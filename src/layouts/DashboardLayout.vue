@@ -93,6 +93,7 @@ const suppliers: Ref<SupplierDto[]> = ref([]);
 const customers: Ref<CustomerDto[]> = ref([]);
 const stocks: Ref<StockDto[]> = ref([]);
 const outOfStock: Ref<StockDto[]> = ref([]);
+const expiredStock: Ref<StockDto[]> = ref([]);
 const sales: Ref<SalesDto[]> = ref([]);
 const today_sSales: Ref<SalesDto[]> = ref([]);
 const issuedSales: Ref<SalesDto[]> = ref([]);
@@ -110,6 +111,7 @@ onMounted(
       customers.value = await customersStore.fetchCustomers();
       stocks.value = await stocksStore.fetchStocks();
       outOfStock.value = await stocksStore.fetchMedicinesOutOfStock();
+      expiredStock.value = await stocksStore.fetchExpiredStock();
       sales.value = await salesStore.fetchSales();
       today_sSales.value = await salesStore.fetchTodaySales();
       issuedSales.value = await salesStore.fetchIssuedSales();
@@ -176,6 +178,10 @@ const card3: DashboardCardItemProps[] = [
     totalText: "Pending Orders",
     totalValue: pendingOrders.value.length,
     href: "/orders/pending"
+  }, {
+    totalText: "Expired Stock",
+    totalValue: expiredStock.value.length,
+    href: "/stocks/expired"
   }
 ];
 

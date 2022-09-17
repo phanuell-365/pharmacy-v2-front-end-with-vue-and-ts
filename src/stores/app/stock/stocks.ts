@@ -49,5 +49,20 @@ export const useStocksStore = defineStore({
 
       return this.stocks;
     },
+
+    async fetchExpiredStock() {
+      const response = await fetch(`${BASE_URL}/stocks?cat=expired-stock`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      this.stocks = data as StockDto[];
+
+      return this.stocks;
+    }
   },
 });
