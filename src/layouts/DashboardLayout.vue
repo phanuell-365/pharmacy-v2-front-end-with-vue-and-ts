@@ -90,31 +90,31 @@ const today_sSales: Ref<SalesDto[]> = ref([]);
 const issuedSales: Ref<SalesDto[]> = ref([]);
 const cancelledSales: Ref<SalesDto[]> = ref([]);
 
-onMounted(
-  async () => {
-    try {
-      orders.value = await ordersStore.fetchOrders();
-      cancelledOrders.value = await ordersStore.fetchCancelledOrders();
-      pendingOrders.value = await ordersStore.fetchPendingOrders();
-      deliveredOrders.value = await ordersStore.fetchDeliveredOrders();
-      today_sOrders.value = await ordersStore.fetchTodayOrders();
-      purchases.value = await purchasesStore.fetchPurchases();
-      today_sPurchases.value = await purchasesStore.fetchTodayPurchases();
-      medicines.value = await medicinesStore.fetchMedicines();
-      suppliers.value = await suppliersStore.fetchSuppliers();
-      customers.value = await customersStore.fetchCustomers();
-      stocks.value = await stocksStore.fetchStocks();
-      outOfStock.value = await stocksStore.fetchMedicinesOutOfStock();
-      expiredStock.value = await stocksStore.fetchExpiredStock();
-      sales.value = await salesStore.fetchSales();
-      today_sSales.value = await salesStore.fetchTodaySales();
-      issuedSales.value = await salesStore.fetchIssuedSales();
-      cancelledSales.value = await salesStore.fetchCancelledSales();
-    } catch (error: any) {
-      console.error(error);
-    }
-  }
-);
+// onMounted(
+//   async () => {
+try {
+  orders.value = await ordersStore.fetchOrders();
+  cancelledOrders.value = await ordersStore.fetchCancelledOrders();
+  pendingOrders.value = await ordersStore.fetchPendingOrders();
+  deliveredOrders.value = await ordersStore.fetchDeliveredOrders();
+  today_sOrders.value = await ordersStore.fetchTodayOrders();
+  purchases.value = await purchasesStore.fetchPurchases();
+  today_sPurchases.value = await purchasesStore.fetchTodayPurchases();
+  medicines.value = await medicinesStore.fetchMedicines();
+  suppliers.value = await suppliersStore.fetchSuppliers();
+  customers.value = await customersStore.fetchCustomers();
+  stocks.value = await stocksStore.fetchStocks();
+  outOfStock.value = await stocksStore.fetchMedicinesOutOfStock();
+  expiredStock.value = await stocksStore.fetchExpiredStock();
+  sales.value = await salesStore.fetchSales();
+  today_sSales.value = await salesStore.fetchTodaySales();
+  issuedSales.value = await salesStore.fetchIssuedSales();
+  cancelledSales.value = await salesStore.fetchCancelledSales();
+} catch (error: any) {
+  console.error(error);
+}
+//   }
+// );
 
 interface DashboardCardItemProps {
   totalValue: number;
@@ -128,84 +128,89 @@ interface DashboardCarouselCards {
   cards: DashboardCardItemProps[];
 }
 
-const dashboardCarouselCards: Ref<DashboardCarouselCards[]> = ref([
-  {
-    name: "card-one",
-    active: true,
-    cards: [
+const dashboardCarouselCards: Ref<DashboardCarouselCards[]> = ref([]);
+
+onMounted(
+  () => {
+    dashboardCarouselCards.value = ([
       {
-        totalText: "Total Orders",
-        totalValue: orders.value.length,
-        href: "/orders"
+        name: "card-one",
+        active: true,
+        cards: [
+          {
+            totalText: "Total Orders",
+            totalValue: orders.value.length,
+            href: "/orders"
+          },
+          {
+            totalText: "Total Purchases",
+            totalValue: purchases.value.length,
+            href: "/purchases"
+          },
+          {
+            totalText: "Total Medicines",
+            totalValue: medicines.value.length,
+            href: "/medicines"
+          },
+          {
+            totalText: "Total Suppliers",
+            totalValue: suppliers.value.length,
+            href: "/suppliers"
+          }
+        ]
       },
       {
-        totalText: "Total Purchases",
-        totalValue: purchases.value.length,
-        href: "/purchases"
+        name: "card-two",
+        cards: [
+          {
+            totalText: "Total Customers",
+            totalValue: customers.value.length,
+            href: "/customers"
+          },
+          {
+            totalText: "Out of stock",
+            totalValue: outOfStock.value.length,
+            href: "/stocks/out-of-stock"
+          },
+          {
+            totalText: "Cancelled Orders",
+            totalValue: cancelledOrders.value.length,
+            href: "/orders/cancelled"
+          },
+          {
+            totalText: "Issued Sales",
+            totalValue: issuedSales.value.length,
+            href: "/sales/issued"
+          }
+        ]
       },
       {
-        totalText: "Total Medicines",
-        totalValue: medicines.value.length,
-        href: "/medicines"
-      },
-      {
-        totalText: "Total Suppliers",
-        totalValue: suppliers.value.length,
-        href: "/suppliers"
+        name: "card-three",
+        cards: [
+          {
+            totalText: "Pending Orders",
+            totalValue: pendingOrders.value.length,
+            href: "/orders/pending"
+          },
+          {
+            totalText: "Expired Stock",
+            totalValue: expiredStock.value.length,
+            href: "/stocks/expired"
+          },
+          {
+            totalText: "Delivered Orders",
+            totalValue: deliveredOrders.value.length,
+            href: "/orders/delivered"
+          },
+          {
+            totalText: "Cancelled Sales",
+            totalValue: cancelledSales.value.length,
+            href: "/sales/cancelled"
+          }
+        ]
       }
-    ]
-  },
-  {
-    name: "card-two",
-    cards: [
-      {
-        totalText: "Total Customers",
-        totalValue: customers.value.length,
-        href: "/customers"
-      },
-      {
-        totalText: "Out of stock",
-        totalValue: outOfStock.value.length,
-        href: "/stocks/out-of-stock"
-      },
-      {
-        totalText: "Cancelled Orders",
-        totalValue: cancelledOrders.value.length,
-        href: "/orders/cancelled"
-      },
-      {
-        totalText: "Issued Sales",
-        totalValue: issuedSales.value.length,
-        href: "/sales/issued"
-      }
-    ]
-  },
-  {
-    name: "card-three",
-    cards: [
-      {
-        totalText: "Pending Orders",
-        totalValue: pendingOrders.value.length,
-        href: "/orders/pending"
-      },
-      {
-        totalText: "Expired Stock",
-        totalValue: expiredStock.value.length,
-        href: "/stocks/expired"
-      },
-      {
-        totalText: "Delivered Orders",
-        totalValue: deliveredOrders.value.length,
-        href: "/orders/delivered"
-      },
-      {
-        totalText: "Cancelled Sales",
-        totalValue: cancelledSales.value.length,
-        href: "/sales/cancelled"
-      }
-    ]
-  }
-]);
+    ]);
+  });
 
 // Today's Reports
 
@@ -237,37 +242,44 @@ interface DashboardCarouselReportCards {
   cards: CardReportTableRowProps[];
 }
 
-const dashboardCarouselReportCards: Ref<DashboardCarouselReportCards[]> = ref([
-  {
-    name: "report-card-one",
-    active: true,
-    cards: [
+const dashboardCarouselReportCards: Ref<DashboardCarouselReportCards[]> = ref([]);
+
+onMounted(
+  () => {
+    dashboardCarouselReportCards.value = ([
       {
-        totalText: "Total Purchases",
-        totalValue: totalPurchases,
-        money: true
+        name: "report-card-one",
+        active: true,
+        cards: [
+          {
+            totalText: "Total Purchases",
+            totalValue: totalPurchases,
+            money: true
+          },
+          {
+            totalText: "Total Sales",
+            totalValue: totalSales,
+            money: true
+          }
+        ]
       },
       {
-        totalText: "Total Sales",
-        totalValue: totalSales,
-        money: true
+        name: "report-card-two",
+        cards: [
+          {
+            totalText: "Total Orders",
+            totalValue: today_sOrders.value.length
+          },
+          {
+            totalText: "Total Sales",
+            totalValue: today_sSales.value.length
+          }
+        ]
       }
-    ]
-  },
-  {
-    name: "report-card-two",
-    cards: [
-      {
-        totalText: "Total Orders",
-        totalValue: today_sOrders.value.length
-      },
-      {
-        totalText: "Total Sales",
-        totalValue: today_sSales.value.length
-      }
-    ]
+    ]);
   }
-]);
+);
+
 
 </script>
 <style scoped>

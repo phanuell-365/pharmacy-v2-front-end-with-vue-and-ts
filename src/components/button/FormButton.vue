@@ -1,9 +1,14 @@
 <template>
-  <button :class="buttonSkin" class="btn btn-hover mx-2" type="submit">{{ text }}</button>
+  <button :class="buttonSkin" :value="formButtonValue" class="btn btn-hover btn-sm mx-2 rounded" name="button"
+          role="button"
+          type="submit"
+          @click="onClick">
+    {{ text }}
+  </button>
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 interface FormButtonProps {
   text: string;
@@ -16,6 +21,12 @@ const props = defineProps<FormButtonProps>();
 const buttonSkin = computed(
   () => props.outline ? `btn-outline-${props.skin}` : `btn-${props.skin}`
 );
+
+const formButtonValue = ref(false);
+
+const onClick = () => {
+  formButtonValue.value = !formButtonValue.value;
+};
 </script>
 
 <style scoped>

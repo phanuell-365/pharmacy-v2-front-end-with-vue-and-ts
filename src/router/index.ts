@@ -91,6 +91,13 @@ const router = createRouter({
       path: "/sales/create",
       name: "add-sale",
       component: () => import("../views/sales/AddSaleView.vue")
+    },
+
+    // medicines routes
+    {
+      path: "/medicines/create",
+      name: "add-medicine",
+      component: () => import("../views/medicines/AddMedicineView.vue")
     }
   ]
 });
