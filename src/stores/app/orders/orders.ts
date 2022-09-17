@@ -109,5 +109,23 @@ export const useOrdersStore = defineStore({
 
       return data as OrderDto[];
     },
+
+    async fetchTodayOrders() {
+      const response = await fetch(`${BASE_URL}/orders?today=true`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message);
+      }
+
+      return data as OrderDto[];
+    },
   },
 });

@@ -3,16 +3,9 @@
     <div class="row justify-content-evenly">
       <div class="col col-7 col-lg-7 col-md-7 card m-1">
         <DashboardCarousel>
-          <DashboardCarouselCard id="carouselOne" :interval="5000" active>
-            <DashboardCardItem v-for="card in card1" :key="card.totalText" :href="card.href"
-                               :total-text="card.totalText" :total-value="card.totalValue" />
-          </DashboardCarouselCard>
-          <DashboardCarouselCard id="carouselTwo" :interval="5000">
-            <DashboardCardItem v-for="card in card2" :key="card.totalText" :href="card.href"
-                               :total-text="card.totalText" :total-value="card.totalValue" />
-          </DashboardCarouselCard>
-          <DashboardCarouselCard id="carouselThree" :interval="5000">
-            <DashboardCardItem v-for="card in card3" :key="card.totalText" :href="card.href"
+          <DashboardCarouselCard v-for="cardItem in dashboardCarouselCards" :key="cardItem.name"
+                                 :active="cardItem.active">
+            <DashboardCardItem v-for="card in cardItem.cards" :href="card.href"
                                :total-text="card.totalText" :total-value="card.totalValue" />
           </DashboardCarouselCard>
         </DashboardCarousel>
@@ -20,13 +13,9 @@
       <div class="col col-4 col-lg-4 col-md-4 card m-1">
         <DashboardCarousel>
           <DashboardCarouselReport>
-            <DashboardCarouselCard :interval="6000" active>
-              <CardReportItem
-                :totals="todayReports" />
-            </DashboardCarouselCard>
-            <DashboardCarouselCard :interval="6000">
-              <CardReportItem
-                :totals="[{totalText: 'Total Sales', totalValue: 10}, {totalText: 'Total Supplies', totalValue: 2000}]" />
+            <DashboardCarouselCard v-for="cardItem in dashboardCarouselReportCards" :key="cardItem.name"
+                                   :active="cardItem.active" :interval="6000">
+              <CardReportItem :totals="cardItem.cards" />
             </DashboardCarouselCard>
           </DashboardCarouselReport>
         </DashboardCarousel>
@@ -73,7 +62,7 @@ import type { CustomerDto } from "@/stores/app/customers/dto";
 import { useStocksStore } from "@/stores/app/stock/stocks";
 import type { StockDto } from "@/stores/app/stock/dto";
 import { useSalesStore } from "@/stores/app/sales/sales";
-import type { SalesDto } from "@/stores/app/sales/dto/sale.dto";
+import type { SalesDto } from "@/stores/app/sales/dto";
 
 const ordersStore = useOrdersStore();
 const purchasesStore = usePurchasesStore();
@@ -86,6 +75,8 @@ const salesStore = useSalesStore();
 const orders: Ref<OrderDto[]> = ref([]);
 const cancelledOrders: Ref<OrderDto[]> = ref([]);
 const pendingOrders: Ref<OrderDto[]> = ref([]);
+const deliveredOrders: Ref<OrderDto[]> = ref([]);
+const today_sOrders: Ref<OrderDto[]> = ref([]);
 const purchases: Ref<PurchaseDto[]> = ref([]);
 const today_sPurchases: Ref<PurchaseDto[]> = ref([]);
 const medicines: Ref<MedicineDto[]> = ref([]);
@@ -97,6 +88,7 @@ const expiredStock: Ref<StockDto[]> = ref([]);
 const sales: Ref<SalesDto[]> = ref([]);
 const today_sSales: Ref<SalesDto[]> = ref([]);
 const issuedSales: Ref<SalesDto[]> = ref([]);
+const cancelledSales: Ref<SalesDto[]> = ref([]);
 
 onMounted(
   async () => {
@@ -104,6 +96,8 @@ onMounted(
       orders.value = await ordersStore.fetchOrders();
       cancelledOrders.value = await ordersStore.fetchCancelledOrders();
       pendingOrders.value = await ordersStore.fetchPendingOrders();
+      deliveredOrders.value = await ordersStore.fetchDeliveredOrders();
+      today_sOrders.value = await ordersStore.fetchTodayOrders();
       purchases.value = await purchasesStore.fetchPurchases();
       today_sPurchases.value = await purchasesStore.fetchTodayPurchases();
       medicines.value = await medicinesStore.fetchMedicines();
@@ -115,6 +109,7 @@ onMounted(
       sales.value = await salesStore.fetchSales();
       today_sSales.value = await salesStore.fetchTodaySales();
       issuedSales.value = await salesStore.fetchIssuedSales();
+      cancelledSales.value = await salesStore.fetchCancelledSales();
     } catch (error: any) {
       console.error(error);
     }
@@ -127,69 +122,97 @@ interface DashboardCardItemProps {
   href: string;
 }
 
-const card1: DashboardCardItemProps[] = [
-  {
-    totalText: "Total Orders",
-    totalValue: orders.value.length,
-    href: "/orders"
-  },
-  {
-    totalText: "Total Purchases",
-    totalValue: purchases.value.length,
-    href: "/purchases"
-  },
-  {
-    totalText: "Total Medicines",
-    totalValue: medicines.value.length,
-    href: "/medicines"
-  },
-  {
-    totalText: "Total Suppliers",
-    totalValue: suppliers.value.length,
-    href: "/suppliers"
-  }
-];
+interface DashboardCarouselCards {
+  name: string;
+  active?: boolean;
+  cards: DashboardCardItemProps[];
+}
 
-const card2: DashboardCardItemProps[] = [
+const dashboardCarouselCards: Ref<DashboardCarouselCards[]> = ref([
   {
-    totalText: "Total Customers",
-    totalValue: customers.value.length,
-    href: "/customers"
+    name: "card-one",
+    active: true,
+    cards: [
+      {
+        totalText: "Total Orders",
+        totalValue: orders.value.length,
+        href: "/orders"
+      },
+      {
+        totalText: "Total Purchases",
+        totalValue: purchases.value.length,
+        href: "/purchases"
+      },
+      {
+        totalText: "Total Medicines",
+        totalValue: medicines.value.length,
+        href: "/medicines"
+      },
+      {
+        totalText: "Total Suppliers",
+        totalValue: suppliers.value.length,
+        href: "/suppliers"
+      }
+    ]
   },
   {
-    totalText: "Out of stock",
-    totalValue: outOfStock.value.length,
-    href: "/stocks/out-of-stock"
+    name: "card-two",
+    cards: [
+      {
+        totalText: "Total Customers",
+        totalValue: customers.value.length,
+        href: "/customers"
+      },
+      {
+        totalText: "Out of stock",
+        totalValue: outOfStock.value.length,
+        href: "/stocks/out-of-stock"
+      },
+      {
+        totalText: "Cancelled Orders",
+        totalValue: cancelledOrders.value.length,
+        href: "/orders/cancelled"
+      },
+      {
+        totalText: "Issued Sales",
+        totalValue: issuedSales.value.length,
+        href: "/sales/issued"
+      }
+    ]
   },
   {
-    totalText: "Cancelled Orders",
-    totalValue: cancelledOrders.value.length,
-    href: "/orders/cancelled"
-  },
-  {
-    totalText: "Issued Sales",
-    totalValue: issuedSales.value.length,
-    href: "/sales/issued"
+    name: "card-three",
+    cards: [
+      {
+        totalText: "Pending Orders",
+        totalValue: pendingOrders.value.length,
+        href: "/orders/pending"
+      },
+      {
+        totalText: "Expired Stock",
+        totalValue: expiredStock.value.length,
+        href: "/stocks/expired"
+      },
+      {
+        totalText: "Delivered Orders",
+        totalValue: deliveredOrders.value.length,
+        href: "/orders/delivered"
+      },
+      {
+        totalText: "Cancelled Sales",
+        totalValue: cancelledSales.value.length,
+        href: "/sales/cancelled"
+      }
+    ]
   }
-];
-
-const card3: DashboardCardItemProps[] = [
-  {
-    totalText: "Pending Orders",
-    totalValue: pendingOrders.value.length,
-    href: "/orders/pending"
-  }, {
-    totalText: "Expired Stock",
-    totalValue: expiredStock.value.length,
-    href: "/stocks/expired"
-  }
-];
+]);
 
 // Today's Reports
 
 interface CardReportTableRowProps {
   totalText: string;
   totalValue: number;
+  money?: boolean;
 }
 
 const calculateTotal = (val: number[]) => {
@@ -208,17 +231,43 @@ const salesTotals = ref(today_sSales.value.map(value => value.totalPrices));
 
 const totalSales = calculateTotal(salesTotals.value);
 
-const todayReports: CardReportTableRowProps[] = [
+interface DashboardCarouselReportCards {
+  name: string;
+  active?: boolean;
+  cards: CardReportTableRowProps[];
+}
+
+const dashboardCarouselReportCards: Ref<DashboardCarouselReportCards[]> = ref([
   {
-    totalText: "Total Purchases",
-    totalValue: totalPurchases
+    name: "report-card-one",
+    active: true,
+    cards: [
+      {
+        totalText: "Total Purchases",
+        totalValue: totalPurchases,
+        money: true
+      },
+      {
+        totalText: "Total Sales",
+        totalValue: totalSales,
+        money: true
+      }
+    ]
   },
   {
-    totalText: "Total Sales",
-    totalValue: totalSales
+    name: "report-card-two",
+    cards: [
+      {
+        totalText: "Total Orders",
+        totalValue: today_sOrders.value.length
+      },
+      {
+        totalText: "Total Sales",
+        totalValue: today_sSales.value.length
+      }
+    ]
   }
-];
-
+]);
 
 </script>
 <style scoped>
