@@ -59,6 +59,7 @@
           {{ startCase(_role) }}
         </option>
       </select>
+      <div class="invalid-feedback">Please select a role</div>
     </div>
 
     <div class="col-md-4">
@@ -77,7 +78,8 @@
     <hr class="my-3">
     <div class="row">
       <div class="col-md-4">
-        <button class="btn btn-info btn-hover">add</button>
+        <FormButton outline skin="info" text="add" />
+        <!--        <button class="btn btn-info btn-hover">add</button>-->
       </div>
     </div>
     <!--      <FormButton name="Create" type="submit" />-->
@@ -95,6 +97,7 @@
 import { TOP_CENTER } from "@/constants/toasts";
 import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
+import FormButton from "@/components/button/FormButton.vue";
 import type { Ref } from "vue";
 import { onMounted, ref } from "vue";
 import { useUsersStore } from "@/stores/app/users/users";

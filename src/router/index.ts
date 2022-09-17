@@ -84,6 +84,13 @@ const router = createRouter({
       name: "manage-customer",
       component: () => import("../views/customers/id/ManageCustomer.vue"),
       props: true
+    },
+
+    // sales routes
+    {
+      path: "/sales/create",
+      name: "add-sale",
+      component: () => import("../views/sales/AddSaleView.vue")
     }
   ]
 });

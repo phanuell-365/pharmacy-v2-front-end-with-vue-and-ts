@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeMount, onMounted, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref } from "vue";
 import { Modal } from "bootstrap";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
@@ -34,9 +34,14 @@ import { useCleanUpModal } from "@/composables/clean-up-modal";
 
 interface LogoutModalProps {
   name: string;
+  to?: string | "current";
 }
 
 const props = defineProps<LogoutModalProps>();
+
+const href = computed(
+  () => props.to ? props.to : "/"
+);
 
 const logoutModalRef = ref();
 
