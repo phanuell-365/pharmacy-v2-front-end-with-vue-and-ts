@@ -12,7 +12,8 @@
                                :total-text="card.totalText" :total-value="card.totalValue" />
           </DashboardCarouselCard>
           <DashboardCarouselCard id="carouselThree" :interval="5000">
-            <DashboardCardItem v-for="e in 4" :key="e" :total-value="1000" href="#" total-text="Total Supplies" />
+            <DashboardCardItem v-for="card in card3" :key="card.totalText" :href="card.href"
+                               :total-text="card.totalText" :total-value="card.totalValue" />
           </DashboardCarouselCard>
         </DashboardCarousel>
       </div>
@@ -84,6 +85,7 @@ const salesStore = useSalesStore();
 
 const orders: Ref<OrderDto[]> = ref([]);
 const cancelledOrders: Ref<OrderDto[]> = ref([]);
+const pendingOrders: Ref<OrderDto[]> = ref([]);
 const purchases: Ref<PurchaseDto[]> = ref([]);
 const today_sPurchases: Ref<PurchaseDto[]> = ref([]);
 const medicines: Ref<MedicineDto[]> = ref([]);
@@ -100,6 +102,7 @@ onMounted(
     try {
       orders.value = await ordersStore.fetchOrders();
       cancelledOrders.value = await ordersStore.fetchCancelledOrders();
+      pendingOrders.value = await ordersStore.fetchPendingOrders();
       purchases.value = await purchasesStore.fetchPurchases();
       today_sPurchases.value = await purchasesStore.fetchTodayPurchases();
       medicines.value = await medicinesStore.fetchMedicines();
@@ -165,6 +168,14 @@ const card2: DashboardCardItemProps[] = [
     totalText: "Issued Sales",
     totalValue: issuedSales.value.length,
     href: "/sales/issued"
+  }
+];
+
+const card3: DashboardCardItemProps[] = [
+  {
+    totalText: "Pending Orders",
+    totalValue: pendingOrders.value.length,
+    href: "/orders/pending"
   }
 ];
 
