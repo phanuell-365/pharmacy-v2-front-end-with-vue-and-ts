@@ -106,6 +106,13 @@ const router = createRouter({
       name: "add-stock",
       component: () => import("../views/stock/AddStockView.vue"),
     },
+
+    // suppliers routes
+    {
+      path: "/suppliers/create",
+      name: "add-supplier",
+      component: () => import("../views/suppliers/AddSupplierView.vue"),
+    },
   ],
 });
 
