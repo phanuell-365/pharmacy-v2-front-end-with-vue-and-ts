@@ -3,6 +3,7 @@ import { MEDICINES_MENU } from "@/constants/sidebar/medicines";
 import { CUSTOMERS_MENU } from "@/constants/sidebar/customers";
 import { HOME_MENU } from "@/constants/sidebar/home";
 import { SALES_MENU } from "@/constants/sidebar/sales";
+import { STOCKS_MENU } from "@/constants/sidebar/stocks";
 
 export const menu = [
   { ...HOME_MENU },
@@ -10,4 +11,5 @@ export const menu = [
   { ...CUSTOMERS_MENU },
   { ...MEDICINES_MENU },
   { ...SALES_MENU },
+  { ...STOCKS_MENU },
 ];

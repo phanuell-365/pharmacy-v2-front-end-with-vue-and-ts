@@ -74,6 +74,7 @@ import type { NewMedicineDto } from "@/stores/app/medicines/dto";
 import { TOP_CENTER } from "@/constants/toasts";
 import moment from "moment";
 import { useRouter } from "vue-router";
+import { useIsNumeric } from "@/composables/is-numeric";
 
 const router = useRouter();
 
@@ -120,9 +121,6 @@ const doseFormValidation = (value: any) => {
 
 const medicineStrengthsStr = ref(medicineStrengths.value.toString());
 
-console.log(medicineStrengthsStr.value.replace(/,/g, "|"));
-
-
 const strengthValidation = (value: string) => {
   if (!value) {
     return "This field is required";
@@ -144,7 +142,7 @@ const levelOfUseValidation = (value: any) => {
     return "This is field is required";
   }
 
-  if (!/^\d+$/.test(value)) {
+  if (!useIsNumeric(value).value) {
     return "The level of use should be a number";
   }
 
@@ -196,10 +194,17 @@ const validateForm = () => {
   const form = formRef.value as HTMLFormElement;
 
   if (doseFormMeta.valid && nameMeta.valid && strengthMeta.valid && levelOfUseMeta && therapeuticClassMeta.valid) {
-    form.classList.remove("was-validated");
     return true;
   } else {
-    form.classList.add("was-validated");
+    toastError.value?.setupToast({
+      name: "Add Medicine Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Medicine Error",
+      text: "Please fill in the required fields",
+      delay: 5000
+    });
+
+    toastError.value?.show();
   }
 };
 

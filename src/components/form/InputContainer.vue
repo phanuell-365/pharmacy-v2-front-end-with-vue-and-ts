@@ -14,7 +14,7 @@ import startCase from "lodash/startCase";
 interface InputContainerProps {
   inputId: string;
   inputLabel: string;
-  invalidFeedback: string;
+  invalidFeedback?: string;
 }
 
 defineProps<InputContainerProps>();

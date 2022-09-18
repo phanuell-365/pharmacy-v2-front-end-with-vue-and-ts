@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView
+      component: HomeView,
     },
     {
       path: "/about",
@@ -15,91 +15,98 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue")
+      component: () => import("../views/AboutView.vue"),
     },
     {
       path: "/dashboard",
       name: "dashboard",
-      component: () => import("../views/DashboardView.vue")
+      component: () => import("../views/DashboardView.vue"),
     },
 
     // users' routes
     {
       path: "/users",
       name: "view-users",
-      component: () => import("../views/users/ViewUsersView.vue")
+      component: () => import("../views/users/ViewUsersView.vue"),
     },
     {
       path: "/users/create",
       name: "add-user",
-      component: () => import("../views/users/AddUserView.vue")
+      component: () => import("../views/users/AddUserView.vue"),
     },
     {
       path: "/users/update",
       name: "manage-users",
-      component: () => import("../views/users/ManageUsersView.vue")
+      component: () => import("../views/users/ManageUsersView.vue"),
     },
     {
       path: "/users/:id",
       name: "view-user",
       component: () => import("../views/users/id/ViewUserView.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/users/:id/update",
       name: "manage-user",
       component: () => import("../views/users/id/ManageUserView.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/users/reports",
       name: "users-reports",
-      component: () => import("../views/users/UsersReportsView.vue")
+      component: () => import("../views/users/UsersReportsView.vue"),
     },
 
     // customers' routes
     {
       path: "/customers/create",
       name: "add-customer",
-      component: () => import("../views/customers/AddCustomer.vue")
+      component: () => import("../views/customers/AddCustomer.vue"),
     },
     {
       path: "/customers",
       name: "view-customers",
-      component: () => import("../views/customers/ViewCustomers.vue")
+      component: () => import("../views/customers/ViewCustomers.vue"),
     },
     {
       path: "/customers/update",
       name: "manage-customers",
-      component: () => import("../views/customers/ManageCustomers.vue")
+      component: () => import("../views/customers/ManageCustomers.vue"),
     },
     {
       path: "/customers/:id",
       name: "view-customer",
       component: () => import("../views/customers/id/ViewCustomer.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/customers/:id/update",
       name: "manage-customer",
       component: () => import("../views/customers/id/ManageCustomer.vue"),
-      props: true
+      props: true,
     },
 
     // sales routes
     {
       path: "/sales/create",
       name: "add-sale",
-      component: () => import("../views/sales/AddSaleView.vue")
+      component: () => import("../views/sales/AddSaleView.vue"),
     },
 
     // medicines routes
     {
       path: "/medicines/create",
       name: "add-medicine",
-      component: () => import("../views/medicines/AddMedicineView.vue")
-    }
-  ]
+      component: () => import("../views/medicines/AddMedicineView.vue"),
+    },
+
+    // stocks routes
+    {
+      path: "/stocks/create",
+      name: "add-stock",
+      component: () => import("../views/stock/AddStockView.vue"),
+    },
+  ],
 });
 
 export default router;

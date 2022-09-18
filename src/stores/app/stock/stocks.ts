@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { StockDto } from "@/stores/app/stock/dto";
+import type { NewStockDto, StockDto } from "@/stores/app/stock/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
@@ -63,6 +63,23 @@ export const useStocksStore = defineStore({
       this.stocks = data as StockDto[];
 
       return this.stocks;
-    }
+    },
+
+    async addStock(payload: NewStockDto) {
+      const response = await fetch(`${BASE_URL}/stocks`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as StockDto;
+    },
   },
 });
