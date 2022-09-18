@@ -32,7 +32,7 @@ export const MEDICINES_MENU: AccordionItemProps = {
       routeName: "place-medicine-order",
     },
     {
-      href: "/medicines?drugs=out-of-stock",
+      href: "/medicines?medicines=out-of-stock",
       description: "out of stock",
       routeName: "out-of-stock",
     },

@@ -113,6 +113,13 @@ const router = createRouter({
       name: "add-supplier",
       component: () => import("../views/suppliers/AddSupplierView.vue"),
     },
+
+    // orders routes
+    {
+      path: "/orders/create",
+      name: "add-order",
+      component: () => import("../views/orders/AddOrderView.vue"),
+    },
   ],
 });
 

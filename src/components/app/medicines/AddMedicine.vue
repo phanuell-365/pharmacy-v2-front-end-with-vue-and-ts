@@ -192,7 +192,6 @@ const {
 } = useField("therapeuticClass", therapeuticClassValidation);
 
 const validateForm = () => {
-  const form = formRef.value as HTMLFormElement;
 
   if (doseFormMeta.valid && nameMeta.valid && strengthMeta.valid && levelOfUseMeta && therapeuticClassMeta.valid) {
     return true;
@@ -302,9 +301,6 @@ const onClear = () => {
 };
 
 const onHiddenBsToast = () => {
-  if (routeRedirect.value === "current")
-    router.go(0);
-
   router.push(routeRedirect.value);
 };
 

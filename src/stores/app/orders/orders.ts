@@ -2,15 +2,18 @@ import { defineStore } from "pinia";
 import type { OrderDto } from "@/stores/app/orders/dto/order.dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import type { NewOrderDto } from "@/stores/app/orders/dto";
 
 interface OrdersState {
   orders: OrderDto[];
+  orderStatuses: string[];
 }
 
 export const useOrdersStore = defineStore({
   id: "orders",
   state: (): OrdersState => ({
     orders: [],
+    orderStatuses: []
   }),
   getters: {},
   actions: {
@@ -24,8 +27,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -43,8 +46,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -61,8 +64,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -79,8 +82,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -97,8 +100,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -115,8 +118,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       });
 
       const data = await response.json();
@@ -127,5 +130,47 @@ export const useOrdersStore = defineStore({
 
       return data as OrderDto[];
     },
-  },
+
+    async fetchOrderStatus() {
+      const response = await fetch(
+        `${BASE_URL}/orders?resource=status&meta=create`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message);
+      }
+
+      this.orderStatuses = data as string[];
+
+      return this.orderStatuses;
+    },
+
+    async addOrder(payload: NewOrderDto) {
+      const response = await fetch(`${BASE_URL}/orders`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message);
+      }
+
+      return data as OrderDto;
+    }
+  }
 });

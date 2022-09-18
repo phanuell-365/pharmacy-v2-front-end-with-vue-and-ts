@@ -43,7 +43,7 @@
     </InputContainer>
 
     <hr class="my-3">
-    
+
     <FormButtonsContainer>
       <FormButton skin="primary" text="add" @click="onAddClick" />
       <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
@@ -198,9 +198,9 @@ const onAddAndNewClick = async () => {
 
 const onAddAndView = async () => {
   if (validateForm()) {
-    const stock = await addCustomer(createCustomerPayload());
+    const customer = await addCustomer(createCustomerPayload());
 
-    routeRedirect.value = `/stocks/${stock?.id}`;
+    routeRedirect.value = `/customers/${customer?.id}`;
   }
 };
 
@@ -222,8 +222,6 @@ const onClear = () => {
 };
 
 const onHiddenBsToast = () => {
-  if (routeRedirect.value === "current")
-    router.go(0);
 
   router.push(routeRedirect.value);
 };
