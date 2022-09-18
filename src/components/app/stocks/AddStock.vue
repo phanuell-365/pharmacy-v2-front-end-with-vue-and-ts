@@ -251,7 +251,7 @@ const validateForm = () => {
     toastError.value?.setupToast({
       name: "Add Stock Error",
       elapsedDuration: moment().startOf("second").fromNow(),
-      heading: "Add Medicine Error",
+      heading: "Add Stock Error",
       text: "Please fill in the required fields",
       delay: 5000
     });
@@ -264,7 +264,7 @@ const createStockPayload = () => {
   const payload: NewStockDto = {
     issueUnitPrice: +issueUnitPrice.value,
     issueUnitPerPackSize: +issueUnitPerPackSize.value,
-    packSize: packSize.value,
+    packSize: startCase(packSize.value),
     packSizePrice: +packSizePrice.value,
     expirationDate: new Date(expirationDate.value),
     MedicineId: MedicineId.value as string
@@ -275,7 +275,6 @@ const createStockPayload = () => {
 
 const addStock = async (payload: NewStockDto) => {
   try {
-    console.log(payload);
     const stock = await stocksStore.addStock(payload);
 
     toastSuccess.value?.setupToast({
@@ -316,7 +315,12 @@ const onAddClick = async () => {
 const onAddAndNewClick = async () => {
   if (validateForm()) {
     await addStock(createStockPayload());
-    routeRedirect.value = "current";
+
+    // select the form using the formRef
+    const form = formRef.value as HTMLFormElement;
+
+    // call reset
+    form?.reset();
   }
 };
 

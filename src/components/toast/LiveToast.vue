@@ -69,7 +69,6 @@ const exposedProps: Ref<LiveToastProps | undefined> = ref();
 defineExpose({
   setupToast: (value: LiveToastProps) => {
     exposedProps.value = value;
-    console.log(value);
   },
   show: () => newToast.value.show()
 });

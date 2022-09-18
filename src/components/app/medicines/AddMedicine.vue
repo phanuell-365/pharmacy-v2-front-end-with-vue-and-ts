@@ -75,6 +75,7 @@ import { TOP_CENTER } from "@/constants/toasts";
 import moment from "moment";
 import { useRouter } from "vue-router";
 import { useIsNumeric } from "@/composables/is-numeric";
+import startCase from "lodash/startCase";
 
 const router = useRouter();
 
@@ -210,11 +211,11 @@ const validateForm = () => {
 
 const createMedicinePayload = () => {
   const payload: NewMedicineDto = {
-    name: name.value,
+    name: startCase(name.value),
     doseForm: doseForm.value,
     strength: strength.value,
     levelOfUse: +levelOfUse.value,
-    therapeuticClass: therapeuticClass.value
+    therapeuticClass: startCase(therapeuticClass.value)
   };
 
   return payload;
@@ -262,7 +263,12 @@ const onAddAndNewClick = async () => {
   // validate the form
   if (validateForm()) {
     await addMedicine(createMedicinePayload());
-    routeRedirect.value = "current";
+
+    // select the form using the formRef
+    const form = formRef.value as HTMLFormElement;
+
+    // call reset
+    form?.reset();
   }
 };
 
