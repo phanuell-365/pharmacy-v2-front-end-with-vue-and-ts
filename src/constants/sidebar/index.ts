@@ -6,6 +6,7 @@ import { SALES_MENU } from "@/constants/sidebar/sales";
 import { STOCKS_MENU } from "@/constants/sidebar/stocks";
 import { SUPPLIERS_MENU } from "@/constants/sidebar/suppliers";
 import { ORDERS_MENU } from "@/constants/sidebar/orders";
+import { PURCHASES_MENU } from "@/constants/sidebar/purchases";
 
 export const menu = [
   { ...HOME_MENU },
@@ -15,5 +16,6 @@ export const menu = [
   { ...SUPPLIERS_MENU },
   { ...STOCKS_MENU },
   { ...ORDERS_MENU },
+  { ...PURCHASES_MENU },
   { ...SALES_MENU },
 ];

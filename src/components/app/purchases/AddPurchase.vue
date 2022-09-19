@@ -1,0 +1,385 @@
+<template>
+  <section class="add-purchase">
+    <form ref="formRef" novalidate @submit.prevent>
+      <div class="row">
+        <!--    Inputs section    -->
+        <hr class="my-1">
+
+        <div class="col-md-12 col-sm-6">
+          <div class="row g-3 m-4">
+            <!--     Medicine       -->
+            <InputContainer :invalid-feedback="MedicineIdErrorMessage" input-id="MedicineId" input-label="Medicine">
+              <input id="validationMedicineId" v-model="Medicine"
+                     :class="{'is-invalid': !MedicineIdMeta.valid && MedicineIdMeta.validated}"
+                     :placeholder="MedicinePlaceholder" class="form-control"
+                     name="name" required
+                     type="text" />
+            </InputContainer>
+            <!--      Supplier      -->
+
+            <InputContainer :invalid-feedback="SupplierIdErrorMessage" input-id="SupplierId" input-label="Supplier">
+              <input id="validationMedicineId" v-model="Supplier"
+                     :class="{'is-invalid': !SupplierIdMeta.valid && SupplierIdMeta.validated}"
+                     :placeholder="SupplierPlaceholder" class="form-control"
+                     name="name" required
+                     type="text" />
+            </InputContainer>
+
+            <!--    orderQuantity        -->
+            <InputContainer input-id="orderQuantity" input-label="orderQuantity">
+              <input
+                id="validationOrderQuantity"
+                :value="orderQuantity"
+                class="form-control shadow-sm"
+                disabled
+                readonly
+                type="text"
+              />
+            </InputContainer>
+
+            <!--    packSizeQuantity        -->
+            <InputContainer :invalid-feedback="packSizeQuantityErrorMessage" input-id="packSizeQuantity"
+                            input-label="packSizeQuantity">
+              <input
+                id="validationPackSizeQuantity"
+                v-model="packSizeQuantity"
+                :class="{'is-invalid': !packSizeQuantityMeta.valid && packSizeQuantityMeta.validated}"
+                class="form-control"
+                name="packSizeQuantity"
+                required
+                type="text"
+              />
+            </InputContainer>
+
+            <!--      pricePerPackSize      -->
+            <InputContainer :invalid-feedback="pricePerPackSizeErrorMessage" input-id="pricePerPackSize"
+                            input-label="pricePerPackSize">
+
+              <input
+                id="validationPricePerPackSize"
+                v-model.trim="pricePerPackSize"
+                :class="{'is-invalid': !pricePerPackSizeMeta.valid && pricePerPackSizeMeta.validated}"
+                class="form-control"
+                name="pricePerPackSize"
+                required
+                type="text"
+              />
+            </InputContainer>
+
+            <!--      totalPackSizePrice      -->
+            <InputContainer input-id="totalPackSizePrice" input-label="totalPackSizePrice">
+              <input
+                id="validationTotalPackSizePrice"
+                v-model="totalPackSizePrice"
+                class="form-control shadow-sm"
+                disabled
+                name="totalPackSizePrice"
+                required
+                type="number"
+              />
+            </InputContainer>
+          </div>
+        </div>
+
+        <!--    Tables section    -->
+        <hr class="my-1">
+        <div class="col-md-12 col-sm-6 mb-3">
+          <TableContainer :field-names="orderAttributes" :records="orders" @clicked-row="onClickedRowHandler" />
+        </div>
+      </div>
+      <FormButtonsContainer>
+        <FormButton skin="primary" text="add" @click="onAddClick" />
+        <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
+        <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
+        <FormButton outline skin="secondary" text="add & view all" @click="onAddAndViewAll" />
+        <FormButton outline skin="danger" text="clear" @click="onClear" />
+      </FormButtonsContainer>
+    </form>
+    <Teleport to="body">
+      <ToastContainer :placement="TOP_CENTER">
+        <LiveToast ref="toastSuccess" skin="info" @on-hidden-bs-toast="onHiddenBsToast" />
+        <LiveToast ref="toastError" skin="danger" />
+      </ToastContainer>
+    </Teleport>
+  </section>
+</template>
+
+<script lang="ts" setup>
+import InputContainer from "@/components/form/InputContainer.vue";
+import FormButtonsContainer from "@/components/form/FormButtonsContainer.vue";
+import FormButton from "@/components/button/FormButton.vue";
+import ToastContainer from "@/components/toast/ToastContainer.vue";
+import LiveToast from "@/components/toast/LiveToast.vue";
+import TableContainer from "@/components/table/TableContainer.vue";
+import { TOP_CENTER } from "@/constants/toasts";
+import { useOrdersStore } from "@/stores/app/orders/orders";
+import type { Ref } from "vue";
+import { onMounted, onUpdated, ref, watch } from "vue";
+import type { OrderDto } from "@/stores/app/orders/dto/order.dto";
+import { useField } from "vee-validate";
+import { useIsNumeric } from "@/composables/is-numeric";
+import moment from "moment";
+import { useRouter } from "vue-router";
+import type { NewPurchaseDto } from "@/stores/app/purchases/dto";
+import { usePurchasesStore } from "@/stores/app/purchases/purchases";
+
+const router = useRouter();
+
+const ordersStore = useOrdersStore();
+const purchasesStore = usePurchasesStore();
+
+const formRef = ref();
+const toastSuccess = ref();
+const toastError = ref();
+
+const orders: Ref<OrderDto []> = ref([]);
+const orderQuantity: Ref<number> = ref(0);
+const totalPackSizePrice: Ref<number> = ref(0);
+const OrderId: Ref<string> = ref("");
+
+orders.value = await ordersStore.fetchOrders();
+
+const onClickedRowHandler = (record: OrderDto) => {
+  orderQuantity.value = record.orderQuantity;
+  Medicine.value = record.medicine;
+  Supplier.value = record.supplier;
+  OrderId.value = record.id;
+};
+
+onMounted(
+  () => {
+    orderAttributes.value = Object.keys(orders.value[0]).filter(value => value !== "id");
+  }
+);
+
+onUpdated(
+  () => {
+    // orderQuantity.value = orders.value[0].orderQuantity;
+    if (packSizeQuantityMeta.valid && pricePerPackSizeMeta.valid) {
+      totalPackSizePrice.value = +packSizeQuantity.value * +pricePerPackSize.value;
+    }
+  }
+);
+
+const medicines = ref(orders.value.map(value => value.medicine));
+
+const suppliers = ref(orders.value.map(value => value.supplier));
+
+const orderAttributes: Ref<string[]> = ref([]);
+
+const MedicineIdValidation = (value: string) => {
+  if (!value)
+    return "This is a required field";
+
+  if (!medicines.value.some(value1 => value1.toLowerCase().includes(value.toLowerCase())))
+    return "The medicine should be one of the ones on the table";
+
+
+  return true;
+};
+
+const SupplierIdValidation = (value: string) => {
+  if (!value)
+    return "This is a required field";
+
+  if (!suppliers.value.some(value1 => value1.toLowerCase().includes(value.toLowerCase())))
+    return "The supplier should be one of the ones on the table";
+
+  return true;
+};
+
+const packSizeQuantityValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  if (!useIsNumeric(value).value)
+    return "The pack size quantity should be a number";
+
+  if (+value <= 0) {
+    return "The pack size quantity should not be less than or equal to 0";
+  }
+
+  return true;
+};
+
+const pricePerPackSizeValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  if (!useIsNumeric(value).value)
+    return "The price per pack size should be a number";
+
+  if (+value <= 0) {
+    return "The pack size quantity should not be less than or equal to 0";
+  }
+
+  return true;
+};
+
+const {
+  value: Medicine,
+  errorMessage: MedicineIdErrorMessage,
+  meta: MedicineIdMeta
+} = useField("MedicineId", MedicineIdValidation);
+
+const {
+  value: Supplier,
+  errorMessage: SupplierIdErrorMessage,
+  meta: SupplierIdMeta
+} = useField("SupplierId", SupplierIdValidation);
+
+const {
+  value: packSizeQuantity,
+  errorMessage: packSizeQuantityErrorMessage,
+  meta: packSizeQuantityMeta
+} = useField("packSizeQuantity", packSizeQuantityValidation);
+
+const {
+  value: pricePerPackSize,
+  errorMessage: pricePerPackSizeErrorMessage,
+  meta: pricePerPackSizeMeta
+} = useField("pricePerPackSize", pricePerPackSizeValidation);
+
+
+const MedicinePlaceholder = ref("");
+const SupplierPlaceholder = ref("");
+
+const realOrdersMed = ref([...orders.value]);
+
+watch(Medicine, () => {
+  orders.value = realOrdersMed.value.filter(value => {
+      if (Medicine.value) {
+        const searchValue = value.medicine.toLowerCase();
+        return searchValue.includes(Medicine.value.toLowerCase());
+      }
+      return true;
+    }
+  );
+  MedicinePlaceholder.value = orders.value[0]?.medicine;
+});
+
+const realOrdersSup = ref([...orders.value]);
+
+watch(Supplier, () => {
+  orders.value = realOrdersSup.value.filter(value => {
+    if (Supplier.value) {
+      const searchValue = value.supplier.toLowerCase();
+      return searchValue.includes(Supplier.value.toLowerCase());
+    }
+    return true;
+  });
+
+  SupplierPlaceholder.value = orders.value[0]?.supplier;
+});
+
+const validateForm = () => {
+  if (MedicineIdMeta.valid && SupplierIdMeta.valid && pricePerPackSizeMeta.valid && packSizeQuantityMeta.valid)
+    return true;
+  else {
+    toastError.value?.setupToast({
+      name: "Add Purchase Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Purchase Error",
+      text: "Please fill in the required fields",
+      delay: 5000
+    });
+
+    toastError.value?.show();
+  }
+};
+
+const createPurchasePayload = () => {
+  const payload: NewPurchaseDto = {
+    packSizeQuantity: +packSizeQuantity.value,
+    pricePerPackSize: +pricePerPackSize.value,
+    OrderId: OrderId.value
+  };
+
+  return payload;
+};
+
+const addPurchase = async (payload: NewPurchaseDto) => {
+  try {
+    const purchase = await purchasesStore.addPurchase(payload);
+
+    toastSuccess.value?.setupToast({
+      name: "Add Success",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Purchase",
+      text: "Added the purchase successfully!",
+      delay: 3000
+    });
+
+    toastSuccess.value?.show();
+
+    return purchase;
+  } catch (error: any) {
+    console.error(error);
+
+    toastError.value?.setupToast({
+      name: "Add Purchase Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Purchase Error",
+      text: "Failed to add the purchase. " + error?.message,
+      delay: 5000
+    });
+
+    toastError.value?.show();
+  }
+};
+
+const routeRedirect = ref("");
+
+const onAddClick = async () => {
+
+  if (validateForm())
+    await addPurchase(createPurchasePayload());
+};
+
+const onAddAndNewClick = async () => {
+  if (validateForm()) {
+    await addPurchase(createPurchasePayload());
+
+    // select the form using the formRef
+    const form = formRef.value as HTMLFormElement;
+
+    // call reset
+    form?.reset();
+  }
+};
+
+const onAddAndView = async () => {
+  if (validateForm()) {
+    const purchase = await addPurchase(createPurchasePayload());
+
+    routeRedirect.value = `/purchases/${purchase?.id}`;
+  }
+};
+
+const onAddAndViewAll = async () => {
+  if (validateForm()) {
+    await addPurchase(createPurchasePayload());
+
+    routeRedirect.value = "/purchases";
+  }
+};
+
+const onClear = () => {
+
+  // select the form using the formRef
+  const form = formRef.value as HTMLFormElement;
+
+  // call reset
+  form?.reset();
+};
+
+const onHiddenBsToast = () => {
+  router.push(routeRedirect.value);
+};
+</script>
+
+<style scoped>
+
+</style>

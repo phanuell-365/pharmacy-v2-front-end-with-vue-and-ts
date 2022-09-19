@@ -49,3 +49,5 @@ export const DANGER_ICON = "fa-solid fa-exclamation-triangle";
 
 export const CHEVRON_LEFT = "fa-solid fa-chevron-left";
 export const ANGLE_LEFT = "fa-solid fa-angle-left";
+
+export const SPINNER = "fas fa-spinner fa-pulse fa-3x";

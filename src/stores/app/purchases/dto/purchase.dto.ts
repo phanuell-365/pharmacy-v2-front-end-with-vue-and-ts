@@ -1,4 +1,5 @@
 export interface PurchaseDto {
+  id: string;
   packSizeQuantity: number;
   pricePerPackSize: number;
   totalPackSizePrice: number;

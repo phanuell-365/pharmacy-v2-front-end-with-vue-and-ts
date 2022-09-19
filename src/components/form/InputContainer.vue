@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4 my-3">
+  <div class="col-md-4 col-sm-4 col-lg-4 my-2">
     <label :for="`validation${startCase(inputId)}`" class="form-label fw-bold">
       {{ startCase(inputLabel) }}:
     </label>

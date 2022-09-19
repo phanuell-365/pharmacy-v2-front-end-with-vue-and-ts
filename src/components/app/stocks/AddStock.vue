@@ -144,7 +144,7 @@ try {
   console.error(error);
 
   toastError.value?.setupToast({
-    name: "Fetch Drug Error",
+    name: "Fetch Medicine Error",
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Medicines Error",
     text: "Failed to fetch medicines from the server",

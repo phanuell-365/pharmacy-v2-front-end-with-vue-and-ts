@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { PurchaseDto } from "@/stores/app/purchases/dto";
+import type { NewPurchaseDto, PurchaseDto } from "@/stores/app/purchases/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
@@ -50,5 +50,22 @@ export const usePurchasesStore = defineStore({
 
       return data as PurchaseDto[];
     },
+
+    async addPurchase(payload: NewPurchaseDto) {
+      const response = await fetch(`${BASE_URL}/purchases`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as PurchaseDto;
+    }
   },
 });

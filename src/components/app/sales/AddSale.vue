@@ -6,49 +6,31 @@
         <CheckoutContainer :list="listItems" />
 
         <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3">Billing address</h4>
-          <button class="btn btn-success p-2" @click="onAddItemClick">+</button>
-          <form class="needs-validation" novalidate>
-
+          <form class="needs-validation row g-3 m-4" novalidate @submit.prevent>
             <hr class="my-4">
 
-            <div class="row gy-3">
-              <div class="col-md-6">
-                <label class="form-label" for="cc-name">Name on card</label>
-                <input id="cc-name" class="form-control" placeholder="" required type="text">
-                <small class="text-muted">Full name as displayed on card</small>
-                <div class="invalid-feedback">
-                  Name on card is required
-                </div>
-              </div>
+            <InputContainer :invalid-feedback="CustomerIdErrorMessage" input-id="CustomerId" input-label="Customer">
+              <select
+                id="validationCustomerId"
+                v-model.trim="CustomerId"
+                class="form-select"
+                name="CustomerId"
+                required
+              >
+                <option
+                  v-for="customer in customers"
+                  :key="customer.name"
+                  :value="customer.id"
+                >
+                  {{ startCase(customer.name) }}
+                </option>
+              </select>
+            </InputContainer>
 
-              <div class="col-md-6">
-                <label class="form-label" for="cc-number">Credit card number</label>
-                <input id="cc-number" class="form-control" placeholder="" required type="text">
-                <div class="invalid-feedback">
-                  Credit card number is required
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <label class="form-label" for="cc-expiration">Expiration</label>
-                <input id="cc-expiration" class="form-control" placeholder="" required type="text">
-                <div class="invalid-feedback">
-                  Expiration date required
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <label class="form-label" for="cc-cvv">CVV</label>
-                <input id="cc-cvv" class="form-control" placeholder="" required type="text">
-                <div class="invalid-feedback">
-                  Security code required
-                </div>
-              </div>
-            </div>
-
+            <InputContainer input-id="Medicine" input-label="Medicine">
+              <SearchFilter />
+            </InputContainer>
             <hr class="my-4">
-
 
             <div class="d-flex w-75 justify-content-end ms-auto">
               <FormButton skin="info" text="add" />
@@ -66,8 +48,37 @@
 <script lang="ts" setup>
 import CheckoutContainer from "@/components/checkout/CheckoutContainer.vue";
 import FormButton from "@/components/button/FormButton.vue";
+import SearchFilter from "@/components/search/SearchFilter.vue";
+import InputContainer from "@/components/form/InputContainer.vue";
+import startCase from "lodash/startCase";
 import type { Ref } from "vue";
 import { ref } from "vue";
+import { useCustomersStore } from "@/stores/app/customers/customers";
+import type { CustomerDto } from "@/stores/app/customers/dto";
+import { useField } from "vee-validate";
+
+const customersStore = useCustomersStore();
+
+const customers: Ref<CustomerDto[]> = ref([]);
+
+try {
+  customers.value = await customersStore.fetchCustomers();
+} catch (error: any) {
+  console.error(error);
+}
+
+const CustomerIdValidation = (value: string) => {
+  if (!value)
+    return "This is a required field";
+
+  return true;
+};
+
+const {
+  value: CustomerId,
+  errorMessage: CustomerIdErrorMessage,
+  meta: CustomerIdMeta
+} = useField("CustomerId", CustomerIdValidation);
 
 interface CheckoutListItemProps {
   medicineName: string;

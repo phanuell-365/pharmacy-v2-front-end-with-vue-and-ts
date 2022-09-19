@@ -223,7 +223,7 @@ interface CardReportTableRowProps {
 const calculateTotal = (val: number[]) => {
   let total = 0;
 
-  val.forEach(value => total += value);
+  val.forEach(value => total += +value);
 
   return total;
 };

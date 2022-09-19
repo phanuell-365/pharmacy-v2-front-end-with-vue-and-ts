@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { RouterView } from "vue-router";</script>
+import { RouterView } from "vue-router";
+import FontAwesome from "@/components/icons/FontAwesome.vue";
+import { SPINNER } from "@/constants/icons";</script>
 
 <template>
 
@@ -10,7 +12,11 @@ import { RouterView } from "vue-router";</script>
           <Transition mode="in-out" name="router">
             <component :is="Component" :key="route.name"></component>
           </Transition>
-          <template #fallback> Loading...</template>
+          <template #fallback>
+            <div class="m-auto">
+              <FontAwesome :icon-name="SPINNER" class="text-success" />
+            </div>
+          </template>
         </Suspense>
       </KeepAlive>
     </template>
