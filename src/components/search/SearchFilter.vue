@@ -13,7 +13,9 @@
       </template>
       <template v-else>
         <a v-for="item in dropdownItems" :key="item" :href="`#${item}`"
-           class="d-flex justify-content-between align-items-center">{{ startCase(item) }}
+           class="d-flex justify-content-between align-items-center"
+           @click="onClickHandler(item)"
+        >{{ startCase(item) }}
           <button class="btn btn-light border-0">+</button>
         </a>
         <a v-if="isLoading" class="fs-6">
@@ -47,8 +49,9 @@ watch(filter, () => {
 
 const show = ref(false);
 
-const onClickHandler = () => {
-  show.value = !show.value;
+const onClickHandler = (item: any) => {
+  console.log(`${item}`);
+  filter.value = item;
 };
 
 const onFocusInHandler = () => {
@@ -56,7 +59,8 @@ const onFocusInHandler = () => {
 };
 
 const onFocusOutHandler = () => {
-  show.value = false;
+  setTimeout(() => show.value = false, 100);
+
 };
 
 const isLoading = ref(true);
@@ -94,7 +98,7 @@ const isLoading = ref(true);
 
 .dp-dropdown {
   position: relative;
-  display: inline-block;
+  /*display: inline-block;*/
 }
 
 .dp-dropdown-content {

@@ -1,55 +1,84 @@
 <template>
   <div class="container">
-    <main>
-      <div class="row g-5">
+    <!--    <main>-->
+    <!--      <div class="row g-5">-->
 
-        <CheckoutContainer :list="listItems" />
+    <!--        <CheckoutContainer :list="listItems" />-->
 
-        <div class="col-md-7 col-lg-8">
-          <form class="needs-validation row g-3 m-4" novalidate @submit.prevent>
-            <hr class="my-4">
+    <!--        <div class="col-md-7 col-lg-8">-->
+    <form class="needs-validation row g-3 m-4" novalidate @submit.prevent>
+      <hr class="my-4">
 
-            <InputContainer :invalid-feedback="CustomerIdErrorMessage" input-id="CustomerId" input-label="Customer">
-              <select
-                id="validationCustomerId"
-                v-model.trim="CustomerId"
-                class="form-select"
-                name="CustomerId"
-                required
-              >
-                <option
-                  v-for="customer in customers"
-                  :key="customer.name"
-                  :value="customer.id"
-                >
-                  {{ startCase(customer.name) }}
-                </option>
-              </select>
-            </InputContainer>
+      <InputContainer :invalid-feedback="CustomerIdErrorMessage" input-id="CustomerId" input-label="Customer">
+        <select
+          id="validationCustomerId"
+          v-model.trim="CustomerId"
+          class="form-select"
+          name="CustomerId"
+          required
+        >
+          <option
+            v-for="customer in customers"
+            :key="customer.name"
+            :value="customer.id"
+          >
+            {{ startCase(customer.name) }}
+          </option>
+        </select>
+      </InputContainer>
 
-            <InputContainer input-id="Medicine" input-label="Medicine">
-              <SearchFilter />
-            </InputContainer>
-            <hr class="my-4">
+      <InputContainer input-id="Medicine" input-label="Medicine">
+        <SearchFilter />
+      </InputContainer>
 
-            <div class="d-flex w-75 justify-content-end ms-auto">
-              <FormButton skin="info" text="add" />
-              <FormButton :text="`add & new`" skin="dark" />
-              <FormButton :text="`add & view`" outline skin="dark" />
-              <FormButton :text="`clear`" outline skin="danger" />
-            </div>
-          </form>
-        </div>
+      <InputContainer input-id="data-list" input-label="data-list">
+        <DataList />
+      </InputContainer>
+      <hr class="my-4">
+
+      <InputTable>
+        <thead>
+        <tr>
+          <td>#</td>
+          <td>Medicine</td>
+          <td>Quantity</td>
+          <td>Price</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>1</td>
+          <td class="w-25">
+            <SearchFilter />
+          </td>
+          <td>10</td>
+          <td>Kshs. 250</td>
+        </tr>
+        </tbody>
+      </InputTable>
+
+      <hr class="my-4">
+
+      <div class="d-flex w-75 justify-content-end ms-auto">
+        <FormButton skin="info" text="add" />
+        <FormButton :text="`add & new`" skin="dark" />
+        <FormButton :text="`add & view`" outline skin="dark" />
+        <FormButton :text="`clear`" outline skin="danger" />
       </div>
-    </main>
+    </form>
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </main>-->
   </div>
 </template>
 
 <script lang="ts" setup>
-import CheckoutContainer from "@/components/checkout/CheckoutContainer.vue";
+// import CheckoutContainer from "@/components/checkout/CheckoutContainer.vue";
 import FormButton from "@/components/button/FormButton.vue";
 import SearchFilter from "@/components/search/SearchFilter.vue";
 import InputContainer from "@/components/form/InputContainer.vue";
+import InputTable from "@/components/table/input/InputTable.vue";
+import DataList from "@/components/search/DataList.vue";
 import startCase from "lodash/startCase";
 import type { Ref } from "vue";
 import { ref } from "vue";

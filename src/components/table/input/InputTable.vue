@@ -8,12 +8,9 @@
 </template>
 
 <script lang="ts" setup>
+
 </script>
 
 <style scoped>
-.scroll-table {
-  position: relative;
-  height: 150px;
-  overflow: auto;
-}
+
 </style>

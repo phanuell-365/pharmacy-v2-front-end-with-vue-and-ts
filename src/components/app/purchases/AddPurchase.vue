@@ -84,7 +84,26 @@
         <!--    Tables section    -->
         <hr class="my-1">
         <div class="col-md-12 col-sm-6 mb-3">
-          <TableContainer :field-names="orderAttributes" :records="orders" @clicked-row="onClickedRowHandler" />
+
+          <!--          <TableContainer :field-names="orderAttributes" :records="orders" @clicked-row="onClickedRowHandler">-->
+          <TableContainer>
+            <TableHead>
+              <PlainTableHeader :field-names="orderAttributes" scope="col" />
+              <th>
+                Action
+              </th>
+            </TableHead>
+            <TableBody>
+              <TableRow :col-count="orderAttributes.length" :records="orders">
+                <template #default="{record}">
+                  <PlainTableData :field-names="orderAttributes" :record="record" />
+                  <td class="text-center">
+                    <button class="btn btn-primary btn-sm px-2" @click="onRowClick(record)">select</button>
+                  </td>
+                </template>
+              </TableRow>
+            </TableBody>
+          </TableContainer>
         </div>
       </div>
       <FormButtonsContainer>
@@ -111,6 +130,11 @@ import FormButton from "@/components/button/FormButton.vue";
 import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
 import TableContainer from "@/components/table/TableContainer.vue";
+import TableHead from "@/components/table/TableHead.vue";
+import PlainTableHeader from "@/components/table/plain/TableHeader.vue";
+import TableBody from "@/components/table/TableBody.vue";
+import TableRow from "@/components/table/TableRow.vue";
+import PlainTableData from "@/components/table/plain/TableData.vue";
 import { TOP_CENTER } from "@/constants/toasts";
 import { useOrdersStore } from "@/stores/app/orders/orders";
 import type { Ref } from "vue";
@@ -139,11 +163,12 @@ const OrderId: Ref<string> = ref("");
 
 orders.value = await ordersStore.fetchOrders();
 
-const onClickedRowHandler = (record: OrderDto) => {
+const onRowClick = (record: OrderDto) => {
   orderQuantity.value = record.orderQuantity;
   Medicine.value = record.medicine;
   Supplier.value = record.supplier;
   OrderId.value = record.id;
+  console.log("clicked");
 };
 
 onMounted(
@@ -367,6 +392,9 @@ const onAddAndViewAll = async () => {
 };
 
 const onClear = () => {
+
+  // set the value of the orders to it's initial value
+  orders.value = realOrdersMed.value;
 
   // select the form using the formRef
   const form = formRef.value as HTMLFormElement;
