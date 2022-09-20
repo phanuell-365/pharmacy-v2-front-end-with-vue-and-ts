@@ -1,5 +1,5 @@
 <template>
-  <td v-for="fieldName in fieldNames" :key="fieldName" @click="onClickHandler(record)">
+  <td v-for="fieldName in fieldNames" :key="fieldName">
     {{ record[fieldName] }}
   </td>
 </template>
@@ -10,15 +10,7 @@ interface DataProps {
   fieldNames: string[];
 }
 
-const props = defineProps<DataProps>();
-
-const emit = defineEmits<{
-  (e: "clicked-row", record: object): void
-}>();
-
-const onClickHandler = (record: object) => {
-  emit("clicked-row", record);
-};
+defineProps<DataProps>();
 </script>
 
 <style scoped>

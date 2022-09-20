@@ -2,11 +2,8 @@
   <section class="add-purchase">
     <form ref="formRef" novalidate @submit.prevent>
       <div class="row">
-        <!--    Inputs section    -->
-        <hr class="my-1">
-
         <div class="col-md-12 col-sm-6">
-          <div class="row g-3 m-4">
+          <div class="row g-3 m-2">
             <!--     Medicine       -->
             <InputContainer :invalid-feedback="MedicineIdErrorMessage" input-id="MedicineId" input-label="Medicine">
               <input id="validationMedicineId" v-model="Medicine"
@@ -86,15 +83,15 @@
         <div class="col-md-12 col-sm-6 mb-3">
 
           <!--          <TableContainer :field-names="orderAttributes" :records="orders" @clicked-row="onClickedRowHandler">-->
-          <TableContainer>
-            <TableHead>
+          <TableContainer skin="light">
+            <TableHead class="sticky-top">
               <PlainTableHeader :field-names="orderAttributes" scope="col" />
               <th>
                 Action
               </th>
             </TableHead>
             <TableBody>
-              <TableRow :col-count="orderAttributes.length" :records="orders">
+              <TableRow :col-count="orderAttributes.length + 1" :records="orders">
                 <template #default="{record}">
                   <PlainTableData :field-names="orderAttributes" :record="record" />
                   <td class="text-center">
@@ -168,7 +165,6 @@ const onRowClick = (record: OrderDto) => {
   Medicine.value = record.medicine;
   Supplier.value = record.supplier;
   OrderId.value = record.id;
-  console.log("clicked");
 };
 
 onMounted(
@@ -273,11 +269,11 @@ const SupplierPlaceholder = ref("");
 
 const realOrdersMed = ref([...orders.value]);
 
-watch(Medicine, () => {
-  orders.value = realOrdersMed.value.filter(value => {
-      if (Medicine.value) {
-        const searchValue = value.medicine.toLowerCase();
-        return searchValue.includes(Medicine.value.toLowerCase());
+watch(Medicine, (value) => {
+  orders.value = realOrdersMed.value.filter(value1 => {
+      if (value1) {
+        const searchValue = value1.medicine.toLowerCase();
+        return searchValue.includes(value.toLowerCase());
       }
       return true;
     }
@@ -287,11 +283,11 @@ watch(Medicine, () => {
 
 const realOrdersSup = ref([...orders.value]);
 
-watch(Supplier, () => {
-  orders.value = realOrdersSup.value.filter(value => {
-    if (Supplier.value) {
-      const searchValue = value.supplier.toLowerCase();
-      return searchValue.includes(Supplier.value.toLowerCase());
+watch(Supplier, (value) => {
+  orders.value = realOrdersSup.value.filter(value1 => {
+    if (value1) {
+      const searchValue = value1.supplier.toLowerCase();
+      return searchValue.includes(value.toLowerCase());
     }
     return true;
   });

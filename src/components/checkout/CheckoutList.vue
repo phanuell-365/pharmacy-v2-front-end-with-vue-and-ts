@@ -1,13 +1,16 @@
 <template>
   <div class="scroll-list">
     <TransitionGroup class="list-group mb-3" name="medicine-list" tag="ul">
-      <CheckoutListItem v-for="item in list" :key="item.medicineName" :product-name="item.medicineName"
+      <CheckoutListItem v-for="item in customersOrdersStore.items" :key="item.medicineName"
+                        :product-name="item.medicineName"
                         :product-price="item.medicinePrice"
-                        @click="onRemoveItemClick(item)" />
+                        :product-quantity="item.medicineQuantity"
+                        @update-item-click="onUpdateItemClick"
+                        @remove-item-click="onRemoveItemClick(item.medicineName)" />
     </TransitionGroup>
     <div class="card p-1 px-2 sticky-bottom">
       <span>Total (KSHS)</span>
-      <strong>Kshs. {{ totalPrice }}</strong>
+      <strong>Kshs. {{ customersOrdersStore.getTotalCost }}</strong>
     </div>
   </div>
 
@@ -15,31 +18,31 @@
 
 <script lang="ts" setup>
 import CheckoutListItem from "./CheckoutListItem.vue";
+import { useCustomersOrdersStore } from "@/stores/app/sales/customers-orders";
 
-interface CheckoutListItemProps {
-  medicineName: string;
-  medicinePrice: number;
+const customersOrdersStore = useCustomersOrdersStore();
+
+const onRemoveItemClick = (medicineName: string) => {
+  customersOrdersStore.removeItem(medicineName);
+};
+
+interface MedicineQuantityUpdate {
+  productName: string;
+  productPrice: number;
+  productQuantity: number;
 }
 
-interface CheckoutListProps {
-  list: CheckoutListItemProps[];
-  totalPrice: number;
-}
+const emit = defineEmits<{ (e: "update-item", medicine: MedicineQuantityUpdate): void }>();
 
-defineProps<CheckoutListProps>();
-
-const emit = defineEmits<{ (e: "removeItem", medicine: CheckoutListItemProps): void }>();
-
-const onRemoveItemClick = (medicine: CheckoutListItemProps) => {
-  console.log(`Deleting => ${medicine.medicineName}`);
-  emit("removeItem", medicine);
+const onUpdateItemClick = (medicine: MedicineQuantityUpdate) => {
+  emit("update-item", medicine);
 };
 </script>
 
 <style scoped>
 .scroll-list {
   position: relative;
-  height: 280px;
+  max-height: 250px;
   overflow: auto;
 }
 
@@ -69,5 +72,24 @@ const onRemoveItemClick = (medicine: CheckoutListItemProps) => {
 
 .medicine-list-move {
   transition: transform 0.8ms ease;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  /*box-shadow: inset 0 0 5px gray;*/
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: lightgray;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: dimgray;
 }
 </style>

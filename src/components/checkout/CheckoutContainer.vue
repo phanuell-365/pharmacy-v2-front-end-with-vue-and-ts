@@ -1,7 +1,7 @@
 <template>
-  <div class="col-md-5 col-lg-4 order-md-last">
-    <CheckoutHeading :number-of-items="medicineList.length" />
-    <CheckoutList :list="medicineList" :total-price="total" @remove-item="onRemoveItemHandler" />
+  <div class="col-md-3 col-lg-4 order-md-last mb-2">
+    <CheckoutHeading :customer-name="customerName" />
+    <CheckoutList @update-item="onUpdateItemHandler" />
   </div>
 
 </template>
@@ -9,42 +9,23 @@
 <script lang="ts" setup>
 import CheckoutHeading from "./CheckoutHeading.vue";
 import CheckoutList from "./CheckoutList.vue";
-import type { Ref } from "vue";
-import { onBeforeUpdate, ref } from "vue";
-
-interface CheckoutListItemProps {
-  medicineName: string;
-  medicinePrice: number;
-}
 
 interface CheckoutListProps {
-  list: CheckoutListItemProps[];
+  customerName?: string;
 }
 
 const props = defineProps<CheckoutListProps>();
 
-const medicineList: Ref<CheckoutListItemProps[]> = ref(props.list);
+interface MedicineQuantityUpdate {
+  productName: string;
+  productPrice: number;
+  productQuantity: number;
+}
 
-const prices = ref(medicineList.value.map(value => value.medicinePrice));
+const emit = defineEmits<{ (e: "update-item", medicine: MedicineQuantityUpdate): void }>();
 
-const total = ref(0);
-
-prices.value.forEach(value => total.value += value);
-
-const numberOfItems = ref(prices.value.length);
-
-onBeforeUpdate(() => {
-  prices.value = medicineList.value.map(value => value.medicinePrice);
-
-  if (prices.value.length > numberOfItems.value) {
-    prices.value.forEach(value => total.value += value);
-  }
-});
-
-const onRemoveItemHandler = (medicine: CheckoutListItemProps) => {
-  medicineList.value = medicineList.value?.filter(value => value.medicineName !== medicine.medicineName);
-  total.value -= medicine.medicinePrice;
-  // totalValue.value
+const onUpdateItemHandler = (medicine: MedicineQuantityUpdate) => {
+  emit("update-item", medicine);
 };
 </script>
 

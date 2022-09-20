@@ -13,8 +13,10 @@ import { SPINNER } from "@/constants/icons";</script>
             <component :is="Component" :key="route.name"></component>
           </Transition>
           <template #fallback>
-            <div class="m-auto">
-              <FontAwesome :icon-name="SPINNER" class="text-success" />
+            <div class="vh-100 d-flex spinner-container justify-content-center align-items-center">
+              <div class=" m-auto my-5">
+                <FontAwesome :icon-name="SPINNER" class="text-success text-center m-auto" />
+              </div>
             </div>
           </template>
         </Suspense>
@@ -24,6 +26,10 @@ import { SPINNER } from "@/constants/icons";</script>
 </template>
 
 <style scoped>
+.spinner-container {
+  overflow: auto;
+}
+
 .router-enter-from {
   opacity: 0;
   transform: translateY(50px);
