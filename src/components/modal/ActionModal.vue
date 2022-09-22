@@ -1,16 +1,29 @@
 <template>
   <div
-    ref="actionModalRef" :aria-labelledby="ariaLabelledBy" aria-hidden="true"
-    class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    ref="actionModalRef"
+    :aria-labelledby="ariaLabelledBy"
+    aria-hidden="true"
+    class="modal fade"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header border-bottom-0">
           <div :id="ariaLabelledBy" class="modal-header p-2 border-bottom-0">
-            <FontAwesome :icon-name="WARNING_ICON" class="mx-3 fa-2x text-warning" />
+            <FontAwesome
+              :icon-name="WARNING_ICON"
+              class="mx-3 fa-2x text-warning"
+            />
             <p class="fs-5 mb-0 text-dark">{{ exposedProps.title }}</p>
           </div>
-          <button aria-label="Close" class="btn-close text-end mx-2"
-                  data-bs-dismiss="modal" type="button"></button>
+          <button
+            aria-label="Close"
+            class="btn-close text-end mx-2"
+            data-bs-dismiss="modal"
+            type="button"
+          ></button>
         </div>
         <div class="modal-body border-bottom-0">
           <slot name="modal-body" />
@@ -56,32 +69,23 @@ defineExpose({
   showModal: () => actionModal.value?.show(),
   hideModal: () => actionModal.value?.hide(),
   setFocus: (inputEl: HTMLInputElement | null) => {
-    actionModalRef.value?.addEventListener("shown.bs.modal", function() {
+    actionModalRef.value?.addEventListener("shown.bs.modal", function () {
       inputEl?.focus();
     });
-  }
+  },
 });
-
 
 const emit = defineEmits(["on-hidden-bs-modal"]);
 
-onMounted(
-  () => {
-    if (actionModalRef.value)
-      actionModal.value = new Modal(actionModalRef.value);
+onMounted(() => {
+  if (actionModalRef.value) actionModal.value = new Modal(actionModalRef.value);
 
-    emit("on-hidden-bs-modal");
-  }
-);
+  emit("on-hidden-bs-modal");
+});
 
-onUnmounted(
-  () => {
-    actionModalRef.value?.removeEventListener("shown.bs.modal", function() {
-    });
-  }
-);
+onUnmounted(() => {
+  actionModalRef.value?.removeEventListener("shown.bs.modal", function () {});
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

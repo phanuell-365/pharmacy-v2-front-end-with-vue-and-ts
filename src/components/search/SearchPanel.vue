@@ -1,16 +1,36 @@
 <template>
   <form autocomplete="off">
     <div class="dropdown">
-      <InputContainer :input-id="`search${startCase(label)}`" :input-label="label"
-                      :invalid-feedback="searchTextErrorMessage">
-        <input id="searchInput" v-model="searchText" :name="name" :placeholder="`Find by ${name} name ... `"
-               autocomplete="off" class="form-control shadow-sm" type="text" @focusin="onFocusInHandler"
-               @focusout="onFocusOutHandler">
+      <InputContainer
+        :input-id="`search${startCase(label)}`"
+        :input-label="label"
+        :invalid-feedback="searchTextErrorMessage"
+      >
+        <input
+          id="searchInput"
+          v-model="searchText"
+          :name="name"
+          :placeholder="`Find by ${name} name ... `"
+          autocomplete="off"
+          class="form-control shadow-sm"
+          type="text"
+          @focusin="onFocusInHandler"
+          @focusout="onFocusOutHandler"
+        />
       </InputContainer>
-      <div id="searchDropdown" :class="{show}" class="search-dropdown rounded">
-      <span v-for="item in filterArr" :key="item.id" class="p-2 text-muted" @click="onClickHandler(item)">
-        {{ item.name }}
-      </span>
+      <div
+        id="searchDropdown"
+        :class="{ show }"
+        class="search-dropdown rounded"
+      >
+        <span
+          v-for="item in filterArr"
+          :key="item.id"
+          class="p-2 text-muted"
+          @click="onClickHandler(item)"
+        >
+          {{ item.name }}
+        </span>
       </div>
     </div>
   </form>
@@ -38,11 +58,9 @@ const props = defineProps<SearchPanelProps>();
 // const searchText = ref("");
 
 const searchTextValidation = (value: string) => {
-
   if (!value) {
     return "Please enter a value to search";
   }
-
 
   return true;
 };
@@ -50,17 +68,17 @@ const searchTextValidation = (value: string) => {
 const {
   value: searchText,
   errorMessage: searchTextErrorMessage,
-  meta: searchTextMeta
+  meta: searchTextMeta,
 } = useField("searchText", searchTextValidation);
 
 const filterArr = ref(props.filterArray);
 const filterArrayClone = ref([...props.filterArray.sort()]);
 
-watch(searchText,
-  (value) => {
-    filterArr.value = filterArrayClone.value.filter(value1 => value1.name.toLowerCase().includes(value.toLowerCase()));
-  }
-);
+watch(searchText, (value) => {
+  filterArr.value = filterArrayClone.value.filter((value1) =>
+    value1.name.toLowerCase().includes(value.toLowerCase())
+  );
+});
 
 const show = ref(false);
 
@@ -69,9 +87,10 @@ const onFocusInHandler = () => {
 };
 
 const onFocusOutHandler = () => {
-  setTimeout(() => show.value = false, 100);
+  setTimeout(() => (show.value = false), 100);
 };
 
+// eslint-disable-next-line no-unused-vars
 const emit = defineEmits<{ (e: "on-found-item", item: SearchPairs): void }>();
 
 const onClickHandler = (item: SearchPairs) => {
@@ -82,9 +101,8 @@ const onClickHandler = (item: SearchPairs) => {
 defineExpose({
   clear: () => {
     searchText.value = "";
-  }
+  },
 });
-
 </script>
 
 <style scoped>

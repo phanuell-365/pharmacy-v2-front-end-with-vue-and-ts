@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { useMedicinesStore } from "@/stores/app/medicines/medicines";
 import { useStocksStore } from "@/stores/app/stock/stocks";
 
-interface CustomersOrders {
+export interface CustomersOrders {
   id: string;
   medicine: string;
   doseForm: string;
@@ -53,6 +53,10 @@ export const useCustomersOrdersStore = defineStore({
       return payload.price * payload.quantity;
     },
 
+    /**
+     * @throws Error If the selected medicine's stock could not be found
+     * @param payload
+     */
     async addItem(payload: AddCustomerOrder) {
       const medicinesStore = useMedicinesStore();
       const stocksStore = useStocksStore();
@@ -64,6 +68,10 @@ export const useCustomersOrdersStore = defineStore({
       const medicineStock = stocks.find(
         (value) => value.medicine === medicine.name
       );
+
+      if (!medicineStock) {
+        throw new Error("No stock was found for the medicine");
+      }
 
       let itemTotalPrice: number;
 
