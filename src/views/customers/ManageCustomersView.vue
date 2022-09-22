@@ -2,15 +2,15 @@
   <section class="manage-customers">
     <SidebarLayout>
       <template #body>
-        <TablePlaceholders />
+        <ManageCustomers />
       </template>
     </SidebarLayout>
   </section>
 </template>
 
 <script lang="ts" setup>
-import TablePlaceholders from "@/components/placeholders/TablePlaceholders.vue";
-import SidebarLayout from "@/layouts/SidebarLayout.vue";</script>
+import SidebarLayout from "@/layouts/SidebarLayout.vue";
+import ManageCustomers from "@/components/app/customers/ManageCustomers.vue";</script>
 
 <style scoped>
 

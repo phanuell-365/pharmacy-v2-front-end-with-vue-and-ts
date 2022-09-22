@@ -9,7 +9,12 @@ export const PURCHASES_MENU: AccordionItemProps = {
     {
       href: "/purchases/create",
       description: "add purchase",
-      routeName: "add-purchase"
-    }
-  ]
+      routeName: "add-purchase",
+    },
+    {
+      href: "/purchases",
+      description: "manage purchases",
+      routeName: "manage-purchases",
+    },
+  ],
 };

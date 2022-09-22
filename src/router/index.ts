@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView
+      component: HomeView,
     },
     {
       path: "/about",
@@ -15,119 +15,143 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue")
+      component: () => import("../views/AboutView.vue"),
     },
     {
       path: "/dashboard",
       name: "dashboard",
-      component: () => import("../views/DashboardView.vue")
+      component: () => import("../views/DashboardView.vue"),
     },
 
     // users' routes
     {
       path: "/users",
       name: "view-users",
-      component: () => import("../views/users/ViewUsersView.vue")
+      component: () => import("../views/users/ViewUsersView.vue"),
     },
     {
       path: "/users/create",
       name: "add-user",
-      component: () => import("../views/users/AddUserView.vue")
+      component: () => import("../views/users/AddUserView.vue"),
     },
     {
       path: "/users/update",
       name: "manage-users",
-      component: () => import("../views/users/ManageUsersView.vue")
+      component: () => import("../views/users/ManageUsersView.vue"),
     },
     {
       path: "/users/:id",
       name: "view-user",
       component: () => import("../views/users/id/ViewUserView.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/users/:id/update",
       name: "manage-user",
       component: () => import("../views/users/id/ManageUserView.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/users/reports",
       name: "users-reports",
-      component: () => import("../views/users/UsersReportsView.vue")
+      component: () => import("../views/users/UsersReportsView.vue"),
     },
 
     // customers' routes
     {
       path: "/customers/create",
       name: "add-customer",
-      component: () => import("../views/customers/AddCustomerView.vue")
+      component: () => import("../views/customers/AddCustomerView.vue"),
     },
     {
       path: "/customers",
       name: "view-customers",
-      component: () => import("../views/customers/ViewCustomers.vue")
+      component: () => import("../views/customers/ViewCustomers.vue"),
     },
     {
       path: "/customers/update",
       name: "manage-customers",
-      component: () => import("../views/customers/ManageCustomers.vue")
+      component: () => import("../views/customers/ManageCustomersView.vue"),
     },
     {
       path: "/customers/:id",
       name: "view-customer",
       component: () => import("../views/customers/id/ViewCustomer.vue"),
-      props: true
+      props: true,
     },
     {
       path: "/customers/:id/update",
       name: "manage-customer",
       component: () => import("../views/customers/id/ManageCustomer.vue"),
-      props: true
+      props: true,
     },
 
     // sales routes
     {
       path: "/sales/create",
       name: "add-sale",
-      component: () => import("../views/sales/AddSaleView.vue")
+      component: () => import("../views/sales/AddSaleView.vue"),
     },
 
     // medicines routes
     {
       path: "/medicines/create",
       name: "add-medicine",
-      component: () => import("../views/medicines/AddMedicineView.vue")
+      component: () => import("../views/medicines/AddMedicineView.vue"),
     },
-
+    {
+      path: "/medicines",
+      name: "manage-medicines",
+      component: () => import("../views/medicines/ManageMedicinesView.vue"),
+    },
     // stocks routes
     {
       path: "/stocks/create",
       name: "add-stock",
-      component: () => import("../views/stock/AddStockView.vue")
+      component: () => import("../views/stock/AddStockView.vue"),
+    },
+    {
+      path: "/stocks",
+      name: "manage-stocks",
+      component: () => import("../views/stock/ManageStocksView.vue"),
     },
 
     // suppliers routes
     {
       path: "/suppliers/create",
       name: "add-supplier",
-      component: () => import("../views/suppliers/AddSupplierView.vue")
+      component: () => import("../views/suppliers/AddSupplierView.vue"),
+    },
+    {
+      path: "/suppliers",
+      name: "manage-suppliers",
+      component: () => import("../views/suppliers/ManageSuppliersView.vue"),
     },
 
     // orders routes
     {
       path: "/orders/create",
       name: "add-order",
-      component: () => import("../views/orders/AddOrderView.vue")
+      component: () => import("../views/orders/AddOrderView.vue"),
+    },
+    {
+      path: "/orders",
+      name: "manage-orders",
+      component: () => import("../views/orders/ManageOrdersView.vue"),
     },
 
     // purchases routes
     {
       path: "/purchases/create",
       name: "add-purchase",
-      component: () => import("../views/purchases/AddPurchaseView.vue")
-    }
-  ]
+      component: () => import("../views/purchases/AddPurchaseView.vue"),
+    },
+    {
+      path: "/purchases",
+      name: "manage-purchases",
+      component: () => import("../views/purchases/ManagePurchasesView.vue"),
+    },
+  ],
 });
 
 export default router;

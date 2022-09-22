@@ -4,4 +4,5 @@ export interface OrderDto {
   status: string;
   medicine: string;
   supplier: string;
+  orderDate: string;
 }

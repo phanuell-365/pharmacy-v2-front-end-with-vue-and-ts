@@ -12,7 +12,7 @@
         </div>
 
         <div class="modal-body p-5 pt-0">
-          <form class="" novalidate @submit.prevent="onFormSubmit ">
+          <form autocomplete="off" class="" novalidate @submit.prevent="onFormSubmit">
             <div class="form-floating mb-3">
               <input id="floatingInput" ref="refUsername" v-model="username" class="form-control rounded-4"
                      placeholder="John Doe"

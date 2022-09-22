@@ -8,8 +8,13 @@ export const STOCKS_MENU: AccordionItemProps = {
   accordionList: [
     {
       href: "/stocks/create",
-      description: "add-stock",
+      description: "add stock",
       routeName: "add-stock",
+    },
+    {
+      href: "/stocks",
+      description: "manage stock",
+      routeName: "manage-stocks",
     },
   ],
 };

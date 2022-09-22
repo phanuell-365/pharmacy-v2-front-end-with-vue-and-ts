@@ -13,11 +13,6 @@ export const MEDICINES_MENU: AccordionItemProps = {
     },
     {
       href: "/medicines",
-      description: "view medicines",
-      routeName: "view-medicines",
-    },
-    {
-      href: "/medicines/update",
       description: "manage medicines",
       routeName: "manage-medicines",
     },

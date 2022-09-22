@@ -1,8 +1,8 @@
 <template>
-  <section class="add-sale">
+  <section class="manage-stocks">
     <SidebarLayout>
       <template #body>
-        <AddSales />
+        <ManageStocks />
       </template>
     </SidebarLayout>
   </section>
@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import AddSales from "@/components/app/sales/AddSales.vue";</script>
+import ManageStocks from "@/components/app/stocks/ManageStocks.vue";</script>
 
 <style scoped>
 

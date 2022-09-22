@@ -1,15 +1,39 @@
 import { defineStore } from "pinia";
+import { useMedicinesStore } from "@/stores/app/medicines/medicines";
+import { useStocksStore } from "@/stores/app/stock/stocks";
 
 interface CustomersOrders {
-  medicineName: string;
-  medicinePrice: number;
-  medicineQuantity: number;
+  id: string;
+  medicine: string;
+  doseForm: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+  levelOfUse: number;
+  expiryDate: string;
+}
+
+interface AddCustomerOrder {
+  id: string;
+  name: string;
+  quantity: number;
 }
 
 interface CustomersOrdersState {
   items: CustomersOrders[];
   totalCost: number;
 }
+
+const EMPTY_CUS_ORDER: CustomersOrders = {
+  id: "",
+  medicine: "",
+  doseForm: "",
+  price: 0,
+  quantity: 0,
+  totalPrice: 0,
+  levelOfUse: 0,
+  expiryDate: "",
+};
 
 export const useCustomersOrdersStore = defineStore({
   id: "customers-orders",
@@ -18,23 +42,63 @@ export const useCustomersOrdersStore = defineStore({
     totalCost: 0,
   }),
   getters: {
-    getItems: (state) => state.items,
+    getItems: (state): CustomersOrders[] => state.items,
     getTotalCost: (state) => state.totalCost,
+    getAttributes: (state) =>
+      Object.keys(EMPTY_CUS_ORDER).filter((value) => value !== "id"),
+    getItemNames: (state) => state.items.map((value) => value.medicine),
   },
   actions: {
-    addItem(payload: CustomersOrders) {
-      this.items.push(payload);
-      this.calculateTotalCost();
+    calculateItemTotalPrice(payload: { price: number; quantity: number }) {
+      return payload.price * payload.quantity;
     },
-    removeItem(medicineName: string) {
-      this.items = this.items.filter(
-        (value) => value.medicineName !== medicineName
+
+    async addItem(payload: AddCustomerOrder) {
+      const medicinesStore = useMedicinesStore();
+      const stocksStore = useStocksStore();
+
+      const medicine = await medicinesStore.fetchMedicineById(payload.id);
+
+      const stocks = await stocksStore.fetchStocks();
+
+      const medicineStock = stocks.find(
+        (value) => value.medicine === medicine.name
       );
+
+      let itemTotalPrice: number;
+
+      if (medicineStock) {
+        itemTotalPrice = this.calculateItemTotalPrice({
+          price: medicineStock.issueUnitPrice,
+          quantity: payload.quantity,
+        });
+
+        this.items.push({
+          id: payload.id,
+          medicine: medicine.name,
+          doseForm: medicine.doseForm,
+          price: medicineStock.issueUnitPrice,
+          quantity: payload.quantity,
+          totalPrice: itemTotalPrice,
+          levelOfUse: medicine.levelOfUse,
+          expiryDate: new Date(
+            medicineStock.expirationDate
+          ).toLocaleDateString(),
+        });
+
+        this.calculateTotalCost();
+      }
+    },
+
+    removeItem(medicineId: string) {
+      console.log("removing -> ", medicineId);
+      this.items = this.items.filter((value) => value.id !== medicineId);
       this.calculateTotalCost();
     },
+
     calculateTotalCost() {
       const costs: number[] = this.items.map((value) => {
-        return value.medicinePrice * value.medicineQuantity;
+        return value.price * value.quantity;
       });
 
       this.totalCost = 0;
@@ -43,14 +107,16 @@ export const useCustomersOrdersStore = defineStore({
         this.totalCost += value;
       });
     },
-    updateItemQuantity(payload: { medicineName: string; newQuantity: number }) {
-      const medicineItem = this.items.find(
-        (value) => value.medicineName === payload.medicineName
-      );
+
+    updateItemQuantity(payload: { id: string; quantity: number }) {
+      const medicineItem = this.items.find((value) => value.id === payload.id);
 
       if (medicineItem) {
-        medicineItem.medicineQuantity = payload.newQuantity;
+        medicineItem.quantity = payload.quantity;
+        medicineItem.totalPrice = this.calculateItemTotalPrice(medicineItem);
       }
+
+      this.calculateTotalCost();
     },
   },
 });

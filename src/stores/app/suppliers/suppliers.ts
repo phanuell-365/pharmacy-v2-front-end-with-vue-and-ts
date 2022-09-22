@@ -3,6 +3,13 @@ import type { NewSupplierDto, SupplierDto } from "@/stores/app/suppliers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
+const SUPPLIER_DEFAULT: SupplierDto = {
+  id: "",
+  name: "",
+  email: "",
+  phone: "",
+};
+
 interface SuppliersState {
   suppliers: SupplierDto[];
 }
@@ -12,7 +19,10 @@ export const useSuppliersStore = defineStore({
   state: (): SuppliersState => ({
     suppliers: [],
   }),
-  getters: {},
+  getters: {
+    getSupplierAttributes: (state) =>
+      Object.keys(SUPPLIER_DEFAULT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();

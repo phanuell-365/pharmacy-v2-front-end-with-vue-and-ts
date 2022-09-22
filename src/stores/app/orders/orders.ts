@@ -4,6 +4,15 @@ import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import type { NewOrderDto } from "@/stores/app/orders/dto";
 
+const ORDER_DEFAULT: OrderDto = {
+  id: "",
+  orderQuantity: 0,
+  status: "",
+  medicine: "",
+  supplier: "",
+  orderDate: "",
+};
+
 interface OrdersState {
   orders: OrderDto[];
   orderStatuses: string[];
@@ -13,9 +22,12 @@ export const useOrdersStore = defineStore({
   id: "orders",
   state: (): OrdersState => ({
     orders: [],
-    orderStatuses: []
+    orderStatuses: [],
   }),
-  getters: {},
+  getters: {
+    getOrderAttributes: (state) =>
+      Object.keys(ORDER_DEFAULT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();
@@ -27,8 +39,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -46,8 +58,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -64,8 +76,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -82,8 +94,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -100,8 +112,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -118,8 +130,8 @@ export const useOrdersStore = defineStore({
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
@@ -138,8 +150,8 @@ export const useOrdersStore = defineStore({
           method: "GET",
           headers: {
             Authorization: `Bearer ${this.getToken()}`,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -159,9 +171,9 @@ export const useOrdersStore = defineStore({
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -171,6 +183,6 @@ export const useOrdersStore = defineStore({
       }
 
       return data as OrderDto;
-    }
-  }
+    },
+  },
 });

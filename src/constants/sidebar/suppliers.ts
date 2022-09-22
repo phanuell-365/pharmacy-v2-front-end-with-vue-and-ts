@@ -11,5 +11,10 @@ export const SUPPLIERS_MENU: AccordionItemProps = {
       description: "add supplier",
       routeName: "add-supplier",
     },
+    {
+      href: "/suppliers",
+      description: "manage suppliers",
+      routeName: "manage-suppliers",
+    },
   ],
 };

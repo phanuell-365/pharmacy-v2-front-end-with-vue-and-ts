@@ -2,14 +2,15 @@
   <section class="manage-users">
     <SidebarLayout>
       <template #body>
-        <TablePlaceholders />
+        <ManageUsers />
       </template>
     </SidebarLayout>
   </section>
 </template>
 
-<script lang="ts" setup>import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import TablePlaceholders from "@/components/placeholders/TablePlaceholders.vue";</script>
+<script lang="ts" setup>
+import SidebarLayout from "@/layouts/SidebarLayout.vue";
+import ManageUsers from "@/components/app/users/ManageUsers.vue";</script>
 
 <style scoped>
 

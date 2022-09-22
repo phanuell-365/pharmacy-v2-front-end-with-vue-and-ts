@@ -86,4 +86,24 @@ main {
   padding: 10px;
 }
 
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(89, 253, 158, 0.55);
+  /*box-shadow: inset 0 0 5px gray;*/
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  /*background: var(--bs-secondary);*/
+  background: rgba(192, 255, 195, 0.55);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(111, 189, 119, 0.45);
+}
+
 </style>

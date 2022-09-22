@@ -1,6 +1,8 @@
 <template>
   <td v-for="fieldName in fieldNames" :key="fieldName">
-    {{ record[fieldName] }}
+    <template v-if="record">
+      {{ record[fieldName] }}
+    </template>
   </td>
 </template>
 

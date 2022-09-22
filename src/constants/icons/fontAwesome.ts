@@ -8,6 +8,7 @@ export const NEW_SUPPLIERS_ICON = "fa-solid fa-shipping-fast";
 export const EDIT_SUPPLIERS_ICON = "fa-solid fa-ambulance";
 
 export const EDIT_ICON = "fa-solid fa-edit";
+export const VIEW_ICON = "fa-solid fa-table";
 
 export const NEW_MEDICINES_ICON = "fa-solid fa-pills";
 export const MEDICINE_ICON = "fa-solid fa-capsules";
@@ -33,7 +34,7 @@ export const LOGIN_ICON = "fas fa-sign-in-alt";
 export const LOGOUT_ICON = "fas fa-sign-out-alt";
 export const CREATE_ICON = "fas fa-user-plus";
 export const UPDATE_ICON = "fas fa-edit";
-export const VIEW_ICON = "fa-solid fa-hospital-user";
+// export const VIEW_ICON = "fa-solid fa-hospital-user";
 export const DELETE_ICON = "fas fa-trash-alt";
 export const SEARCH_ICON = "fas fa-search";
 export const NEW_USER_ICON = "fas fa-user-plus";

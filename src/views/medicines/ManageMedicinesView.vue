@@ -1,8 +1,8 @@
 <template>
-  <section class="add-sale">
+  <section class="manage-medicines">
     <SidebarLayout>
       <template #body>
-        <AddSales />
+        <ManageMedicines />
       </template>
     </SidebarLayout>
   </section>
@@ -10,7 +10,7 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import AddSales from "@/components/app/sales/AddSales.vue";</script>
+import ManageMedicines from "@/components/app/medicines/ManageMedicines.vue";</script>
 
 <style scoped>
 

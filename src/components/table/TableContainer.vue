@@ -1,5 +1,5 @@
 <template>
-  <div class="scroll-table">
+  <div :class="tableSize">
     <table
       :class="color"
       class="table table-hover table-bordered table-striped table-sm table-responsive table-responsive-md table-responsive-sm">
@@ -13,9 +13,14 @@ import { computed } from "vue";
 
 interface TableContainerProps {
   skin?: string;
+  large?: string;
 }
 
 const props = defineProps<TableContainerProps>();
+
+const tableSize = computed(
+  () => props.large ? "scroll-table-lg" : "scroll-table-sm"
+);
 
 const color = computed(
   () => props.skin ? `table-${props.skin}` : "table-success"
@@ -23,9 +28,15 @@ const color = computed(
 </script>
 
 <style scoped>
-.scroll-table {
+.scroll-table-sm {
   position: relative;
-  min-height: 150px;
+  max-height: 150px;
+  overflow: auto;
+}
+
+.scroll-table-lg {
+  position: relative;
+  max-height: 350px;
   overflow: auto;
 }
 

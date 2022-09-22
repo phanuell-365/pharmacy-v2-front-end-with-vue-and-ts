@@ -3,6 +3,13 @@ import type { CustomerDto, NewCustomerDto } from "@/stores/app/customers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
+const CUSTOMER_DEFUALT: CustomerDto = {
+  id: "",
+  name: "",
+  email: "",
+  phone: "",
+};
+
 interface CustomersState {
   customers: CustomerDto[];
 }
@@ -12,7 +19,10 @@ export const useCustomersStore = defineStore({
   state: (): CustomersState => ({
     customers: [],
   }),
-  getters: {},
+  getters: {
+    getCustomerAttributes: (state) =>
+      Object.keys(CUSTOMER_DEFUALT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();
@@ -42,9 +52,9 @@ export const useCustomersStore = defineStore({
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -52,6 +62,6 @@ export const useCustomersStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as CustomerDto;
-    }
+    },
   },
 });

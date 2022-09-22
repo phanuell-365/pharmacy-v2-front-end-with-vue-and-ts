@@ -3,6 +3,18 @@ import type { NewStockDto, StockDto } from "@/stores/app/stock/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
+const STOCKS_DEFAULT: StockDto = {
+  id: "",
+  medicine: "",
+  issueUnitPrice: 0,
+  // issueUnitPerPackSize: 0,
+  // packSizeQuantity: 0,
+  packSize: "",
+  packSizePrice: 0,
+  issueQuantity: 0,
+  expirationDate: "",
+};
+
 interface StocksState {
   stocks: StockDto[];
 }
@@ -12,7 +24,10 @@ export const useStocksStore = defineStore({
   state: (): StocksState => ({
     stocks: [],
   }),
-  getters: {},
+  getters: {
+    getStockAttributes: (state) =>
+      Object.keys(STOCKS_DEFAULT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();

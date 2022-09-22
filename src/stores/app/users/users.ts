@@ -5,6 +5,14 @@ import { BASE_URL } from "@/constants/base-url";
 import startCase from "lodash/startCase";
 import has from "lodash/has";
 
+const USER_DEFAULT: UserDto = {
+  id: "",
+  username: "",
+  email: "",
+  phone: "",
+  role: "",
+};
+
 interface UsersState {
   users: UserDto[];
   usersRoles: string[];
@@ -14,8 +22,11 @@ export const useUsersStore = defineStore({
   id: "users",
   state: (): UsersState => ({
     users: [],
-    usersRoles: [],
+    usersRoles: []
   }),
+  getters: {
+    getUserAttributes: state => Object.keys(USER_DEFAULT).filter(value => value !== "id")
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();
@@ -27,8 +38,8 @@ export const useUsersStore = defineStore({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken(),
-        },
+          Authorization: "Bearer " + this.getToken()
+        }
       });
 
       const data = await response.json();
@@ -50,8 +61,8 @@ export const useUsersStore = defineStore({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken(),
-        },
+          Authorization: "Bearer " + this.getToken()
+        }
       });
 
       const data = await response.json();
@@ -72,9 +83,9 @@ export const useUsersStore = defineStore({
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + this.getToken(),
-          "Content-Disposition": "attachment;filename=users-reports.pdf",
+          "Content-Disposition": "attachment;filename=users-reports.pdf"
         },
-        redirect: "follow",
+        redirect: "follow"
       });
 
       if (!response.ok) {
@@ -122,8 +133,8 @@ export const useUsersStore = defineStore({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + this.getToken(),
-          },
+            Authorization: "Bearer " + this.getToken()
+          }
         }
       );
 
@@ -147,9 +158,9 @@ export const useUsersStore = defineStore({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken(),
+          Authorization: "Bearer " + this.getToken()
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
@@ -162,6 +173,6 @@ export const useUsersStore = defineStore({
       }
 
       return { status: true };
-    },
-  },
+    }
+  }
 });

@@ -3,6 +3,18 @@ import type { NewPurchaseDto, PurchaseDto } from "@/stores/app/purchases/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
+const PURCHASE_DEFAULT: PurchaseDto = {
+  id: "",
+  medicine: "",
+  supplier: "",
+  packSizeQuantity: 0,
+  pricePerPackSize: 0,
+  totalPackSizePrice: 0,
+  // OrderId: "",
+  purchaseDate: "",
+  orderDate: "",
+};
+
 interface PurchasesState {
   purchases: PurchaseDto[];
 }
@@ -12,7 +24,10 @@ export const usePurchasesStore = defineStore({
   state: (): PurchasesState => ({
     purchases: [],
   }),
-  getters: {},
+  getters: {
+    getPurchaseAttributes: (state) =>
+      Object.keys(PURCHASE_DEFAULT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();
@@ -56,9 +71,9 @@ export const usePurchasesStore = defineStore({
         method: "POST",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -66,6 +81,6 @@ export const usePurchasesStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as PurchaseDto;
-    }
+    },
   },
 });
