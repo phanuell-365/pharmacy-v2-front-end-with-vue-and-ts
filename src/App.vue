@@ -73,7 +73,7 @@ import { SPINNER } from "@/constants/icons";
 <style>
 @font-face {
   font-family: "Lato";
-  src: url("./src/assets/fonts/Lato-Regular.ttf");
+  src: url("@/assets/fonts/Lato-Regular.ttf");
 }
 
 * {
