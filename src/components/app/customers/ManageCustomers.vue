@@ -1,11 +1,26 @@
 <template>
   <section class="manage-customers">
-    <SearchTable :attributes="customersStore.getCustomerAttributes" :records="customers" name="customer"
-                 null-comment="Customer not found" search-by="name"
-                 search-term="customer">
-      <template #actions="{recordId}">
-        <ButtonLinkIcon :href="`/customers/${recordId}`" action="view" />
-        <ButtonLinkIcon :href="`/customers/${recordId}/update`" action="update" />
+    <SearchTable
+      :attributes="customersStore.getCustomerAttributes"
+      :records="customers"
+      name="customer"
+      null-comment="Customer not found"
+      search-by="name"
+      search-term="customer"
+    >
+      <template #actions="{ recordId }">
+        <ButtonLinkIcon
+          :href="`/customers/${recordId}`"
+          action="view"
+          data-bs-html="true"
+          data-bs-placement="top"
+          data-bs-toggle="tooltip"
+          title="View Customer"
+        />
+        <ButtonLinkIcon
+          :href="`/customers/${recordId}/update`"
+          action="update"
+        />
         <ButtonLinkIcon :href="`/customers/${recordId}`" action="delete" />
       </template>
     </SearchTable>
@@ -40,7 +55,6 @@ const toastError = ref();
 try {
   customers.value = await customersStore.fetchCustomers();
 } catch (error: any) {
-
   console.error(error);
 
   toastError.value?.setupToast({
@@ -48,13 +62,11 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Customers Error",
     text: "Failed to fetch customers from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
