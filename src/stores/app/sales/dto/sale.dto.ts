@@ -12,8 +12,6 @@ export interface SaleDto {
 export interface SalesDto {
   id: string;
   customer: string;
-  issueUnitQuantity: number;
-  issueUnitPrice: string;
   medicines: string;
   saleDate: string;
   totalPrices: number;

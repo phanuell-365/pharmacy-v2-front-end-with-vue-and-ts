@@ -63,10 +63,6 @@
                   <div class="invalid-feedback">
                     {{ issueUnitQuantityErrorMessage }}
                   </div>
-                  <!--                </div>-->
-                  <!--              </div>-->
-                  <!--            </div>-->
-                  <!--            </div>-->
                 </div>
               </div>
             </div>

@@ -1,12 +1,12 @@
 <template>
   <section class="manage-medicines">
     <SearchTable
-      :attributes="medicinesStore.getMedicineAttributes"
-      :records="medicines"
-      name="medicine"
-      null-comment="Medicine not found"
-      search-by="name"
-      search-term="medicine"
+      :attributes="salesStore.getSalesAttributes"
+      :records="sales"
+      name="sale"
+      null-comment="Sales not found"
+      search-by="customer"
+      search-term="customer"
     >
       <template #actions="{ recordId }">
         <ButtonLinkIcon :href="`/medicines/${recordId}`" action="view" />
@@ -32,29 +32,29 @@ import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
 import ButtonLinkIcon from "@/components/button/ButtonLinkIcon.vue";
 import { TOP_CENTER } from "@/constants/toasts";
-import { useMedicinesStore } from "@/stores/app/medicines/medicines";
+import { useSalesStore } from "@/stores/app/sales/sales";
 import type { Ref } from "vue";
 import { ref } from "vue";
-import type { MedicineDto } from "@/stores/app/medicines/dto";
+import type { SalesDto } from "@/stores/app/sales/dto";
 import moment from "moment";
 
-const medicinesStore = useMedicinesStore();
+const salesStore = useSalesStore();
 
-const medicines: Ref<MedicineDto[] | undefined> = ref();
+const sales: Ref<SalesDto[]> = ref([]);
 
 const toastSuccess = ref();
 const toastError = ref();
 
 try {
-  medicines.value = await medicinesStore.fetchMedicines();
+  sales.value = await salesStore.fetchSales();
 } catch (error: any) {
   console.error(error);
 
   toastError.value?.setupToast({
-    name: "Fetch Medicines Error",
+    name: "Fetch Sales Error",
     elapsedDuration: moment().startOf("second").fromNow(),
-    heading: "Fetch Medicines Error",
-    text: "Failed to fetch medicines from the server",
+    heading: "Fetch Sales Error",
+    text: "Failed to fetch sales from the server",
     delay: 5000,
   });
 

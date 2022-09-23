@@ -2,6 +2,15 @@ import { defineStore } from "pinia";
 import type { SaleDto, SalesDto } from "@/stores/app/sales/dto/sale.dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import type { NewSalesDto } from "@/stores/app/sales/dto";
+
+const SALES_DEFAULT: SalesDto = {
+  id: "",
+  customer: "",
+  medicines: "",
+  saleDate: "",
+  totalPrices: 0,
+};
 
 interface SalesState {
   sales: SalesDto[];
@@ -14,7 +23,10 @@ export const useSalesStore = defineStore({
     sales: [],
     sale: null,
   }),
-  getters: {},
+  getters: {
+    getSalesAttributes: (state) =>
+      Object.keys(SALES_DEFAULT).filter((value) => value !== "id"),
+  },
   actions: {
     getToken() {
       const tokenStore = useTokenStore();
@@ -55,12 +67,15 @@ export const useSalesStore = defineStore({
     },
 
     async fetchCancelledSales() {
-      const response: Response = await fetch(`${BASE_URL}/sales?status=cancelled`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+      const response: Response = await fetch(
+        `${BASE_URL}/sales?status=cancelled`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -70,18 +85,41 @@ export const useSalesStore = defineStore({
     },
 
     async fetchIssuedSales() {
-      const response: Response = await fetch(`${BASE_URL}/sales?status=issued`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+      const response: Response = await fetch(
+        `${BASE_URL}/sales?status=issued`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok) throw new Error(data?.message);
 
       return data as SalesDto[];
-    }
+    },
+
+    async addSales(payload: NewSalesDto) {
+      const response: Response = await fetch(
+        `${BASE_URL}/sales?status=issued`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload.sales),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as SalesDto;
+    },
   },
 });

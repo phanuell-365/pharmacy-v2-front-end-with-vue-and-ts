@@ -11,5 +11,10 @@ export const SALES_MENU: AccordionItemProps = {
       description: "add sale",
       routeName: "add-sale",
     },
+    {
+      href: "/sales",
+      description: "manage sales",
+      routeName: "manage-sales",
+    },
   ],
 };

@@ -2,7 +2,8 @@
   <div :class="tableSize">
     <table
       :class="color"
-      class="table table-hover table-bordered table-striped table-sm table-responsive table-responsive-md table-responsive-sm">
+      class="table table-hover table-bordered table-striped table-sm table-responsive table-responsive-md table-responsive-sm"
+    >
       <slot />
     </table>
   </div>
@@ -13,17 +14,17 @@ import { computed } from "vue";
 
 interface TableContainerProps {
   skin?: string;
-  large?: string;
+  large?: boolean;
 }
 
 const props = defineProps<TableContainerProps>();
 
-const tableSize = computed(
-  () => props.large ? "scroll-table-lg" : "scroll-table-sm"
+const tableSize = computed(() =>
+  props.large ? "scroll-table-lg" : "scroll-table-sm"
 );
 
-const color = computed(
-  () => props.skin ? `table-${props.skin}` : "table-success"
+const color = computed(() =>
+  props.skin ? `table-${props.skin}` : "table-success"
 );
 </script>
 

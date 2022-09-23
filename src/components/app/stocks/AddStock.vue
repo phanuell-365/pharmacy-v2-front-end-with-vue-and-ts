@@ -1,14 +1,19 @@
 <template>
-  <hr class="my-3">
+  <hr class="my-3" />
   <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
-
     <!--  issueUnitPrice  -->
-    <InputContainer :invalid-feedback="issueUnitPriceErrorMessage" input-id="issueUnitPrice"
-                    input-label="issueUnitPrice">
+    <InputContainer
+      :invalid-feedback="issueUnitPriceErrorMessage"
+      input-id="issueUnitPrice"
+      input-label="issueUnitPrice"
+    >
       <input
         id="validationIssueUnitPrice"
         v-model.trim="issueUnitPrice"
-        :class="{'is-invalid': !issueUnitPriceMeta.valid && issueUnitPriceMeta.validated}"
+        :class="{
+          'is-invalid':
+            !issueUnitPriceMeta.valid && issueUnitPriceMeta.validated,
+        }"
         class="form-control"
         name="issueUnitPrice"
         required
@@ -18,12 +23,19 @@
 
     <!--  issueUnitPerPackSize  -->
 
-    <InputContainer :invalid-feedback="issueUnitPerPackSizeErrorMessage" input-id="issueUnitPerPackSize"
-                    input-label="issueUnitPerPackSize">
+    <InputContainer
+      :invalid-feedback="issueUnitPerPackSizeErrorMessage"
+      input-id="issueUnitPerPackSize"
+      input-label="issueUnitPerPackSize"
+    >
       <input
         id="validationIssueUnitPerPackSize"
         v-model.trim="issueUnitPerPackSize"
-        :class="{'is-invalid': !issueUnitPerPackSizeMeta.valid && issueUnitPerPackSizeMeta.validated}"
+        :class="{
+          'is-invalid':
+            !issueUnitPerPackSizeMeta.valid &&
+            issueUnitPerPackSizeMeta.validated,
+        }"
         class="form-control"
         name="issueUnitPerPackSize"
         required
@@ -33,11 +45,15 @@
 
     <!--  packSize  -->
 
-    <InputContainer :invalid-feedback="packSizeErrorMessage" input-id="packSize" input-label="packSize">
+    <InputContainer
+      :invalid-feedback="packSizeErrorMessage"
+      input-id="packSize"
+      input-label="packSize"
+    >
       <input
         id="validationPackSize"
         v-model.trim="packSize"
-        :class="{'is-invalid': !packSizeMeta.valid && packSizeMeta.validated}"
+        :class="{ 'is-invalid': !packSizeMeta.valid && packSizeMeta.validated }"
         class="form-control"
         name="packSize"
         required
@@ -47,11 +63,17 @@
 
     <!--  packSizePrice  -->
 
-    <InputContainer :invalid-feedback="packSizePriceErrorMessage" input-id="packSizePrice" input-label="packSizePrice">
+    <InputContainer
+      :invalid-feedback="packSizePriceErrorMessage"
+      input-id="packSizePrice"
+      input-label="packSizePrice"
+    >
       <input
         id="validationPackSizePrice"
         v-model.trim="packSizePrice"
-        :class="{'is-invalid': !packSizePriceMeta.valid && packSizePriceMeta.validated}"
+        :class="{
+          'is-invalid': !packSizePriceMeta.valid && packSizePriceMeta.validated,
+        }"
         class="form-control"
         name="packSizePrice"
         required
@@ -60,12 +82,18 @@
     </InputContainer>
 
     <!--  expirationDate  -->
-    <InputContainer :invalid-feedback="expirationDateErrorMessage" input-id="expirationDate"
-                    input-label="expirationDate">
+    <InputContainer
+      :invalid-feedback="expirationDateErrorMessage"
+      input-id="expirationDate"
+      input-label="expirationDate"
+    >
       <input
         id="validationExpirationDate"
         v-model.trim="expirationDate"
-        :class="{'is-invalid': !expirationDateMeta.valid && expirationDateMeta.validated}"
+        :class="{
+          'is-invalid':
+            !expirationDateMeta.valid && expirationDateMeta.validated,
+        }"
         class="form-control"
         name="expirationDate"
         required
@@ -75,33 +103,52 @@
 
     <!--  MedicineId  -->
 
-    <InputContainer :invalid-feedback="MedicineIdErrorMessage" input-id="MedicineId" input-label="MedicineId">
+    <InputContainer
+      :invalid-feedback="MedicineIdErrorMessage"
+      input-id="MedicineId"
+      input-label="MedicineId"
+    >
       <select
         id="validationMedicineId"
         v-model.trim="MedicineId"
-        :class="{'is-invalid': !MedicineIdMeta.valid && MedicineIdMeta.validated}"
+        :class="{
+          'is-invalid': !MedicineIdMeta.valid && MedicineIdMeta.validated,
+        }"
         class="form-select"
         name="MedicineId"
         required
       >
-        <option v-for="medicine in medicines" :key="medicine.name" :value="medicine.id">
+        <option
+          v-for="medicine in medicines"
+          :key="medicine.name"
+          :value="medicine.id"
+        >
           {{ startCase(medicine.name) }}
         </option>
       </select>
     </InputContainer>
 
-    <hr class="my-3">
+    <hr class="my-3" />
     <FormButtonsContainer>
       <FormButton skin="primary" text="add" @click="onAddClick" />
       <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
       <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
-      <FormButton outline skin="secondary" text="add & view all" @click="onAddAndViewAll" />
+      <FormButton
+        outline
+        skin="secondary"
+        text="add & view all"
+        @click="onAddAndViewAll"
+      />
       <FormButton outline skin="danger" text="clear" @click="onClear" />
     </FormButtonsContainer>
 
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast ref="toastSuccess" skin="info" @on-hidden-bs-toast="onHiddenBsToast" />
+        <LiveToast
+          ref="toastSuccess"
+          skin="info"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
     </Teleport>
@@ -148,7 +195,7 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Medicines Error",
     text: "Failed to fetch medicines from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
@@ -187,8 +234,7 @@ const packSizeValidation = (value: string) => {
 };
 
 const packSizePriceValidation = (value: string) => {
-  if (!value)
-    return "This is a required field";
+  if (!value) return "This is a required field";
 
   if (!useIsNumeric(value).value)
     return "The pack size price should be a number";
@@ -197,55 +243,58 @@ const packSizePriceValidation = (value: string) => {
 };
 
 const expirationDateValidation = (value: string) => {
-  if (!value)
-    return "This is a required field";
+  if (!value) return "This is a required field";
 
-  if (new Date(value) < new Date())
-    return "Enter a valid date.";
+  if (new Date(value) < new Date()) return "Enter a valid date.";
 
   return true;
 };
 
-
 const {
   value: issueUnitPrice,
   errorMessage: issueUnitPriceErrorMessage,
-  meta: issueUnitPriceMeta
+  meta: issueUnitPriceMeta,
 } = useField("issueUnitPrice", issueUnitPriceValidation);
 
 const {
   value: issueUnitPerPackSize,
   errorMessage: issueUnitPerPackSizeErrorMessage,
-  meta: issueUnitPerPackSizeMeta
+  meta: issueUnitPerPackSizeMeta,
 } = useField("issueUnitPerPackSize", issueUnitPerPackSizeValidation);
 
 const {
   value: packSize,
   errorMessage: packSizeErrorMessage,
-  meta: packSizeMeta
+  meta: packSizeMeta,
 } = useField("packSize", packSizeValidation);
-
 
 const {
   value: packSizePrice,
   errorMessage: packSizePriceErrorMessage,
-  meta: packSizePriceMeta
+  meta: packSizePriceMeta,
 } = useField("packSizePrice", packSizePriceValidation);
 
 const {
   value: expirationDate,
   errorMessage: expirationDateErrorMessage,
-  meta: expirationDateMeta
+  meta: expirationDateMeta,
 } = useField("expirationDate", expirationDateValidation);
 
 const {
   value: MedicineId,
   errorMessage: MedicineIdErrorMessage,
-  meta: MedicineIdMeta
+  meta: MedicineIdMeta,
 } = useField("MedicineId");
 
 const validateForm = () => {
-  if (issueUnitPerPackSizeMeta.valid && issueUnitPriceMeta.valid && packSizeMeta.valid && packSizePriceMeta.valid && expirationDateMeta.valid && MedicineIdMeta.valid)
+  if (
+    issueUnitPerPackSizeMeta.valid &&
+    issueUnitPriceMeta.valid &&
+    packSizeMeta.valid &&
+    packSizePriceMeta.valid &&
+    expirationDateMeta.valid &&
+    MedicineIdMeta.valid
+  )
     return true;
   else {
     toastError.value?.setupToast({
@@ -253,7 +302,7 @@ const validateForm = () => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Stock Error",
       text: "Please fill in the required fields",
-      delay: 5000
+      delay: 5000,
     });
 
     toastError.value?.show();
@@ -267,7 +316,7 @@ const createStockPayload = () => {
     packSize: startCase(packSize.value),
     packSizePrice: +packSizePrice.value,
     expirationDate: new Date(expirationDate.value),
-    MedicineId: MedicineId.value as string
+    MedicineId: MedicineId.value as string,
   };
 
   return payload;
@@ -282,14 +331,13 @@ const addStock = async (payload: NewStockDto) => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Stock",
       text: "Added the stock successfully!",
-      delay: 3000
+      delay: 3000,
     });
 
     toastSuccess.value?.show();
 
     return stock;
   } catch (error: any) {
-
     console.error(error);
 
     toastError.value?.setupToast({
@@ -297,7 +345,7 @@ const addStock = async (payload: NewStockDto) => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Stock Error",
       text: "Failed to add the stock",
-      delay: 5000
+      delay: 5000,
     });
 
     toastError.value?.show();
@@ -307,9 +355,7 @@ const addStock = async (payload: NewStockDto) => {
 const routeRedirect = ref("");
 
 const onAddClick = async () => {
-
-  if (validateForm())
-    await addStock(createStockPayload());
+  if (validateForm()) await addStock(createStockPayload());
 };
 
 const onAddAndNewClick = async () => {
@@ -341,7 +387,6 @@ const onAddAndViewAll = async () => {
 };
 
 const onClear = () => {
-
   // select the form using the formRef
   const form = formRef.value as HTMLFormElement;
 
@@ -350,13 +395,10 @@ const onClear = () => {
 };
 
 const onHiddenBsToast = () => {
-  if (routeRedirect.value === "current")
-    router.go(0);
+  if (routeRedirect.value === "current") router.go(0);
 
   router.push(routeRedirect.value);
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

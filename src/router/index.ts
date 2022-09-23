@@ -92,6 +92,11 @@ const router = createRouter({
       name: "add-sale",
       component: () => import("../views/sales/AddSaleView.vue"),
     },
+    {
+      path: "/sales",
+      name: "manage-sales",
+      component: () => import("../views/sales/ManageSalesView.vue"),
+    },
 
     // medicines routes
     {

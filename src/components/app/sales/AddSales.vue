@@ -1,11 +1,12 @@
 <template>
   <section class="row">
-    <form autocomplete="off" novalidate @submit.prevent>
+    <form ref="formRef" autocomplete="off" novalidate @submit.prevent>
       <div class="col-lg-12 col-md-12 bg-light my-1 rounded shadow-sm">
         <div class="row g-3">
           <div class="col-lg-9 col-md-9">
             <div class="col-lg-4 col-md-4">
               <SearchPanel
+                ref="customerSearchPanelRef"
                 :filter-array="customerSearchPairs"
                 class="mx-2"
                 label="customer"
@@ -19,18 +20,28 @@
               <div class="col-lg-12 col-md-12 mb-3 text-end">
                 <h6 class="fs-6">Amount Received</h6>
                 <h4 class="fs-4 fw-bold text-muted">
-                  Kshs. {{ amountReceived }}
+                  Kshs.
+                  <template v-if="amountReceivedMeta.valid">
+                    {{ amountReceived }}
+                  </template>
                 </h4>
               </div>
               <div class="col-lg-12 col-md-12">
-                <label class="lead fs-6">Amount: </label>
+                <label class="lead fs-6" for="amount">Amount: </label>
                 <input
                   id="amount"
                   v-model="amountReceived"
+                  :class="{
+                    'is-invalid':
+                      !amountReceivedMeta.valid && amountReceivedMeta.validated,
+                  }"
                   class="form-control"
                   name="amount"
                   type="text"
                 />
+                <div class="invalid-feedback">
+                  {{ amountReceivedErrorMessage }}
+                </div>
               </div>
             </div>
           </div>
@@ -38,182 +49,94 @@
       </div>
       <hr class="my-3" />
       <div class="col-lg-12 col-md-12">
-        <!--        <h6 class="fs-6 fw-semibold">Select a medicine: </h6>-->
+        <h6 class="fs-6 fw-semibold">Click to add medicine to the order</h6>
         <div class="row">
-          <div class="col-lg-12 col-md-12">
-            <div class="row my-1 align-baseline">
-              <!--              <template v-if="updateMode">-->
-              <!--                <InputContainer input-id="medicineFound" input-label="medicine">-->
-              <!--                  <input id="medicineFound" v-model="updateMedicineName" class="form-control" disabled name="medicine"-->
-              <!--                         type="text">-->
-              <!--                </InputContainer>-->
-              <!--              </template>-->
-              <!--              <template v-else>-->
-              <div class="col-lg-4 col-md-4">
-                <SearchPanel
-                  ref="medicineSearchPanelRef"
-                  :filter-array="medicineSearchPairs"
-                  label="medicine"
-                  name="medicine"
-                  @on-found-item="onFoundMedicineItem"
-                />
-              </div>
-              <!--              </template>-->
-              <!--              <template v-if="updateMode">-->
-              <!--                <InputContainer :invalid-feedback="newIssueUnitQuantityErrorMessage" input-id="issueUnitQuantity"-->
-              <!--                                input-label="issueUnitQuantity">-->
-              <!--                  <input id="validationUpdateIssueUnitQuantity" ref="issueUnitQuantityRef"-->
-              <!--                         v-model="newIssueUnitQuantity"-->
-              <!--                         :autofocus="updateMode"-->
-              <!--                         :class="{'is-invalid': !newIssueUnitQuantityMeta.valid && newIssueUnitQuantityMeta.validated}"-->
-              <!--                         class="form-control" name="issueUnitQuantity"-->
-              <!--                         required-->
-              <!--                         type="text">-->
-              <!--                </InputContainer>-->
-              <!--              </template>-->
-              <!--              <template>-->
-              <InputContainer
-                :invalid-feedback="issueUnitQuantityErrorMessage"
-                input-id="issueUnitQuantity"
-                input-label="issueUnitQuantity"
+          <div class="text-start my-2">
+            <FormButton
+              skin="primary"
+              text="Add item"
+              @click="onShowAddItemModalClick"
+            />
+          </div>
+          <TableContainer skin="light">
+            <TableHead>
+              <PlainTableHeader
+                :field-names="customersOrdersAttributes"
+                scope="col"
+              />
+              <th>Actions</th>
+            </TableHead>
+            <TableBody>
+              <TableRow
+                :col-count="customersOrdersAttributes.length + 1"
+                :records="customersOrders"
+                null-comment="No medicine selected"
               >
-                <input
-                  id="validationIssueUnitQuantity"
-                  ref="issueUnitQuantityRef"
-                  v-model="issueUnitQuantity"
-                  :class="{
-                    'is-invalid':
-                      !issueUnitQuantityMeta.valid &&
-                      issueUnitQuantityMeta.validated,
-                  }"
-                  :disabled="!addMode"
-                  class="form-control"
-                  name="issueUnitQuantity"
-                  required
-                  type="text"
-                />
-              </InputContainer>
-              <!--              </template>-->
-              <div class="col-lg-4 col-md-4 m-auto mt-4 pt-3">
-                <FormButton
-                  :disabled="
-                    !issueUnitQuantityMeta.validated &&
-                    !issueUnitQuantityMeta.valid
-                  "
-                  skin="primary"
-                  text="Add Item"
-                  @click="addMedicineToSelectedMedicine"
-                />
-                <FormButton
-                  skin="info"
-                  text="add"
-                  @click="onShowAddItemModalClick"
-                />
-              </div>
-              <!--              </template>-->
-            </div>
+                <template #default="{ record }">
+                  <PlainTableData
+                    :field-names="customersOrdersAttributes"
+                    :record="record"
+                  />
+                  <td>
+                    <div class="text-center">
+                      <ButtonIcon
+                        :icon-name="UPDATE_ICON"
+                        class="mx-1"
+                        skin="secondary"
+                        @click="onUpdateCustomerOrderClick(record.id)"
+                      />
+                      <ButtonIcon
+                        :icon-name="DELETE_ICON"
+                        class="mx-1"
+                        skin="danger"
+                        @click="onRemoveCustomerOrder(record.id)"
+                      />
+                    </div>
+                  </td>
+                </template>
+              </TableRow>
+            </TableBody>
+          </TableContainer>
+          <div class="text-end">
+            <h6 class="fs-6 my-2">
+              <span class="fw-semibold lead"> Total Cost </span>
+              <span class="border p-2 rounded">
+                Kshs. {{ customersOrdersStore.totalCost }}</span
+              >
+            </h6>
           </div>
-          <div class="col-lg-12 col-md-12">
-            <TableContainer skin="light">
-              <TableHead>
-                <PlainTableHeader
-                  :field-names="customersOrdersAttributes"
-                  scope="col"
-                />
-                <th>Actions</th>
-              </TableHead>
-              <TableBody>
-                <TableRow
-                  :col-count="customersOrdersAttributes.length + 1"
-                  :records="customersOrders"
-                  null-comment="No medicine selected"
-                >
-                  <template #default="{ record }">
-                    <PlainTableData
-                      :field-names="customersOrdersAttributes"
-                      :record="record"
-                    />
-                    <td>
-                      <div class="text-center">
-                        <!--                        <template v-if="updateMode && record.id === foundMedicineId">-->
-                        <!--                          <FormButton skin="secondary" text="Update" @click="onUpdateCustomerOrder" />-->
-                        <!--                        </template>-->
-                        <!--                        <template v-else>-->
-                        <ButtonIcon
-                          :icon-name="UPDATE_ICON"
-                          class="mx-1"
-                          skin="secondary"
-                          @click="onSetUpdateModeClick(record.id)"
-                        />
-                        <ButtonIcon
-                          :icon-name="DELETE_ICON"
-                          class="mx-1"
-                          skin="danger"
-                          @click="onRemoveCustomerOrder(record.id)"
-                        />
-                        <!--                        </template>-->
-                      </div>
-                    </td>
-                  </template>
-                </TableRow>
-              </TableBody>
-            </TableContainer>
-          </div>
+          <FormButtonContainer class="my-2">
+            <FormButton skin="primary" text="add" @click="onAddClick" />
+            <FormButton
+              skin="secondary"
+              text="add & new"
+              @click="onAddAndNewClick"
+            />
+            <FormButton
+              outline
+              skin="dark"
+              text="add & view"
+              @click="onAddAndView"
+            />
+            <FormButton
+              outline
+              skin="secondary"
+              text="add & view all"
+              @click="onAddAndViewAll"
+            />
+            <FormButton outline skin="danger" text="clear" @click="onClear" />
+          </FormButtonContainer>
         </div>
       </div>
       <Teleport to="body">
         <AddItem ref="addItemModal" />
         <UpdateItem ref="updateItemModal" />
-        <!--   Action Modal     -->
-        <ActionModal ref="updateCustomerOrderModal">
-          <template #modal-body>
-            <div class="row">
-              <p class="fs-5 fw-semibold">
-                Please enter the new issue unit quantity
-              </p>
-              <div class="row mb-3">
-                <label
-                  class="col-sm-2 col-form-label fs-6 fw-semibold"
-                  for="colFormLabel"
-                  >Quantity</label
-                >
-                <div class="col-sm-10 m-auto">
-                  <input
-                    id="validationUpdateIssueUnitQuantity"
-                    ref="newIssueUnitQuantityRef"
-                    v-model="newIssueUnitQuantity"
-                    :autofocus="updateMode"
-                    :class="{
-                      'is-invalid':
-                        !newIssueUnitQuantityMeta.valid &&
-                        newIssueUnitQuantityMeta.validated,
-                    }"
-                    autocomplete="off"
-                    class="form-control"
-                    name="issueUnitQuantity"
-                    required
-                    type="text"
-                  />
-                  <div class="invalid-feedback">
-                    {{ newIssueUnitQuantityErrorMessage }}
-                  </div>
-                  <!--                  <input id="newIssueQuantity" class="form-control m-auto" name="newIssueQuantity" type="text">-->
-                </div>
-              </div>
-            </div>
-          </template>
-          <template #modal-buttons>
-            <FormButton
-              skin="secondary"
-              text="Update"
-              @click="onUpdateCustomerOrder"
-            />
-            <FormButton skin="danger" text="Cancel" />
-          </template>
-        </ActionModal>
-
         <ToastContainer :placement="TOP_CENTER">
-          <LiveToast ref="toastSuccess" skin="info" />
+          <LiveToast
+            ref="toastSuccess"
+            skin="info"
+            @on-hidden-bs-toast="onHiddenBsToast"
+          />
           <LiveToast ref="toastError" skin="danger" />
         </ToastContainer>
       </Teleport>
@@ -223,7 +146,7 @@
 
 <script lang="ts" setup>
 import SearchPanel from "@/components/search/SearchPanel.vue";
-import InputContainer from "@/components/form/InputContainer.vue";
+import FormButtonContainer from "@/components/form/FormButtonsContainer.vue";
 import FormButton from "@/components/button/FormButton.vue";
 import TableContainer from "@/components/table/TableContainer.vue";
 import TableHead from "@/components/table/TableHead.vue";
@@ -234,7 +157,6 @@ import PlainTableData from "@/components/table/plain/TableData.vue";
 import ButtonIcon from "@/components/button/ButtonIcon.vue";
 import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
-import ActionModal from "@/components/modal/ActionModal.vue";
 import AddItem from "./AddItem.vue";
 import UpdateItem from "./UpdateItem.vue";
 import { DELETE_ICON, UPDATE_ICON } from "@/constants/icons";
@@ -247,25 +169,32 @@ import { useMedicinesStore } from "@/stores/app/medicines/medicines";
 import type { MedicineDto } from "@/stores/app/medicines/dto";
 import { useStocksStore } from "@/stores/app/stock/stocks";
 import type { StockDto } from "@/stores/app/stock/dto";
+import { useCustomersOrdersStore } from "@/stores/app/sales/customers-orders";
 import { useIsNumeric } from "@/composables/is-numeric";
 import { useField } from "vee-validate";
-import { useCustomersOrdersStore } from "@/stores/app/sales/customers-orders";
+import type { NewSaleDto, NewSalesDto } from "@/stores/app/sales/dto";
+import { useRouter } from "vue-router";
 import moment from "moment";
+import { useSalesStore } from "@/stores/app/sales/sales";
+
+const router = useRouter();
 
 const customersStore = useCustomersStore();
 const medicineStore = useMedicinesStore();
 const stocksStore = useStocksStore();
 const customersOrdersStore = useCustomersOrdersStore();
+const salesStore = useSalesStore();
 
 const customers: Ref<CustomerDto[]> = ref([]);
 const medicines: Ref<MedicineDto[]> = ref([]);
 const stocks: Ref<StockDto[]> = ref([]);
 
+const formRef: Ref<HTMLFormElement | null> = ref(null);
+const customerSearchPanelRef: Ref<
+  InstanceType<SearchPanel> | null | undefined
+> = ref();
 const toastSuccess = ref();
 const toastError = ref();
-const medicineSearchPanelRef = ref();
-const updateCustomerOrderModal = ref();
-const newIssueUnitQuantityRef: Ref<HTMLInputElement | null> = ref(null);
 
 customers.value = await customersStore.fetchCustomers();
 medicines.value = await medicineStore.fetchMedicines();
@@ -289,13 +218,8 @@ medicineSearchPairs.value = medicines.value.map((value) => ({
 }));
 
 const foundCustomerId = ref("");
-const foundMedicineId = ref("");
-const foundMedicineName = ref("");
 
 const foundCustomer: Ref<CustomerDto | undefined> = ref();
-const foundMedicine: Ref<MedicineDto | null | undefined> = ref(null);
-
-const disableIssueUnitQuantity = ref(true);
 
 const onFoundCustomerItem = (item: SearchPairs) => {
   foundCustomerId.value = item.id;
@@ -304,21 +228,8 @@ const onFoundCustomerItem = (item: SearchPairs) => {
   );
 };
 
-const addMode = ref(false);
 const addItemModal = ref();
 const updateItemModal = ref();
-
-const onFoundMedicineItem = (item: SearchPairs) => {
-  addMode.value = true;
-  disableIssueUnitQuantity.value = false;
-  foundMedicineId.value = item.id;
-  foundMedicineName.value = item.name;
-  foundMedicine.value = medicines.value.find(
-    (value) => value.id === foundMedicineId.value
-  );
-};
-
-const amountReceived = ref(0);
 
 interface CustomersOrders {
   id: string;
@@ -336,137 +247,10 @@ const customersOrdersAttributes: Ref<string[]> = ref([]);
 
 customersOrdersAttributes.value = customersOrdersStore.getAttributes;
 
-// const issueUnitQuantityRef: Ref<HTMLInputElement | null> = ref(null);
-
-const issueUnitQuantityValidation = (value: string) => {
-  if (addMode.value) {
-    if (!value) return "This is a required field";
-
-    if (!useIsNumeric(value).value)
-      return "The issue unit quantity should be a number";
-
-    if (+value <= 0) {
-      return "The issue unit quantity not be less than or equal to 0";
-    }
-  }
-  return true;
-};
-
-const {
-  value: issueUnitQuantity,
-  errorMessage: issueUnitQuantityErrorMessage,
-  meta: issueUnitQuantityMeta,
-} = useField("issueUnitQuantity", issueUnitQuantityValidation);
-
-const newIssueUnitQuantityValidation = (value: string) => {
-  if (!value) return "This is a required field";
-
-  if (!useIsNumeric(value).value)
-    return "The issue unit quantity should be a number";
-
-  if (+value <= 0) {
-    return "The issue unit quantity not be less than or equal to 0";
-  }
-
-  return true;
-};
-
-const {
-  value: newIssueUnitQuantity,
-  errorMessage: newIssueUnitQuantityErrorMessage,
-  meta: newIssueUnitQuantityMeta,
-} = useField("newIssueUnitQuantity", newIssueUnitQuantityValidation);
-
-customersOrders.value = customersOrdersStore.getItems;
-
-const addMedicineToSelectedMedicine = () => {
-  addMode.value = false;
-
-  disableIssueUnitQuantity.value = true;
-
-  toastError.value?.setupToast({
-    name: "Add customer order",
-    elapsedDuration: moment().startOf("seconds").fromNow(),
-    heading: "Add Customer Order",
-    text: "The item is already present in the order! Did you mean to update ?",
-    delay: 6000,
-  });
-
-  // check if the name of the medicine to be added already exists
-  if (
-    customersOrdersStore.getItemNames.includes(
-      foundMedicine.value?.name as string
-    ) ||
-    !foundMedicine.value
-  )
-    toastError.value?.show();
-  else
-    customersOrdersStore.addItem({
-      id: foundMedicineId.value,
-      name: foundMedicine.value?.name as string,
-      quantity: +issueUnitQuantity.value,
-    });
-
-  foundMedicine.value = null;
-  foundMedicineId.value = "";
-  issueUnitQuantity.value = "";
-
-  customersOrders.value = customersOrdersStore.getItems;
-
-  medicineSearchPanelRef.value?.clear();
-};
-
-const updateMode = ref(false);
-
-const customerOrderItemToUpdate: Ref<CustomersOrders | undefined | null> =
-  ref(null);
-
-const onSetUpdateModeClick = (medicineOrderId: string) => {
-  updateCustomerOrderModal.value?.setUpModal({
-    title: "Update Medicine Quantity!",
-  });
-
-  customerOrderItemToUpdate.value = customersOrdersStore.getItems.find(
-    (value) => value.id === medicineOrderId
-  );
-
-  newIssueUnitQuantity.value =
-    customerOrderItemToUpdate.value?.quantity.toString() as string;
-
+const onUpdateCustomerOrderClick = (medicineOrderId: string) => {
   updateItemModal.value?.setMedicineOrderId(medicineOrderId);
   updateItemModal.value?.showModal();
   updateItemModal.value?.hideModal();
-
-  // updateCustomerOrderModal.value?.showModal();
-  //
-  // updateCustomerOrderModal.value?.setFocus(newIssueUnitQuantityRef.value);
-
-  // newIssueUnitQuantityRef.value?.focus();
-
-  // issueUnitQuantityRef.value?.focus();
-  //
-  // if (medicineOrder) {
-  //   newIssueUnitQuantity.value = medicineOrder.quantity.toString();
-  //   updateMedicineName.value = medicineOrder.medicine;
-  // }
-};
-
-const onUpdateCustomerOrder = () => {
-  if (newIssueUnitQuantityMeta.valid && newIssueUnitQuantityMeta.validated) {
-    customersOrdersStore.updateItemQuantity({
-      id: customerOrderItemToUpdate.value?.id as string,
-      quantity: +newIssueUnitQuantity.value,
-    });
-
-    updateCustomerOrderModal.value?.hideModal();
-  } else {
-    newIssueUnitQuantityMeta.valid = false;
-    newIssueUnitQuantityErrorMessage.value =
-      "Please enter the issue unit quantity!";
-  }
-  // issueUnitQuantity.value = "";
-  // issueUnitQuantityMeta.valid = true;
-  // issueUnitQuantityMeta.validated = false;
 };
 
 const onRemoveCustomerOrder = (customerOrderId: string) => {
@@ -475,12 +259,157 @@ const onRemoveCustomerOrder = (customerOrderId: string) => {
 };
 
 const onShowAddItemModalClick = () => {
+  customersOrders.value = customersOrdersStore.getItems;
   addItemModal.value?.showModal();
 };
+
+const amountReceivedValidation = (value: string) => {
+  if (!value) return "This is a required field";
+
+  if (!useIsNumeric(value).value)
+    return "The amount received should be a number";
+
+  if (+value <= 0) {
+    return "The amount received not be less than or equal to 0";
+  }
+
+  if (+value < customersOrdersStore.getTotalCost) {
+    return "The amount received is less than the total price";
+  }
+
+  if (+value > customersOrdersStore.getTotalCost) {
+    return "The amount received is greater than the total price";
+  }
+
+  return true;
+};
+
+const {
+  value: amountReceived,
+  errorMessage: amountReceivedErrorMessage,
+  meta: amountReceivedMeta,
+} = useField("amountReceived", amountReceivedValidation);
+
+const validateForm = () => {
+  if (amountReceivedMeta.valid && foundCustomer.value) {
+    return true;
+  } else {
+    toastError.value?.setupToast({
+      name: "Add Sales Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Sales Error",
+      text: "Please fill in the required fields",
+      delay: 5000,
+    });
+
+    toastError.value?.show();
+
+    return false;
+  }
+};
+
+const createSalesPayload = () => {
+  const customersOrdersArray: Ref<NewSaleDto[]> = ref(
+    customersOrdersStore.items.map((value) => {
+      const cusOrder: NewSaleDto = {
+        issueUnitQuantity: value.quantity,
+        MedicineId: value.id,
+        CustomerId: foundCustomerId.value,
+      };
+
+      return cusOrder;
+    })
+  );
+
+  const payload: NewSalesDto = {
+    sales: customersOrdersArray.value,
+  };
+
+  return payload;
+};
+
+const addSales = async (payload: NewSalesDto) => {
+  try {
+    const sales = await salesStore.addSales(payload);
+
+    toastSuccess.value?.setupToast({
+      name: "Add Sales",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Sales",
+      text: "Added the sales successfully!",
+      delay: 3000,
+    });
+
+    toastSuccess.value?.show();
+
+    customersOrdersStore.$reset();
+
+    return sales;
+  } catch (error: any) {
+    console.error(error);
+
+    toastError.value?.setupToast({
+      name: "Add Sales Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add Sales Error",
+      text: "Failed to add the sales. " + error.message,
+      delay: 5000,
+    });
+
+    toastError.value?.show();
+  }
+};
+
+const routeRedirect = ref("");
+
+const onAddClick = async () => {
+  if (validateForm()) await addSales(createSalesPayload());
+};
+
+const onAddAndNewClick = async () => {
+  if (validateForm()) {
+    await addSales(createSalesPayload());
+
+    // select the form using the formRef
+    const form = formRef.value;
+
+    // call reset
+    form?.reset();
+  }
+};
+
+const onAddAndView = async () => {
+  if (validateForm()) {
+    const sales = await addSales(createSalesPayload());
+
+    routeRedirect.value = `/sales/${sales?.id}`;
+  }
+};
+
+const onAddAndViewAll = async () => {
+  if (validateForm()) {
+    await addSales(createSalesPayload());
+
+    routeRedirect.value = "/sales";
+  }
+};
+
+const onClear = () => {
+  // select the form using the formRef
+  const form = formRef.value as HTMLFormElement;
+
+  // call reset
+  form?.reset();
+
+  customerSearchPanelRef.value?.clear();
+  foundCustomer.value = undefined;
+  foundCustomerId.value = "";
+};
+
+const onHiddenBsToast = () => {
+  if (routeRedirect.value === "current") router.go(0);
+
+  router.push(routeRedirect.value);
+};
 </script>
-<style scoped>
-#validationUpdateIssueUnitQuantity,
-#validationIssueUnitQuantity {
-  width: 250px;
-}
-</style>
+<style scoped></style>

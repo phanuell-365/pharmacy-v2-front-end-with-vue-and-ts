@@ -3,3 +3,7 @@ export interface NewSaleDto {
   MedicineId: string;
   CustomerId: string;
 }
+
+export interface NewSalesDto {
+  sales: NewSaleDto[];
+}

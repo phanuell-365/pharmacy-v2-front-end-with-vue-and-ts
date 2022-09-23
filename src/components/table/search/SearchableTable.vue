@@ -4,29 +4,43 @@
       <div class="row">
         <div class="col-lg-6 col-md-6">
           <div class="dropdown">
-            <input id="searchInput" v-model="searchText" :name="name" :placeholder="`Find by ${searchTerm} name ... `"
-                   autocomplete="off" class="form-control shadow-sm" type="text" @focusin="onFocusInHandler"
-                   @focusout="onFocusOutHandler">
+            <input
+              id="searchInput"
+              v-model="searchText"
+              :name="name"
+              :placeholder="`Find by ${searchTerm} name ... `"
+              autocomplete="off"
+              class="form-control shadow-sm"
+              type="text"
+              @focusin="onFocusInHandler"
+              @focusout="onFocusOutHandler"
+            />
           </div>
         </div>
         <div class="col-lg-6 col-md-6 text-end">
-          <ButtonLink :href="`/${name}s/create`" :text="`Add ${name}`" action="add" />
+          <ButtonLink
+            :href="`/${name}s/create`"
+            :text="`Add ${name}`"
+            action="add"
+          />
         </div>
       </div>
     </div>
     <div class="col-lg-12 col-md-12">
-      <TableContainer skin="light">
+      <TableContainer large skin="light">
         <TableHead class="sticky-top">
           <PlainTableHeader :field-names="attributes" scope="col" />
           <template v-if="!noAction">
-            <th>
-              Action
-            </th>
+            <th>Action</th>
           </template>
         </TableHead>
         <TableBody>
-          <TableRow :col-count="attributes.length + 1" :null-comment="nullComment" :records="propRecords">
-            <template #default="{record}">
+          <TableRow
+            :col-count="attributes.length + 1"
+            :null-comment="nullComment"
+            :records="propRecords"
+          >
+            <template #default="{ record }">
               <PlainTableData :field-names="attributes" :record="record" />
               <template v-if="!noAction">
                 <td class="text-center">
@@ -73,7 +87,7 @@ const onFocusInHandler = () => {
 };
 
 const onFocusOutHandler = () => {
-  setTimeout(() => show.value = false, 100);
+  setTimeout(() => (show.value = false), 100);
 };
 
 const filterValue: Ref<string> = ref(props.searchBy);
@@ -82,18 +96,16 @@ const propRecords = ref([...props.records.sort()]);
 
 const recordsClone = ref([...props.records.sort()]);
 
-watch(searchText,
-  (value) => {
-    propRecords.value = recordsClone.value.filter(value1 => {
-      if (value1) {
-        //@ts-ignore
-        const searchValue = value1[filterValue.value].toLowerCase();
-        return searchValue.includes(value.toLowerCase());
-      }
-      return true;
-    });
-  }
-);
+watch(searchText, (value) => {
+  propRecords.value = recordsClone.value.filter((value1) => {
+    if (value1) {
+      //@ts-ignore
+      const searchValue = value1[filterValue.value].toLowerCase();
+      return searchValue.includes(value.toLowerCase());
+    }
+    return true;
+  });
+});
 </script>
 
 <style scoped>
