@@ -52,3 +52,6 @@ export const CHEVRON_LEFT = "fa-solid fa-chevron-left";
 export const ANGLE_LEFT = "fa-solid fa-angle-left";
 
 export const SPINNER = "fas fa-spinner fa-pulse fa-3x";
+export const CODE_ICON = "fas fa-code";
+
+export const ARROW_RIGHT_ICON = "fas fa-arrow-right";

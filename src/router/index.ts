@@ -156,6 +156,13 @@ const router = createRouter({
       name: "manage-purchases",
       component: () => import("../views/purchases/ManagePurchasesView.vue"),
     },
+
+    // the all routes handler
+    {
+      path: "/:notFound(.*)*",
+      name: "not-found",
+      component: () => import("../components/error/NotFound.vue"),
+    },
   ],
 });
 

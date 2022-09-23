@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { RouterView } from "vue-router";
 import FontAwesome from "@/components/icons/FontAwesome.vue";
-import { SPINNER } from "@/constants/icons";</script>
+import { SPINNER } from "@/constants/icons";
+</script>
 
 <template>
-
-  <RouterView #="{Component, route}">
+  <RouterView #="{ Component, route }">
     <template v-if="Component">
       <KeepAlive :max="1">
         <Suspense :timeout="0">
@@ -13,9 +13,14 @@ import { SPINNER } from "@/constants/icons";</script>
             <component :is="Component" :key="route.name"></component>
           </Transition>
           <template #fallback>
-            <div class="vh-100 d-flex spinner-container justify-content-center align-items-center">
-              <div class=" m-auto my-5">
-                <FontAwesome :icon-name="SPINNER" class="text-success text-center m-auto" />
+            <div
+              class="vh-100 d-flex spinner-container justify-content-center align-items-center"
+            >
+              <div class="m-auto my-5">
+                <FontAwesome
+                  :icon-name="SPINNER"
+                  class="text-success text-center m-auto"
+                />
               </div>
             </div>
           </template>
@@ -33,7 +38,6 @@ import { SPINNER } from "@/constants/icons";</script>
 .router-enter-from {
   opacity: 0;
   transform: translateY(50px);
-
 }
 
 .router-enter-active {
@@ -79,8 +83,8 @@ import { SPINNER } from "@/constants/icons";</script>
 }
 
 body {
-  font-family: 'Lato', sans-serif !important;
-  padding: 2px;
+  font-family: "Lato", Ubuntu, sans-serif !important;
+  padding: 0;
   color: #777 !important;
 }
 </style>
