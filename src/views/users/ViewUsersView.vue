@@ -10,8 +10,7 @@
 
 <script lang="ts" setup>
 import TablePlaceholders from "@/components/placeholders/TablePlaceholders.vue";
-import SidebarLayout from "@/layouts/SidebarLayout.vue";</script>
+import SidebarLayout from "@/layouts/SidebarLayout.vue";
+</script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

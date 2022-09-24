@@ -1,5 +1,5 @@
 <template>
-  <section :class="`not-found-${name} not-found`">
+  <section :class="`not-found-${name}`" class="not-found">
     <div class="container-fluid">
       <div class="row justify-content-center align-content-center m-auto mb-0">
         <div class="text-center text-success mb-4">
@@ -12,24 +12,30 @@
           <h1 class="fs-1 fw-bolder lead error-text text-dark">
             {{ pageName }} not found.
           </h1>
-          <span class="fs-5 fw-light d-block">
-            Sorry, we couldn't find the page
-            <span class="text-success">"{{ path }}</span>
-          </span>
-          <button
-            class="mt-5 fw-bold fs-5 text-success btn btn-light bg-transparent border-0"
-            @click="onGoBackClick"
-          >
-            Go back
-            <FontAwesome :icon-name="ARROW_RIGHT_ICON" class="mx-2" />
-          </button>
+          <slot name="text-content">
+            <span class="fs-5 fw-light d-block">
+              Sorry, we couldn't find the page
+              <span class="text-success">"{{ path }}</span>
+            </span>
+          </slot>
+          <slot name="go-back">
+            <button
+              class="mt-5 fw-bold fs-5 text-success btn btn-light bg-transparent border-0 position-relative"
+              @click="onGoBackClick"
+            >
+              <span class="btn-icon mx-1">Go back</span>
+              <FontAwesome :icon-name="ARROW_RIGHT_ICON" class="mx-2 icon" />
+            </button>
+          </slot>
         </div>
       </div>
     </div>
     <footer class="d-flex justify-content-center">
-      <RouterLink class="link-secondary text-decoration-none" to="/"
-        >Get Started
-      </RouterLink>
+      <slot name="footer">
+        <RouterLink class="link-secondary text-decoration-none" to="/"
+          >Get Started
+        </RouterLink>
+      </slot>
     </footer>
   </section>
 </template>
@@ -44,7 +50,7 @@ const router = useRouter();
 interface NotFoundBaseProps {
   name: string;
   pageName: string;
-  path: string;
+  path?: string;
 }
 
 defineProps<NotFoundBaseProps>();
@@ -78,5 +84,21 @@ const onGoBackClick = () => {
 
 .error-text {
   font-family: "Monteserrat-Bold", Ubuntu, sans-serif;
+  font-size: 3rem;
+}
+
+/*
+.btn:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease-out;
+}*/
+
+.btn-icon:hover {
+  transform: translateY(5px) scale(3);
+}
+
+.icon:hover {
+  transform: translateX(2px);
+  transition: all 0.3s ease-in;
 }
 </style>

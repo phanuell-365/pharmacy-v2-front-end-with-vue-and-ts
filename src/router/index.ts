@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,16 @@ const router = createRouter({
       path: "/users/create",
       name: "add-user",
       component: () => import("../views/users/AddUserView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+        if (!(authStore.isAdmin() || authStore.isChiefPharmacist())) {
+          return next({
+            name: "un-authorized",
+            path: "/un-authorized",
+            params: { action: "add-user" },
+          });
+        }
+      },
     },
     {
       path: "/users/update",
@@ -76,7 +87,7 @@ const router = createRouter({
     {
       path: "/customers/:id",
       name: "view-customer",
-      component: () => import("../views/customers/id/ViewCustomer.vue"),
+      component: () => import("../views/customers/id/ViewCustomerView.vue"),
       props: true,
     },
     {
@@ -157,7 +168,33 @@ const router = createRouter({
       component: () => import("../views/purchases/ManagePurchasesView.vue"),
     },
 
-    // the all routes handler
+    // UnAuthorized
+    {
+      path: "/un-authorized/:action?",
+      name: "un-authorized",
+      component: () => import("../components/error/UnAuthorized.vue"),
+      props: true,
+    },
+
+    // the all routes handlers
+
+    // users
+    {
+      path: "/errors/users/:invalidId(.*)",
+      name: "invalid-user-id",
+      component: () => import("../components/error/NotFoundUser.vue"),
+      props: true,
+    },
+
+    // customers
+    {
+      path: "/errors/customers/:invalidId(.*)",
+      name: "invalid-customer-id",
+      component: () => import("../components/error/NotFoundCustomer.vue"),
+      props: true,
+    },
+
+    // all
     {
       path: "/:notFound(.*)*",
       name: "not-found",

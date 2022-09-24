@@ -3,18 +3,29 @@
     <div class="row justify-content-evenly">
       <div class="col col-7 col-lg-7 col-md-7 card m-1">
         <DashboardCarousel>
-          <DashboardCarouselCard v-for="cardItem in dashboardCarouselCards" :key="cardItem.name"
-                                 :active="cardItem.active">
-            <DashboardCardItem v-for="card in cardItem.cards" :href="card.href"
-                               :total-text="card.totalText" :total-value="card.totalValue" />
+          <DashboardCarouselCard
+            v-for="cardItem in dashboardCarouselCards"
+            :key="cardItem.name"
+            :active="cardItem.active"
+          >
+            <DashboardCardItem
+              v-for="card in cardItem.cards"
+              :href="card.href"
+              :total-text="card.totalText"
+              :total-value="card.totalValue"
+            />
           </DashboardCarouselCard>
         </DashboardCarousel>
       </div>
       <div class="col col-4 col-lg-4 col-md-4 card m-1">
         <DashboardCarousel>
           <DashboardCarouselReport>
-            <DashboardCarouselCard v-for="cardItem in dashboardCarouselReportCards" :key="cardItem.name"
-                                   :active="cardItem.active" :interval="6000">
+            <DashboardCarouselCard
+              v-for="cardItem in dashboardCarouselReportCards"
+              :key="cardItem.name"
+              :active="cardItem.active"
+              :interval="6000"
+            >
               <CardReportItem :totals="cardItem.cards" />
             </DashboardCarouselCard>
           </DashboardCarouselReport>
@@ -36,7 +47,6 @@
   <!--      <LiveToast ref="toastB" skin="danger" />-->
   <!--    </ToastContainer>-->
   <!--  </Teleport>-->
-
 </template>
 
 <script lang="ts" setup>
@@ -112,6 +122,10 @@ try {
   cancelledSales.value = await salesStore.fetchCancelledSales();
 } catch (error: any) {
   console.error(error);
+
+  if (error.message.includes("")) {
+    console.log(error);
+  }
 }
 //   }
 // );
@@ -130,87 +144,86 @@ interface DashboardCarouselCards {
 
 const dashboardCarouselCards: Ref<DashboardCarouselCards[]> = ref([]);
 
-onMounted(
-  () => {
-    dashboardCarouselCards.value = ([
-      {
-        name: "card-one",
-        active: true,
-        cards: [
-          {
-            totalText: "Total Orders",
-            totalValue: orders.value.length,
-            href: "/orders"
-          },
-          {
-            totalText: "Total Purchases",
-            totalValue: purchases.value.length,
-            href: "/purchases"
-          },
-          {
-            totalText: "Total Medicines",
-            totalValue: medicines.value.length,
-            href: "/medicines"
-          },
-          {
-            totalText: "Total Suppliers",
-            totalValue: suppliers.value.length,
-            href: "/suppliers"
-          }
-        ]
-      },
-      {
-        name: "card-two",
-        cards: [
-          {
-            totalText: "Total Customers",
-            totalValue: customers.value.length,
-            href: "/customers"
-          },
-          {
-            totalText: "Out of stock",
-            totalValue: outOfStock.value.length,
-            href: "/stocks/out-of-stock"
-          },
-          {
-            totalText: "Cancelled Orders",
-            totalValue: cancelledOrders.value.length,
-            href: "/orders/cancelled"
-          },
-          {
-            totalText: "Issued Sales",
-            totalValue: issuedSales.value.length,
-            href: "/sales/issued"
-          }
-        ]
-      },
-      {
-        name: "card-three",
-        cards: [
-          {
-            totalText: "Pending Orders",
-            totalValue: pendingOrders.value.length,
-            href: "/orders/pending"
-          },
-          {
-            totalText: "Expired Stock",
-            totalValue: expiredStock.value.length,
-            href: "/stocks/expired"
-          },
-          {
-            totalText: "Delivered Orders",
-            totalValue: deliveredOrders.value.length,
-            href: "/orders/delivered"
-          },
-          {
-            totalText: "Cancelled Sales",
-            totalValue: cancelledSales.value.length,
-            href: "/sales/cancelled"
-          }
-        ]
-      }
-    ]);
-  });
+onMounted(() => {
+  dashboardCarouselCards.value = [
+    {
+      name: "card-one",
+      active: true,
+      cards: [
+        {
+          totalText: "Total Orders",
+          totalValue: orders.value.length,
+          href: "/orders",
+        },
+        {
+          totalText: "Total Purchases",
+          totalValue: purchases.value.length,
+          href: "/purchases",
+        },
+        {
+          totalText: "Total Medicines",
+          totalValue: medicines.value.length,
+          href: "/medicines",
+        },
+        {
+          totalText: "Total Suppliers",
+          totalValue: suppliers.value.length,
+          href: "/suppliers",
+        },
+      ],
+    },
+    {
+      name: "card-two",
+      cards: [
+        {
+          totalText: "Total Customers",
+          totalValue: customers.value.length,
+          href: "/customers",
+        },
+        {
+          totalText: "Out of stock",
+          totalValue: outOfStock.value.length,
+          href: "/stocks/out-of-stock",
+        },
+        {
+          totalText: "Cancelled Orders",
+          totalValue: cancelledOrders.value.length,
+          href: "/orders/cancelled",
+        },
+        {
+          totalText: "Issued Sales",
+          totalValue: issuedSales.value.length,
+          href: "/sales/issued",
+        },
+      ],
+    },
+    {
+      name: "card-three",
+      cards: [
+        {
+          totalText: "Pending Orders",
+          totalValue: pendingOrders.value.length,
+          href: "/orders/pending",
+        },
+        {
+          totalText: "Expired Stock",
+          totalValue: expiredStock.value.length,
+          href: "/stocks/expired",
+        },
+        {
+          totalText: "Delivered Orders",
+          totalValue: deliveredOrders.value.length,
+          href: "/orders/delivered",
+        },
+        {
+          totalText: "Cancelled Sales",
+          totalValue: cancelledSales.value.length,
+          href: "/sales/cancelled",
+        },
+      ],
+    },
+  ];
+});
 
 // Today's Reports
 
@@ -223,16 +236,18 @@ interface CardReportTableRowProps {
 const calculateTotal = (val: number[]) => {
   let total = 0;
 
-  val.forEach(value => total += +value);
+  val.forEach((value) => (total += +value));
 
   return total;
 };
 
-const purchaseTotals = ref(today_sPurchases.value.map(value => value.totalPackSizePrice));
+const purchaseTotals = ref(
+  today_sPurchases.value.map((value) => value.totalPackSizePrice)
+);
 
 const totalPurchases = calculateTotal(purchaseTotals.value);
 
-const salesTotals = ref(today_sSales.value.map(value => value.totalPrices));
+const salesTotals = ref(today_sSales.value.map((value) => value.totalPrices));
 
 const totalSales = calculateTotal(salesTotals.value);
 
@@ -242,46 +257,42 @@ interface DashboardCarouselReportCards {
   cards: CardReportTableRowProps[];
 }
 
-const dashboardCarouselReportCards: Ref<DashboardCarouselReportCards[]> = ref([]);
-
-onMounted(
-  () => {
-    dashboardCarouselReportCards.value = ([
-      {
-        name: "report-card-one",
-        active: true,
-        cards: [
-          {
-            totalText: "Total Purchases",
-            totalValue: totalPurchases,
-            money: true
-          },
-          {
-            totalText: "Total Sales",
-            totalValue: totalSales,
-            money: true
-          }
-        ]
-      },
-      {
-        name: "report-card-two",
-        cards: [
-          {
-            totalText: "Total Orders",
-            totalValue: today_sOrders.value.length
-          },
-          {
-            totalText: "Total Sales",
-            totalValue: today_sSales.value.length
-          }
-        ]
-      }
-    ]);
-  }
+const dashboardCarouselReportCards: Ref<DashboardCarouselReportCards[]> = ref(
+  []
 );
 
-
+onMounted(() => {
+  dashboardCarouselReportCards.value = [
+    {
+      name: "report-card-one",
+      active: true,
+      cards: [
+        {
+          totalText: "Total Purchases",
+          totalValue: totalPurchases,
+          money: true,
+        },
+        {
+          totalText: "Total Sales",
+          totalValue: totalSales,
+          money: true,
+        },
+      ],
+    },
+    {
+      name: "report-card-two",
+      cards: [
+        {
+          totalText: "Total Orders",
+          totalValue: today_sOrders.value.length,
+        },
+        {
+          totalText: "Total Sales",
+          totalValue: today_sSales.value.length,
+        },
+      ],
+    },
+  ];
+});
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

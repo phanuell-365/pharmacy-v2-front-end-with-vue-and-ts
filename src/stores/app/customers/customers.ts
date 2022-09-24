@@ -63,5 +63,20 @@ export const useCustomersStore = defineStore({
 
       return data as CustomerDto;
     },
+
+    async fetchCustomerById(customerId: string) {
+      const response = await fetch(`${BASE_URL}/customers/${customerId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as CustomerDto;
+    },
   },
 });

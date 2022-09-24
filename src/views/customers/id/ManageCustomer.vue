@@ -2,7 +2,7 @@
   <section class="manage-customer">
     <SidebarLayout>
       <template #body>
-        Manage {{ id }}
+        <ManageCustomer :customer-id="id" />
       </template>
     </SidebarLayout>
   </section>
@@ -10,6 +10,7 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
+import ManageCustomer from "@/components/app/customers/ManageCustomer.vue";
 
 interface ManageUserProps {
   id: string;
@@ -18,6 +19,4 @@ interface ManageUserProps {
 defineProps<ManageUserProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

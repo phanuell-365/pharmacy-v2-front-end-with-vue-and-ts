@@ -39,6 +39,7 @@ export const DELETE_ICON = "fas fa-trash-alt";
 export const SEARCH_ICON = "fas fa-search";
 export const NEW_USER_ICON = "fas fa-user-plus";
 export const EDIT_USER_ICON = "fa-solid fa-user-pen";
+export const USER_LOCK = "fa-solid fa-user-lock";
 
 export const BELL_ICON = "fa-solid fa-bell";
 export const BAN_ICON = "fa-solid fa-ban";
