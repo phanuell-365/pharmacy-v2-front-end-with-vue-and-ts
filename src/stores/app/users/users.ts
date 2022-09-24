@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import type { NewUserDto, UserDto } from "@/stores/app/users/dto";
+import type {
+  NewUserDto,
+  UpdateUserDto,
+  UserDto,
+} from "@/stores/app/users/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import startCase from "lodash/startCase";
@@ -69,10 +73,10 @@ export const useUsersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        // if (response.status === 401) {
-        //   const tokenStore = useTokenStore();
-        //   tokenStore.clearToken();
-        // }
+        if (response.status === 401) {
+          const tokenStore = useTokenStore();
+          tokenStore.clearToken();
+        }
         throw new Error(data?.message);
       }
 
@@ -154,7 +158,7 @@ export const useUsersStore = defineStore({
 
       return data;
     },
-    async addUser(payload: NewUserDto): Promise<{ status: boolean }> {
+    async addUser(payload: NewUserDto): Promise<UserDto> {
       const response: Response = await fetch(`${BASE_URL}/users`, {
         method: "POST",
         headers: {
@@ -173,7 +177,48 @@ export const useUsersStore = defineStore({
         throw new Error(data.message);
       }
 
-      return { status: true };
+      return data as UserDto;
+    },
+
+    async updateUser(userId: string, payload: UpdateUserDto) {
+      const response: Response = await fetch(`${BASE_URL}/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken(),
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.message === "Unauthorized") {
+          throw new Error(data.message + "! Failed to update the user!");
+        }
+        throw new Error(data.message);
+      }
+
+      return data as UserDto;
+    },
+
+    async deleteUser(userId: string) {
+      const response: Response = await fetch(`${BASE_URL}/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken(),
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.message === "Unauthorized") {
+          throw new Error(data.message + "! Failed to delete the user!");
+        }
+        throw new Error(data.message);
+      }
     },
   },
 });

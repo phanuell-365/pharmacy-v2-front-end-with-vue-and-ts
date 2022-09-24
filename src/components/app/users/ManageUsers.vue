@@ -10,7 +10,10 @@
     >
       <template #actions="{ recordId }">
         <ButtonLinkIcon :href="`/users/${recordId}`" action="view" />
-        <ButtonLinkIcon :href="`/users/${recordId}/update`" action="update" />
+        <ButtonLinkIcon
+          :href="`/users/${recordId}?update=true`"
+          action="update"
+        />
         <ButtonLinkIcon :href="`/users/${recordId}`" action="delete" />
       </template>
     </SearchTable>

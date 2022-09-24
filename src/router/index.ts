@@ -24,7 +24,7 @@ const router = createRouter({
       component: () => import("../views/DashboardView.vue"),
       // beforeEnter: (to, from, next) => {
       //   const authStore = useAuthStore();
-      //   if (authStore.isAdmin() || authStore.isChiefPharmacist()) {
+      //   if (!authStore.isAdmin() || !authStore.isChiefPharmacist()) {
       //     return next("/medicines");
       //   } else
       //     return next({
@@ -71,8 +71,11 @@ const router = createRouter({
     {
       path: "/users/:id",
       name: "manage-user",
-      component: () => import("../views/users/id/ViewUserView.vue"),
-      props: true,
+      component: () => import("../views/users/id/ManageUserView.vue"),
+      props: (route) => ({
+        params: route.params.id,
+        query: route.query.update,
+      }),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
         if (
@@ -91,12 +94,12 @@ const router = createRouter({
           });
       },
     },
-    {
-      path: "/users/:id/update",
-      name: "manage-user",
-      component: () => import("../views/users/id/ManageUserView.vue"),
-      props: true,
-    },
+    // {
+    //   path: "/users/:id/update",
+    //   name: "manage-user",
+    //   component: () => import("../views/users/id/ManageUserView.vue"),
+    //   props: true,
+    // },
     // {
     //   path: "/users/reports",
     //   name: "users-reports",

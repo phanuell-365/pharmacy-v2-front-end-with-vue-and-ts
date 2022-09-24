@@ -1,60 +1,119 @@
 <template>
   <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
-
     <!--  name  -->
-    <InputContainer :invalid-feedback="nameErrorMessage" input-id="name" input-label="name">
-      <input id="validationName" v-model="name" :class="{'is-invalid': !nameMeta.valid && nameMeta.validated}"
-             class="form-control" name="name"
-             required
-             type="text" />
+    <InputContainer
+      :invalid-feedback="nameErrorMessage"
+      input-id="name"
+      input-label="name"
+    >
+      <input
+        id="validationName"
+        v-model="name"
+        :class="{ 'is-invalid': !nameMeta.valid && nameMeta.validated }"
+        class="form-control"
+        name="name"
+        required
+        type="text"
+      />
     </InputContainer>
 
     <!--  doseForm  -->
-    <InputContainer :invalid-feedback="doseFormErrorMessage" input-id="doseForm" input-label="doseForm">
-      <select id="validationDoseForm" v-model.trim="doseForm"
-              :class="{'is-invalid': !doseFormMeta.valid && doseFormMeta.validated}"
-              class="form-select" name="doseForm" required>
-        <option v-for="_doseForm in medicineDoseForms"
-                :key="_doseForm" :value="_doseForm">
+    <InputContainer
+      :invalid-feedback="doseFormErrorMessage"
+      input-id="doseForm"
+      input-label="doseForm"
+    >
+      <select
+        id="validationDoseForm"
+        v-model.trim="doseForm"
+        :class="{ 'is-invalid': !doseFormMeta.valid && doseFormMeta.validated }"
+        class="form-select"
+        name="doseForm"
+        required
+      >
+        <option
+          v-for="_doseForm in medicineDoseForms"
+          :key="_doseForm"
+          :value="_doseForm"
+        >
           {{ _doseForm }}
         </option>
       </select>
     </InputContainer>
 
     <!--  strength  -->
-    <InputContainer :invalid-feedback="strengthErrorMessage" input-id="strength" input-label="strength">
-      <input id="validationStrength" v-model="strength"
-             :class="{'is-invalid': !strengthMeta.valid && strengthMeta.validated}" class="form-control" name="strength"
-             type="text">
+    <InputContainer
+      :invalid-feedback="strengthErrorMessage"
+      input-id="strength"
+      input-label="strength"
+    >
+      <input
+        id="validationStrength"
+        v-model="strength"
+        :class="{ 'is-invalid': !strengthMeta.valid && strengthMeta.validated }"
+        class="form-control"
+        name="strength"
+        type="text"
+      />
     </InputContainer>
 
     <!--  levelOfUse  -->
-    <InputContainer :invalid-feedback="levelOfUseErrorMessage" input-id="levelOfUse" input-label="levelOfUse">
-      <input id="validationLevelOfUse" v-model="levelOfUse"
-             :class="{'is-invalid': !levelOfUseMeta.valid && levelOfUseMeta.validated}" class="form-control"
-             name="levelOfUse" type="text" />
+    <InputContainer
+      :invalid-feedback="levelOfUseErrorMessage"
+      input-id="levelOfUse"
+      input-label="levelOfUse"
+    >
+      <input
+        id="validationLevelOfUse"
+        v-model="levelOfUse"
+        :class="{
+          'is-invalid': !levelOfUseMeta.valid && levelOfUseMeta.validated,
+        }"
+        class="form-control"
+        name="levelOfUse"
+        type="text"
+      />
     </InputContainer>
 
     <!-- therapeuticClass  -->
-    <InputContainer :invalid-feedback="therapeuticClassErrorMessage" input-id="therapeuticClass"
-                    input-label="therapeuticClass">
-      <input id="validationTherapeuticClass" v-model="therapeuticClass"
-             :class="{'is-invalid': !therapeuticClassMeta.valid && therapeuticClassMeta.validated}" class="form-control"
-             name="therapeuticClass"
-             type="text" />
+    <InputContainer
+      :invalid-feedback="therapeuticClassErrorMessage"
+      input-id="therapeuticClass"
+      input-label="therapeuticClass"
+    >
+      <input
+        id="validationTherapeuticClass"
+        v-model="therapeuticClass"
+        :class="{
+          'is-invalid':
+            !therapeuticClassMeta.valid && therapeuticClassMeta.validated,
+        }"
+        class="form-control"
+        name="therapeuticClass"
+        type="text"
+      />
     </InputContainer>
 
     <FormButtonsContainer>
       <FormButton skin="primary" text="add" @click="onAddClick" />
       <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
       <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
-      <FormButton outline skin="secondary" text="add & view all" @click="onAddAndViewAll" />
+      <FormButton
+        outline
+        skin="secondary"
+        text="add & view all"
+        @click="onAddAndViewAll"
+      />
       <FormButton outline skin="danger" text="clear" @click="onClear" />
     </FormButtonsContainer>
   </form>
   <Teleport to="body">
     <ToastContainer :placement="TOP_CENTER">
-      <LiveToast ref="toastSuccess" skin="info" @on-hidden-bs-toast="onHiddenBsToast" />
+      <LiveToast
+        ref="toastSuccess"
+        skin="info"
+        @on-hidden-bs-toast="onHiddenBsToast"
+      />
       <LiveToast ref="toastError" skin="danger" />
     </ToastContainer>
   </Teleport>
@@ -97,12 +156,11 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Roles Error",
     text: "Failed to fetch roles from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
 }
-
 
 const nameValidation = (value: any) => {
   if (!value) {
@@ -127,9 +185,14 @@ const strengthValidation = (value: string) => {
     return "This field is required";
   }
 
-  const strengthRegExp = ref("(" + medicineStrengthsStr.value.replace(/,/g, "|") + ")");
+  const strengthRegExp = ref(
+    "(" + medicineStrengthsStr.value.replace(/,/g, "|") + ")"
+  );
   const strengthRegExp2 = "\\b\\d+\\s+";
-  const pattern = new RegExp(strengthRegExp2 + strengthRegExp.value + "$\\w*", "gi");
+  const pattern = new RegExp(
+    strengthRegExp2 + strengthRegExp.value + "$\\w*",
+    "gi"
+  );
 
   if (!new RegExp(pattern, "gi").test(value)) {
     return "Enter a valid medicine strength i.e 500 mg";
@@ -166,34 +229,43 @@ const therapeuticClassValidation = (value: string) => {
   return true;
 };
 
-const { value: name, errorMessage: nameErrorMessage, meta: nameMeta } = useField("name", nameValidation);
+const {
+  value: name,
+  errorMessage: nameErrorMessage,
+  meta: nameMeta,
+} = useField("name", nameValidation);
 const {
   value: doseForm,
   errorMessage: doseFormErrorMessage,
-  meta: doseFormMeta
+  meta: doseFormMeta,
 } = useField("doseForm", doseFormValidation);
 
 const {
   value: strength,
   errorMessage: strengthErrorMessage,
-  meta: strengthMeta
+  meta: strengthMeta,
 } = useField("strength", strengthValidation);
 
 const {
   value: levelOfUse,
   errorMessage: levelOfUseErrorMessage,
-  meta: levelOfUseMeta
+  meta: levelOfUseMeta,
 } = useField("levelOfUse", levelOfUseValidation);
 
 const {
   value: therapeuticClass,
   errorMessage: therapeuticClassErrorMessage,
-  meta: therapeuticClassMeta
+  meta: therapeuticClassMeta,
 } = useField("therapeuticClass", therapeuticClassValidation);
 
 const validateForm = () => {
-
-  if (doseFormMeta.valid && nameMeta.valid && strengthMeta.valid && levelOfUseMeta && therapeuticClassMeta.valid) {
+  if (
+    doseFormMeta.valid &&
+    nameMeta.valid &&
+    strengthMeta.valid &&
+    levelOfUseMeta &&
+    therapeuticClassMeta.valid
+  ) {
     return true;
   } else {
     toastError.value?.setupToast({
@@ -201,7 +273,7 @@ const validateForm = () => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Medicine Error",
       text: "Please fill in the required fields",
-      delay: 5000
+      delay: 5000,
     });
 
     toastError.value?.show();
@@ -214,7 +286,7 @@ const createMedicinePayload = () => {
     doseForm: doseForm.value,
     strength: strength.value,
     levelOfUse: +levelOfUse.value,
-    therapeuticClass: startCase(therapeuticClass.value)
+    therapeuticClass: startCase(therapeuticClass.value),
   };
 
   return payload;
@@ -228,13 +300,12 @@ const addMedicine = async (payload: NewMedicineDto) => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Medicine",
       text: "Added the medicine successfully!",
-      delay: 3000
+      delay: 3000,
     });
 
     toastSuccess.value?.show();
 
     return medicine;
-
   } catch (error: any) {
     console.error(error);
     toastError.value?.setupToast({
@@ -242,7 +313,7 @@ const addMedicine = async (payload: NewMedicineDto) => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add Medicine Error",
       text: "Failed to add the medicine",
-      delay: 5000
+      delay: 5000,
     });
 
     toastError.value?.show();
@@ -272,7 +343,6 @@ const onAddAndNewClick = async () => {
 };
 
 const onAddAndView = async () => {
-
   // validate the form
   if (validateForm()) {
     const medicine = await addMedicine(createMedicinePayload());
@@ -282,7 +352,6 @@ const onAddAndView = async () => {
 };
 
 const onAddAndViewAll = async () => {
-
   // validate the form
   if (validateForm()) {
     await addMedicine(createMedicinePayload());
@@ -292,7 +361,6 @@ const onAddAndViewAll = async () => {
 };
 
 const onClear = () => {
-
   // select the form using the formRef
   const form = formRef.value as HTMLFormElement;
 
@@ -303,9 +371,6 @@ const onClear = () => {
 const onHiddenBsToast = () => {
   router.push(routeRedirect.value);
 };
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

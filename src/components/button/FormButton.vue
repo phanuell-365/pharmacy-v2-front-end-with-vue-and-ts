@@ -1,14 +1,20 @@
 <template>
-  <button :class="buttonSkin" :value="formButtonValue" class="btn btn-hover btn-sm mx-2 rounded" name="button"
-          role="button"
-          type="submit"
-          @click="onClick">
-    {{ text }}
+  <button
+    :class="buttonSkin"
+    :value="formButtonValue"
+    class="btn btn-hover btn-sm mx-2 rounded"
+    name="button"
+    role="button"
+    type="submit"
+    @click="onClick"
+  >
+    {{ startCase(text) }}
   </button>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
+import startCase from "lodash/startCase";
 
 interface FormButtonProps {
   text: string;
@@ -18,8 +24,8 @@ interface FormButtonProps {
 
 const props = defineProps<FormButtonProps>();
 
-const buttonSkin = computed(
-  () => props.outline ? `btn-outline-${props.skin}` : `btn-${props.skin}`
+const buttonSkin = computed(() =>
+  props.outline ? `btn-outline-${props.skin}` : `btn-${props.skin}`
 );
 
 const formButtonValue = ref(false);
@@ -33,7 +39,7 @@ const onClick = () => {
 .btn-hover:hover {
   transform: translateY(-3px);
   /*box-shadow: var(--bs-card-box-shadow);*/
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in;
 }
 

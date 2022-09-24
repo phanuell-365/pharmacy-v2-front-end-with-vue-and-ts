@@ -1,14 +1,23 @@
 <template>
   <section class="add-user">
-    <form class="row g-3 m-4" novalidate @submit.prevent="onFormSubmitHandler">
+    <form
+      ref="formRef"
+      autocomplete="off"
+      class="row g-3 m-4"
+      novalidate
+      @submit.prevent
+    >
       <InputContainer
+        :invalid-feedback="usernameErrorMessage"
         input-id="username"
         input-label="username"
-        invalid-feedback="Please enter a username"
       >
         <input
           id="validationUsername"
           v-model.trim="username"
+          :class="{
+            'is-invalid': !usernameMeta.valid && usernameMeta.validated,
+          }"
           class="form-control"
           name="username"
           required
@@ -16,38 +25,49 @@
         />
       </InputContainer>
 
-      <div class="col-md-4">
-        <label class="form-label" for="validationPassword">Password</label>
-
+      <InputContainer
+        :invalid-feedback="passwordErrorMessage"
+        input-id="password"
+        input-label="password"
+      >
         <input
           id="validationPassword"
           v-model.trim="password"
+          :class="{
+            'is-invalid': !passwordMeta.valid && passwordMeta.validated,
+          }"
           class="form-control"
           name="password"
           required
           type="password"
         />
-        <div class="invalid-feedback">Please enter a password</div>
-      </div>
+      </InputContainer>
 
-      <div class="col-md-4">
-        <label class="form-label" for="validationEmail">Email</label>
+      <InputContainer
+        :invalid-feedback="emailErrorMessage"
+        input-id="email"
+        input-label="email"
+      >
         <input
           id="validationEmail"
           v-model.trim="email"
+          :class="{ 'is-invalid': !emailMeta.valid && emailMeta.validated }"
           class="form-control"
           name="email"
           required
           type="email"
         />
-        <div class="invalid-feedback">Please enter a email</div>
-      </div>
+      </InputContainer>
 
-      <div class="col-md-4">
-        <label class="form-label" for="validationRole">Role</label>
+      <InputContainer
+        :invalid-feedback="roleErrorMessage"
+        input-id="role"
+        input-label="role"
+      >
         <select
           id="validationRole"
           v-model.trim="role"
+          :class="{ 'is-invalid': !roleMeta.valid && roleMeta.validated }"
           class="form-select"
           name="role"
           required
@@ -62,34 +82,55 @@
             {{ startCase(_role) }}
           </option>
         </select>
-        <div class="invalid-feedback">Please select a role</div>
-      </div>
+      </InputContainer>
 
-      <div class="col-md-4">
-        <label class="form-label" for="validationPhone">Phone</label>
+      <InputContainer
+        :invalid-feedback="phoneErrorMessage"
+        input-id="phone"
+        input-label="phone"
+      >
         <input
           id="validationPhone"
           v-model.trim="phone"
+          :class="{ 'is-invalid': !phoneMeta.valid && phoneMeta.validated }"
           class="form-control"
           name="phone"
           required
           type="tel"
         />
-        <div class="invalid-feedback">Please enter a phone</div>
-      </div>
+      </InputContainer>
 
       <hr class="my-3" />
       <FormButtonsContainer>
-        <FormButton skin="success" text="add" />
-        <FormButton skin="dark" text="add & new" />
-        <FormButton outline skin="dark" text="add & view" />
-        <FormButton outline skin="danger" text="clear" />
+        <FormButton skin="primary" text="add" @click="onAddClick" />
+        <FormButton
+          skin="secondary"
+          text="add & new"
+          @click="onAddAndNewClick"
+        />
+        <FormButton
+          outline
+          skin="dark"
+          text="add & view"
+          @click="onAddAndView"
+        />
+        <FormButton
+          outline
+          skin="secondary"
+          text="add & view all"
+          @click="onAddAndViewAll"
+        />
+        <FormButton outline skin="danger" text="clear" @click="onClear" />
       </FormButtonsContainer>
     </form>
 
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast ref="toastSuccess" skin="info" />
+        <LiveToast
+          ref="toastSuccess"
+          skin="info"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
     </Teleport>
@@ -104,14 +145,17 @@ import FormButton from "@/components/button/FormButton.vue";
 import InputContainer from "@/components/form/InputContainer.vue";
 import FormButtonsContainer from "@/components/form/FormButtonsContainer.vue";
 import type { Ref } from "vue";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useUsersStore } from "@/stores/app/users/users";
 import moment from "moment";
 import type { NewUserDto } from "@/stores/app/users/dto";
-import { useGetFormElement } from "@/composables/get-form-element";
 import startCase from "lodash/startCase";
-import { useGetClickedButton } from "@/composables/get-clicked-button";
+import { useField } from "vee-validate";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+
+const formRef = ref();
 const toastSuccess = ref();
 const toastError = ref();
 
@@ -119,131 +163,198 @@ const usersStore = useUsersStore();
 
 const usersRoles: Ref<string[]> = ref([]);
 
-onMounted(async () => {
-  try {
-    usersRoles.value = await usersStore.fetchUsersRoles();
-  } catch (error: any) {
+try {
+  usersRoles.value = await usersStore.fetchUsersRoles();
+} catch (error: any) {
+  toastError.value?.setupToast({
+    name: "Roles Error",
+    elapsedDuration: moment().startOf("second").fromNow(),
+    heading: "Fetch Roles Error",
+    text: "Failed to fetch roles from the server",
+    delay: 5000,
+  });
+
+  toastError.value?.show();
+}
+
+const usernameValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  return true;
+};
+
+const passwordValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  return true;
+};
+
+const emailValidation = (value: string) => {
+  if (!value) return "This field is required";
+
+  return true;
+};
+
+const phoneValidation = (value: string) => {
+  if (!value) return "This field is required";
+
+  if (value.length < 10)
+    return "The phone number should contain not less than 10 characters";
+
+  if (value.length > 10)
+    return "The phone number should contain not more than 10 characters";
+
+  return true;
+};
+
+const roleValidation = (value: string) => {
+  if (!value) return "This field is required";
+
+  return true;
+};
+
+const {
+  value: username,
+  errorMessage: usernameErrorMessage,
+  meta: usernameMeta,
+} = useField("username", usernameValidation);
+
+const {
+  value: password,
+  errorMessage: passwordErrorMessage,
+  meta: passwordMeta,
+} = useField("password", passwordValidation);
+
+const {
+  value: email,
+  errorMessage: emailErrorMessage,
+  meta: emailMeta,
+} = useField("email", emailValidation);
+
+const {
+  value: phone,
+  errorMessage: phoneErrorMessage,
+  meta: phoneMeta,
+} = useField("phone", phoneValidation);
+
+const {
+  value: role,
+  errorMessage: roleErrorMessage,
+  meta: roleMeta,
+} = useField("role", roleValidation);
+
+const validateForm = () => {
+  if (
+    usernameMeta.valid &&
+    passwordMeta.valid &&
+    emailMeta.valid &&
+    phoneMeta.valid &&
+    roleMeta.valid
+  )
+    return true;
+  else {
     toastError.value?.setupToast({
-      name: "Roles Error",
+      name: "Add User Error",
       elapsedDuration: moment().startOf("second").fromNow(),
-      heading: "Fetch Roles Error",
-      text: "Failed to fetch roles from the server",
+      heading: "Add User Error",
+      text: "Please fill in the required fields",
       delay: 5000,
     });
 
     toastError.value?.show();
   }
-});
+};
 
-const username: Ref<NewUserDto["username"] | undefined> = ref();
-const password: Ref<NewUserDto["password"] | undefined> = ref();
-const email: Ref<NewUserDto["email"] | undefined> = ref();
-const phone: Ref<NewUserDto["phone"] | undefined> = ref();
-const role: Ref<NewUserDto["role"] | undefined> = ref(usersRoles.value[0]);
-
-const onFormSubmitHandler = async (event: Event) => {
-  const form = event.target as HTMLFormElement;
-
-  // determine which button was clicked
-  const clickedButton = useGetClickedButton(form);
-
-  console.log(clickedButton.value);
-
+const createUserPayload = () => {
   const payload: NewUserDto = {
-    username: "",
-    password: "",
-    email: "",
-    phone: "",
-    role: "",
+    username: username.value,
+    password: password.value,
+    email: email.value,
+    phone: phone.value,
+    role: role.value,
   };
 
-  // (() => {
-  const usernameEl = useGetFormElement(form, "input", "username")
-    .value as HTMLInputElement;
+  return payload;
+};
 
-  if (!username.value) {
-    usernameEl.classList.add("is-invalid");
-  } else {
-    usernameEl.classList.remove("is-invalid");
-    payload.username = username.value;
-  }
-
-  const passwordEl = useGetFormElement(form, "input", "password")
-    .value as HTMLInputElement;
-
-  if (!password.value) {
-    passwordEl.classList.add("is-invalid");
-  } else {
-    passwordEl.classList.remove("is-invalid");
-    payload.password = password.value;
-  }
-
-  const emailEl = useGetFormElement(form, "input", "email")
-    .value as HTMLInputElement;
-
-  if (!email.value) {
-    emailEl.classList.add("is-invalid");
-  } else {
-    emailEl.classList.remove("is-invalid");
-    payload.email = email.value as string;
-  }
-
-  const roleEl = useGetFormElement(form, "select", "role")
-    .value as HTMLSelectElement;
-
-  if (!role.value) {
-    roleEl.classList.add("is-invalid");
-  } else {
-    roleEl.classList.remove("is-invalid");
-    payload.role = role.value as string;
-  }
-
-  const phoneEl = useGetFormElement(form, "input", "phone")
-    .value as HTMLInputElement;
-
-  if (!phone.value) {
-    phoneEl.classList.add("is-invalid");
-  } else {
-    phoneEl.classList.remove("is-invalid");
-    payload.phone = phone.value as string;
-  }
-  // })();
-
+const addUser = async (payload: NewUserDto) => {
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const values = Object.values(payload);
+    const user = await usersStore.addUser(payload);
 
-    const valid = values.every((value: string) => value !== "");
+    toastSuccess.value?.setupToast({
+      name: "Add Success",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Add User",
+      text: "Added the user successfully!",
+      delay: 3000,
+    });
 
-    if (valid) {
-      const success = await usersStore.addUser({ ...payload });
+    toastSuccess.value?.show();
 
-      if (success.status) {
-        toastSuccess.value?.setupToast({
-          name: "Add Success",
-          elapsedDuration: moment().startOf("second").fromNow(),
-          heading: "Add User",
-          text: "Added the user successfully!",
-          delay: 3000,
-        });
-
-        toastSuccess.value?.show();
-      }
-    }
-  } catch (e: any) {
-    console.error(e);
+    return user;
+  } catch (error: any) {
+    console.error(error);
 
     toastError.value?.setupToast({
       name: "Add User Error",
       elapsedDuration: moment().startOf("second").fromNow(),
-      heading: "Add user error!",
-      text: `An error occurred. ${e.message}`,
+      heading: "Add User Error",
+      text: "Failed to add the user. " + error?.message,
       delay: 5000,
     });
 
     toastError.value?.show();
   }
+};
+
+const routeRedirect = ref("");
+
+const onAddClick = async () => {
+  if (validateForm()) await addUser(createUserPayload());
+};
+
+const onAddAndNewClick = async () => {
+  if (validateForm()) {
+    await addUser(createUserPayload());
+
+    // select the form using the formRef
+    const form = formRef.value as HTMLFormElement;
+
+    // call reset
+    form?.reset();
+  }
+};
+
+const onAddAndView = async () => {
+  if (validateForm()) {
+    const user = await addUser(createUserPayload());
+
+    routeRedirect.value = `/users/${user?.id}`;
+  }
+};
+
+const onAddAndViewAll = async () => {
+  if (validateForm()) {
+    await addUser(createUserPayload());
+
+    routeRedirect.value = "/users";
+  }
+};
+
+const onClear = () => {
+  // select the form using the formRef
+  const form = formRef.value as HTMLFormElement;
+
+  // call reset
+  form?.reset();
+};
+
+const onHiddenBsToast = () => {
+  router.push(routeRedirect.value);
 };
 </script>
 

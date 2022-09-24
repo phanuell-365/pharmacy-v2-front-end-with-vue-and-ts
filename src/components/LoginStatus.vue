@@ -5,10 +5,19 @@
         {{ textContent }}
       </span>
     </label>
-    <input id="flexSwitchCheckCheckedDisabled" ref="switchInput" :checked="status"
-           :class="{'status-active': status, 'status-inactive text-danger': !status}"
-           class="form-check-input" disabled role="switch"
-           type="checkbox">
+    <input
+      id="flexSwitchCheckCheckedDisabled"
+      ref="switchInput"
+      :checked="status"
+      :class="{
+        'status-active': status,
+        'status-inactive text-danger': !status,
+      }"
+      class="form-check-input"
+      disabled
+      role="switch"
+      type="checkbox"
+    />
   </div>
   <Teleport to="body">
     <Transition>
@@ -36,8 +45,8 @@ const status = ref(authStore.isLoggedIn());
 
 const logout = ref(false);
 
-const textContent = computed(
-  () => !status.value ? "Logged Out" : "Logged In"
+const textContent = computed(() =>
+  !status.value ? "Logged Out" : "Logged In"
 );
 
 const switchInput = ref();
@@ -66,12 +75,14 @@ const onLogoutClick = () => {
   opacity: 1;
 }
 
-span.text-content, input[disabled],
+span.text-content,
+input[disabled],
 span.text-content {
   opacity: 1 !important;
 }
 
-.form-check-input:disabled ~ .form-check-label, .form-check-input[disabled] ~ .form-check-label {
+.form-check-input:disabled ~ .form-check-label,
+.form-check-input[disabled] ~ .form-check-label {
   opacity: 1 !important;
 }
 
