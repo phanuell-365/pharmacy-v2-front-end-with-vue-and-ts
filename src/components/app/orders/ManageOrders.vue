@@ -1,9 +1,14 @@
 <template>
   <section class="manage-orders">
-    <SearchTable :attributes="ordersStore.getOrderAttributes" :records="orders" name="medicine"
-                 null-comment="Order not found"
-                 search-by="medicine">
-      <template #actions="{recordId}">
+    <SearchTable
+      :attributes="ordersStore.getOrderAttributes"
+      :records="orders"
+      name="order"
+      null-comment="Order not found"
+      search-by="medicine"
+      search-term="medicine"
+    >
+      <template #actions="{ recordId }">
         <ButtonLinkIcon :href="`/orders/${recordId}`" action="view" />
         <ButtonLinkIcon :href="`/orders/${recordId}/update`" action="update" />
         <ButtonLinkIcon :href="`/orders/${recordId}`" action="delete" />
@@ -11,7 +16,11 @@
     </SearchTable>
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast ref="toastSuccess" skin="info" @on-hidden-bs-toast="onHiddenBsToast" />
+        <LiveToast
+          ref="toastSuccess"
+          skin="info"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
     </Teleport>
@@ -40,7 +49,6 @@ const toastError = ref();
 try {
   orders.value = await ordersStore.fetchOrders();
 } catch (error: any) {
-
   console.error(error);
 
   toastError.value?.setupToast({
@@ -48,13 +56,11 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Orders Error",
     text: "Failed to fetch orders from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -120,6 +120,13 @@ const router = createRouter({
       name: "manage-medicines",
       component: () => import("../views/medicines/ManageMedicinesView.vue"),
     },
+    {
+      path: "/medicines/:id",
+      name: "manage-medicine",
+      component: () => import("../views/medicines/id/ManageMedicineView.vue"),
+      props: true,
+    },
+
     // stocks routes
     {
       path: "/stocks/create",
@@ -191,6 +198,14 @@ const router = createRouter({
       path: "/errors/customers/:invalidId(.*)",
       name: "invalid-customer-id",
       component: () => import("../components/error/NotFoundCustomer.vue"),
+      props: true,
+    },
+
+    // medicines
+    {
+      path: "/errors/medicines/:invalidId(.*)",
+      name: "invalid-mdicine-id",
+      component: () => import("../components/error/NotFoundMedicine.vue"),
       props: true,
     },
 

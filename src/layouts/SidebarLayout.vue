@@ -6,7 +6,9 @@
     <main>
       <div class="row mx-2 align-items-center">
         <div class="col-6">
-          <p class="fw-bold text-muted mb-0 lead">{{ startCase(sidebarStore.getSidebarMenuName) }}</p>
+          <p class="fw-bold text-muted mb-0 lead">
+            {{ startCase(sidebarStore.getSidebarMenuName) }}
+          </p>
         </div>
         <div class="col-6 d-flex justify-content-end">
           <LoginStatus />
@@ -20,7 +22,8 @@
       <CardLayout name="card">
         <template #heading>
           <small class="text-start fw-normal small p-0 m-auto m-0">
-            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</small>
+            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</small
+          >
         </template>
         <template #body>
           <slot name="body" />
@@ -39,7 +42,7 @@ import LoginStatus from "@/components/LoginStatus.vue";
 import LoginModal from "@/components/modal/login/LoginModal.vue";
 import SidebarContainer from "@/components/sidebar/SidebarContainer.vue";
 import { useAuthStore } from "@/stores/auth";
-import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useCleanUpModal } from "@/composables/clean-up-modal";
 import { ref } from "vue";
 import { menu } from "@/constants/sidebar";
@@ -48,7 +51,6 @@ import startCase from "lodash/startCase";
 
 const loginModal = ref();
 
-const router = useRouter();
 const route = useRoute();
 
 const routeName = route.name as string;
@@ -64,7 +66,6 @@ onBeforeRouteLeave((to, from, next) => {
   useCleanUpModal(loginModal.value?.modal);
   next();
 });
-
 </script>
 
 <style scoped>
@@ -105,5 +106,4 @@ main {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(111, 189, 119, 0.45);
 }
-
 </style>

@@ -10,7 +10,7 @@
         <div class="text-center mt-4">
           <h4 class="fs-4 fw-bolder text-success">404</h4>
           <h1 class="fs-1 fw-bolder lead error-text text-dark">
-            {{ pageName }} not found.
+            {{ pageName }} not found !
           </h1>
           <slot name="text-content">
             <span class="fs-5 fw-light d-block">
