@@ -9,22 +9,12 @@ export const USERS_MENU: AccordionItemProps = {
     {
       href: "/users/create",
       description: "add user",
-      routeName: "add-user"
+      routeName: "add-user",
     },
     {
       href: "/users",
-      description: "view users",
-      routeName: "view-users"
-    },
-    {
-      href: "/users/update",
       description: "manage users",
-      routeName: "manage-users"
+      routeName: "manage-users",
     },
-    {
-      href: "/users/reports",
-      description: "users reports",
-      routeName: "users-reports"
-    }
-  ]
+  ],
 };

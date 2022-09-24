@@ -4,7 +4,7 @@ import { useStorage } from "@vueuse/core";
 export const useTokenStore = defineStore({
   id: "token",
   state: () => ({
-    token: null
+    token: null,
   }),
   actions: {
     storeTokenToLocalStorage(_token: string) {
@@ -28,6 +28,6 @@ export const useTokenStore = defineStore({
       if (data) {
         localStorage.removeItem("token");
       }
-    }
-  }
+    },
+  },
 });

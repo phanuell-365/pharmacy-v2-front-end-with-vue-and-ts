@@ -1,29 +1,38 @@
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <section class="content">
-
     <div class="heading">
       <h1 class="heading-text">
-        <span class="main-heading-text text-secondary">ResTechs Online Pharmaceutical Management System</span>
-        <span class="sub-heading-text text-success">Your healthy life companion</span>
+        <span class="main-heading-text text-secondary"
+          >ResTechs Online Pharmaceutical Management System</span
+        >
+        <span class="sub-heading-text text-success"
+          >Your healthy life companion</span
+        >
       </h1>
     </div>
 
     <div class="button-container">
-      <RouterLink class="btn-success btn login-btn btn-animated" to="/dashboard" type="submit">
+      <RouterLink
+        class="btn-success btn login-btn btn-animated"
+        to="/dashboard"
+        type="submit"
+      >
         <span class="submit-text">Get started</span>
       </RouterLink>
     </div>
   </section>
 </template>
 <style scoped>
-
 .content {
   height: 100vh !important;
-  background-image: linear-gradient(to top right, rgba(191, 255, 235, 0.55), rgba(234, 255, 192, 0.55)),
-  url("./src/assets/images/phamarceutical-tech.jpg") !important;
+  background-image: linear-gradient(
+      to top right,
+      rgba(191, 255, 235, 0.55),
+      rgba(234, 255, 192, 0.55)
+    ),
+    url("@/assets/images/phamarceutical-tech.jpg") !important;
   background-size: cover !important;
   background-position: bottom !important;
 
@@ -35,7 +44,6 @@
   align-items: center !important;
   position: relative !important;
 }
-
 
 .heading {
   position: relative !important;
@@ -51,7 +59,6 @@
 
   /*transform: translate(-50%, -50%);*/
 }
-
 
 .main-heading-text {
   display: block;
@@ -76,12 +83,13 @@
   animation: moveInFromBottom 1s ease-out;
 }
 
-.login-btn:link, .login-btn:visited {
+.login-btn:link,
+.login-btn:visited {
   border-radius: 10em;
   padding: 10px 40px;
   text-transform: uppercase;
   font-weight: 100;
-  transition: all .2s;
+  transition: all 0.2s;
   position: relative;
 }
 
@@ -95,18 +103,18 @@
   top: 0;
   left: 0;
   z-index: -1;
-  transition: all .4s;
+  transition: all 0.4s;
   background-color: var(--bs-btn-bg);
 }
 
 .login-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 .login-btn:active {
   transform: translateY(-1px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .btn:hover::after {
@@ -139,10 +147,9 @@
 }
 
 .btn-animated {
-  animation: moveInFromBottom .5s ease-out .75s;
+  animation: moveInFromBottom 0.5s ease-out 0.75s;
   animation-fill-mode: backwards;
 }
-
 
 @keyframes moveInFromBottom {
   0% {
@@ -167,6 +174,4 @@
     transform: translate(0);
   }
 }
-
-
 </style>

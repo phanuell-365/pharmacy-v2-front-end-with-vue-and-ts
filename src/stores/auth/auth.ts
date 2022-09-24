@@ -34,20 +34,26 @@ export const useAuthStore = defineStore({
       const expiresInHours = Number.parseInt(data?.expires_in);
       const expiresIn = expiresInHours * 60 * 60 * 1000;
       const expirationDate = new Date().getTime() + expiresIn;
+      // const expirationDate = 10000;
 
       useStorage("authData", {
         ...data,
         expirationDate,
       });
-
+    },
+    getExpiryDate() {
+      const data = localStorage.getItem("authData");
+      if (data) {
+        const dataJson = JSON.parse(data);
+        return dataJson["expirationDate"];
+      }
+    },
+    isAuthenticated() {
       timer = setTimeout(() => {
         this.logout();
         console.warn("Logging out ..");
-      }, 3000);
+      }, this.getExpiryDate());
 
-      console.log(timer);
-    },
-    isAuthenticated() {
       const tokenStore = useTokenStore();
 
       return !!tokenStore.getStoredToken();
@@ -78,6 +84,9 @@ export const useAuthStore = defineStore({
     },
     isPharmacist() {
       return this.getUserRole() === "pharmacist";
+    },
+    isPharmacyAssistant() {
+      return this.getUserRole() === "pharmacyAssistant";
     },
     isPharmacyTechnician() {
       return this.getUserRole() === "pharmacyTechnician";

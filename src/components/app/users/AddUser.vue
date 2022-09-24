@@ -1,7 +1,11 @@
 <template>
   <section class="add-user">
     <form class="row g-3 m-4" novalidate @submit.prevent="onFormSubmitHandler">
-      <InputContainer input-id="username" input-label="username" invalid-feedback="Please enter a username">
+      <InputContainer
+        input-id="username"
+        input-label="username"
+        invalid-feedback="Please enter a username"
+      >
         <input
           id="validationUsername"
           v-model.trim="username"
@@ -74,7 +78,7 @@
         <div class="invalid-feedback">Please enter a phone</div>
       </div>
 
-      <hr class="my-3">
+      <hr class="my-3" />
       <FormButtonsContainer>
         <FormButton skin="success" text="add" />
         <FormButton skin="dark" text="add & new" />
@@ -115,24 +119,21 @@ const usersStore = useUsersStore();
 
 const usersRoles: Ref<string[]> = ref([]);
 
-onMounted(
-  async () => {
-    try {
-      usersRoles.value = await usersStore.fetchUsersRoles();
+onMounted(async () => {
+  try {
+    usersRoles.value = await usersStore.fetchUsersRoles();
+  } catch (error: any) {
+    toastError.value?.setupToast({
+      name: "Roles Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Fetch Roles Error",
+      text: "Failed to fetch roles from the server",
+      delay: 5000,
+    });
 
-    } catch (error: any) {
-      toastError.value?.setupToast({
-        name: "Roles Error",
-        elapsedDuration: moment().startOf("second").fromNow(),
-        heading: "Fetch Roles Error",
-        text: "Failed to fetch roles from the server",
-        delay: 5000
-      });
-
-      toastError.value?.show();
-    }
+    toastError.value?.show();
   }
-);
+});
 
 const username: Ref<NewUserDto["username"] | undefined> = ref();
 const password: Ref<NewUserDto["password"] | undefined> = ref();
@@ -153,7 +154,7 @@ const onFormSubmitHandler = async (event: Event) => {
     password: "",
     email: "",
     phone: "",
-    role: ""
+    role: "",
   };
 
   // (() => {
@@ -224,7 +225,7 @@ const onFormSubmitHandler = async (event: Event) => {
           elapsedDuration: moment().startOf("second").fromNow(),
           heading: "Add User",
           text: "Added the user successfully!",
-          delay: 3000
+          delay: 3000,
         });
 
         toastSuccess.value?.show();
@@ -238,7 +239,7 @@ const onFormSubmitHandler = async (event: Event) => {
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Add user error!",
       text: `An error occurred. ${e.message}`,
-      delay: 5000
+      delay: 5000,
     });
 
     toastError.value?.show();
@@ -250,7 +251,7 @@ const onFormSubmitHandler = async (event: Event) => {
 .btn-hover:hover {
   transform: translateY(-3px);
   /*box-shadow: var(--bs-card-box-shadow);*/
-  box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in;
 }
 

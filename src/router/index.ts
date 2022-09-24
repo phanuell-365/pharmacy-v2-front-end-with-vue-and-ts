@@ -22,39 +22,74 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../views/DashboardView.vue"),
+      // beforeEnter: (to, from, next) => {
+      //   const authStore = useAuthStore();
+      //   if (authStore.isAdmin() || authStore.isChiefPharmacist()) {
+      //     return next("/medicines");
+      //   } else
+      //     return next({
+      //       name: "un-authorized",
+      //       path: "/un-authorized",
+      //       params: { action: "add-user" },
+      //     });
+      // },
     },
 
     // users' routes
-    {
-      path: "/users",
-      name: "view-users",
-      component: () => import("../views/users/ViewUsersView.vue"),
-    },
     {
       path: "/users/create",
       name: "add-user",
       component: () => import("../views/users/AddUserView.vue"),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
-        if (!(authStore.isAdmin() || authStore.isChiefPharmacist())) {
+        if (authStore.isAdmin() || authStore.isChiefPharmacist()) {
+          return next();
+        } else
           return next({
             name: "un-authorized",
             path: "/un-authorized",
             params: { action: "add-user" },
           });
-        }
       },
     },
     {
-      path: "/users/update",
+      path: "/users",
       name: "manage-users",
       component: () => import("../views/users/ManageUsersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+        if (authStore.isAdmin() || authStore.isChiefPharmacist()) {
+          return next();
+        } else
+          return next({
+            name: "un-authorized",
+            path: "/un-authorized",
+            params: { action: "add-user" },
+          });
+      },
     },
     {
       path: "/users/:id",
-      name: "view-user",
+      name: "manage-user",
       component: () => import("../views/users/id/ViewUserView.vue"),
       props: true,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+        if (
+          authStore.isAdmin() ||
+          authStore.isChiefPharmacist() ||
+          authStore.isPharmacist() ||
+          authStore.isPharmacyAssistant() ||
+          authStore.isPharmacyTechnician()
+        ) {
+          return next();
+        } else
+          return next({
+            name: "un-authorized",
+            path: "/un-authorized",
+            params: { action: "add-user" },
+          });
+      },
     },
     {
       path: "/users/:id/update",
@@ -62,11 +97,11 @@ const router = createRouter({
       component: () => import("../views/users/id/ManageUserView.vue"),
       props: true,
     },
-    {
-      path: "/users/reports",
-      name: "users-reports",
-      component: () => import("../views/users/UsersReportsView.vue"),
-    },
+    // {
+    //   path: "/users/reports",
+    //   name: "users-reports",
+    //   component: () => import("../views/users/UsersReportsView.vue"),
+    // },
 
     // customers' routes
     {
@@ -204,7 +239,7 @@ const router = createRouter({
     // medicines
     {
       path: "/errors/medicines/:invalidId(.*)",
-      name: "invalid-mdicine-id",
+      name: "invalid-medicine-id",
       component: () => import("../components/error/NotFoundMedicine.vue"),
       props: true,
     },

@@ -10,8 +10,7 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import ManageUsers from "@/components/app/users/ManageUsers.vue";</script>
+import ManageUsers from "@/components/app/users/ManageUsers.vue";
+</script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

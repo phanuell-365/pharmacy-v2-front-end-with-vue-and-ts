@@ -22,10 +22,11 @@ export const useUsersStore = defineStore({
   id: "users",
   state: (): UsersState => ({
     users: [],
-    usersRoles: []
+    usersRoles: [],
   }),
   getters: {
-    getUserAttributes: state => Object.keys(USER_DEFAULT).filter(value => value !== "id")
+    getUserAttributes: (state) =>
+      Object.keys(USER_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -38,8 +39,8 @@ export const useUsersStore = defineStore({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken()
-        }
+          Authorization: "Bearer " + this.getToken(),
+        },
       });
 
       const data = await response.json();
@@ -61,17 +62,17 @@ export const useUsersStore = defineStore({
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken()
-        }
+          Authorization: "Bearer " + this.getToken(),
+        },
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 401) {
-          const tokenStore = useTokenStore();
-          tokenStore.clearToken();
-        }
+        // if (response.status === 401) {
+        //   const tokenStore = useTokenStore();
+        //   tokenStore.clearToken();
+        // }
         throw new Error(data?.message);
       }
 
@@ -83,16 +84,16 @@ export const useUsersStore = defineStore({
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + this.getToken(),
-          "Content-Disposition": "attachment;filename=users-reports.pdf"
+          "Content-Disposition": "attachment;filename=users-reports.pdf",
         },
-        redirect: "follow"
+        redirect: "follow",
       });
 
       if (!response.ok) {
-        if (response.status === 401) {
-          const tokenStore = useTokenStore();
-          tokenStore.clearToken();
-        }
+        // if (response.status === 401) {
+        //   const tokenStore = useTokenStore();
+        //   tokenStore.clearToken();
+        // }
         throw new Error("Failed to load the report");
       }
 
@@ -133,8 +134,8 @@ export const useUsersStore = defineStore({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + this.getToken()
-          }
+            Authorization: "Bearer " + this.getToken(),
+          },
         }
       );
 
@@ -158,9 +159,9 @@ export const useUsersStore = defineStore({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken()
+          Authorization: "Bearer " + this.getToken(),
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -173,6 +174,6 @@ export const useUsersStore = defineStore({
       }
 
       return { status: true };
-    }
-  }
+    },
+  },
 });
