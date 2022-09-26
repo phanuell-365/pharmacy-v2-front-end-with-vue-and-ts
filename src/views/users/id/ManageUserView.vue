@@ -2,7 +2,7 @@
   <section class="manage-user">
     <SidebarLayout>
       <template #body>
-        <ManageUser :update-mode="update" :user-id="userId" />
+        <ManageUser :update-mode="updateMode" :user-id="userId" />
       </template>
     </SidebarLayout>
   </section>
@@ -11,23 +11,25 @@
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
 import ManageUser from "@/components/app/users/ManageUser.vue";
-import { useRoute } from "vue-router";
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
-const route = useRoute();
+interface ManageUserProps {
+  userId: string;
+  update: boolean;
+}
 
-const params = route.params["id"];
+const props = defineProps<ManageUserProps>();
 
-const query = route.query["update"];
+const updateMode: Ref<boolean> = ref(props.update);
 
-const userId: Ref<string | null> = ref(null);
-
-const update: Ref<boolean | null> = ref(null);
-
-if (!Array.isArray(params)) userId.value = params;
-
-if (!Array.isArray(query)) update.value = !!query;
+watch(
+  () => props.update,
+  (value) => {
+    console.log(value);
+    updateMode.value = value;
+  }
+);
 </script>
 
 <style scoped></style>

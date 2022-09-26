@@ -73,8 +73,8 @@ const router = createRouter({
       name: "manage-user",
       component: () => import("../views/users/id/ManageUserView.vue"),
       props: (route) => ({
-        params: route.params.id,
-        query: route.query.update,
+        userId: route.params.id,
+        update: !!route.query.update,
       }),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();

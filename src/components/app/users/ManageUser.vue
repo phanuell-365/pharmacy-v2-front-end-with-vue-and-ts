@@ -179,7 +179,7 @@ import DeleteModal from "@/components/modal/delete/DeleteModal.vue";
 import startCase from "lodash/startCase";
 import { useUsersStore } from "@/stores/app/users/users";
 import type { Ref } from "vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { UpdateUserDto, UserDto } from "@/stores/app/users/dto";
 import { useRouter } from "vue-router";
 import { useField } from "vee-validate";
@@ -206,6 +206,14 @@ const user: Ref<UserDto | null> = ref(null);
 const usersRoles: Ref<string[]> = ref([]);
 const setUpdateMode: Ref<boolean | undefined> = ref(props.updateMode);
 const setViewMode: Ref<boolean | undefined> = ref(!props.updateMode);
+
+watch(
+  () => props.updateMode,
+  (value) => {
+    setUpdateMode.value = value;
+    setViewMode.value = !value;
+  }
+);
 
 try {
   usersRoles.value = await usersStore.fetchUsersRoles();
