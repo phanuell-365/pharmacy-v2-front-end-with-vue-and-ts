@@ -139,8 +139,10 @@ const router = createRouter({
     },
     {
       path: "/customers/:id",
-      name: "view-customer",
-      component: () => import("../views/customers/id/ViewCustomerView.vue"),
+      name: "manage-customer",
+      // name: "view-customer",
+      component: () => import("../views/customers/id/ManageCustomerView.vue"),
+      // component: () => import("../views/customers/id/ViewCustomerView.vue"),
       props: (route) => ({
         params: route.params.id,
         query: route.query.update,
@@ -156,11 +158,9 @@ const router = createRouter({
         });
       },
     },
-    {
-      path: "/customers/:id/update",
-      name: "manage-customer",
-      component: () => import("../views/customers/id/ManageCustomer.vue"),
-    },
+    // {
+    //   path: "/customers/:id/update",
+    // },
 
     // sales routes
     {

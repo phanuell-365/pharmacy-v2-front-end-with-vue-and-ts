@@ -13,11 +13,6 @@ export const CUSTOMERS_MENU: AccordionItemProps = {
     },
     {
       href: "/customers",
-      description: "view customers",
-      routeName: "view-customers",
-    },
-    {
-      href: "/customers/update",
       description: "manage customers",
       routeName: "manage-customers",
     },

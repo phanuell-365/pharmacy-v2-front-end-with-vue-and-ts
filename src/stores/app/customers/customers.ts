@@ -1,9 +1,13 @@
 import { defineStore } from "pinia";
-import type { CustomerDto, NewCustomerDto } from "@/stores/app/customers/dto";
+import type {
+  CustomerDto,
+  NewCustomerDto,
+  UpdateCustomerDto,
+} from "@/stores/app/customers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
-const CUSTOMER_DEFUALT: CustomerDto = {
+const CUSTOMER_DEFAULT: CustomerDto = {
   id: "",
   name: "",
   email: "",
@@ -21,7 +25,7 @@ export const useCustomersStore = defineStore({
   }),
   getters: {
     getCustomerAttributes: (state) =>
-      Object.keys(CUSTOMER_DEFUALT).filter((value) => value !== "id"),
+      Object.keys(CUSTOMER_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -77,6 +81,48 @@ export const useCustomersStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as CustomerDto;
+    },
+
+    async updateCustomer(customerId: string, payload: UpdateCustomerDto) {
+      const response = await fetch(`${BASE_URL}/customers/${customerId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as CustomerDto;
+    },
+
+    async deleteCustomer(customerId: string) {
+      const response: Response = await fetch(
+        `${BASE_URL}/customers/${customerId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.getToken(),
+          },
+        }
+      );
+
+      if (response.status === 204) return "Deleted the customer successfully!";
+      else if (!response.ok) {
+        let data;
+
+        if (response.body) {
+          data = await response.json();
+
+          throw new Error(data.message + "! Failed to delete the customer!");
+        }
+        return "Failed to delete the customer!";
+      }
     },
   },
 });

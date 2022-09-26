@@ -1,6 +1,4 @@
 <template>
-  <hr class="my-3" />
-
   <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
     <!--  name  -->
     <InputContainer
@@ -53,9 +51,7 @@
       />
     </InputContainer>
 
-    <hr class="my-3" />
-
-    <FormButtonsContainer>
+    <FormButtonsContainer class="mt-5">
       <FormButton skin="primary" text="add" @click="onAddClick" />
       <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
       <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
@@ -72,7 +68,7 @@
       <ToastContainer :placement="TOP_CENTER">
         <LiveToast
           ref="toastSuccess"
-          skin="info"
+          skin="success"
           @on-hidden-bs-toast="onHiddenBsToast"
         />
         <LiveToast ref="toastError" skin="danger" />

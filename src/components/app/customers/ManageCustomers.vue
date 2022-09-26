@@ -18,7 +18,7 @@
           title="View Customer"
         />
         <ButtonLinkIcon
-          :href="`/customers/${recordId}/update`"
+          :href="`/customers/${recordId}?update=true`"
           action="update"
         />
         <ButtonLinkIcon :href="`/customers/${recordId}`" action="delete" />
