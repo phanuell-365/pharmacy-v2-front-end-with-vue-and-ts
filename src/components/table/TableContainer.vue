@@ -37,7 +37,7 @@ const color = computed(() =>
 
 .scroll-table-lg {
   position: relative;
-  max-height: 400px;
+  max-height: 380px;
   overflow: auto;
 }
 

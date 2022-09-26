@@ -1,9 +1,14 @@
 <template>
   <section class="manage-stocks">
-    <SearchTable :attributes="stocksStore.getStockAttributes" :records="stocks" name="stocks" null-comment="Stock not found"
-                 search-by="medicine"
-                 search-term="medicine">
-      <template #actions="{recordId}">
+    <SearchTable
+      :attributes="stocksStore.getStockAttributes"
+      :records="stocks"
+      name="stock"
+      null-comment="Stock not found"
+      search-by="medicine"
+      search-term="medicine"
+    >
+      <template #actions="{ recordId }">
         <ButtonLinkIcon :href="`/stocks/${recordId}`" action="view" />
         <ButtonLinkIcon :href="`/stocks/${recordId}/update`" action="update" />
         <ButtonLinkIcon :href="`/stocks/${recordId}`" action="delete" />
@@ -40,7 +45,6 @@ const toastError = ref();
 try {
   stocks.value = await stocksStore.fetchStocks();
 } catch (error: any) {
-
   console.error(error);
 
   toastError.value?.setupToast({
@@ -48,13 +52,11 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Stocks Error",
     text: "Failed to fetch stocks from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

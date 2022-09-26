@@ -16,5 +16,20 @@ export const SALES_MENU: AccordionItemProps = {
       description: "manage sales",
       routeName: "manage-sales",
     },
+    {
+      href: "/sales/issued",
+      description: "issued sales",
+      routeName: "issued-sales",
+    },
+    {
+      href: "/sales/pending",
+      description: "pending sales",
+      routeName: "pending-sales",
+    },
+    {
+      href: "/sales/cancelled",
+      description: "cancelled sales",
+      routeName: "cancelled-sales",
+    },
   ],
 };

@@ -195,6 +195,54 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/sales/issued",
+      name: "issued-sales",
+      component: () => import("../views/sales/ViewIssuedSales.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "issued-sale" },
+        });
+      },
+    },
+
+    {
+      path: "/sales/pending",
+      name: "pending-sales",
+      component: () => import("../views/sales/ViewPendingSales.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "pending-sale" },
+        });
+      },
+    },
+
+    {
+      path: "/sales/cancelled",
+      name: "cancelled-sales",
+      component: () => import("../views/sales/ViewCancelledSales.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "cancelled-sales" },
+        });
+      },
+    },
+
     // medicines routes
     {
       path: "/medicines/create",

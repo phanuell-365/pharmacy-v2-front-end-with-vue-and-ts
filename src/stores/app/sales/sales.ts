@@ -12,6 +12,17 @@ const SALES_DEFAULT: SalesDto = {
   totalPrices: 0,
 };
 
+const SALE_DEFAULT: SaleDto = {
+  id: "",
+  customer: "",
+  medicine: "",
+  issueUnitQuantity: 0,
+  issueUnitPrice: "",
+  status: "",
+  saleDate: "",
+  totalPrice: 0,
+};
+
 interface SalesState {
   sales: SalesDto[];
   sale: SaleDto | null;
@@ -26,6 +37,8 @@ export const useSalesStore = defineStore({
   getters: {
     getSalesAttributes: (state) =>
       Object.keys(SALES_DEFAULT).filter((value) => value !== "id"),
+    getSaleAttributes: (state) =>
+      Object.keys(SALE_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -81,7 +94,7 @@ export const useSalesStore = defineStore({
 
       if (!response.ok) throw new Error(data?.message);
 
-      return data as SalesDto[];
+      return data as SaleDto[];
     },
 
     async fetchIssuedSales() {
@@ -99,7 +112,25 @@ export const useSalesStore = defineStore({
 
       if (!response.ok) throw new Error(data?.message);
 
-      return data as SalesDto[];
+      return data as SaleDto[];
+    },
+
+    async fetchPendingSales() {
+      const response: Response = await fetch(
+        `${BASE_URL}/sales?status=pending`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as SaleDto[];
     },
 
     async addSales(payload: NewSalesDto) {
@@ -119,7 +150,7 @@ export const useSalesStore = defineStore({
 
       if (!response.ok) throw new Error(data?.message);
 
-      return data as SalesDto;
+      return data as SaleDto;
     },
   },
 });
