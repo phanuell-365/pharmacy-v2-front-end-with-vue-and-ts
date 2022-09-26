@@ -102,25 +102,20 @@
 
       <hr class="my-3" />
       <FormButtonsContainer>
-        <FormButton skin="primary" text="add" @click="onAddClick" />
-        <FormButton
-          skin="secondary"
-          text="add & new"
-          @click="onAddAndNewClick"
-        />
+        <FormButton skin="primary" text="Add" @click="onAddAndNewClick" />
         <FormButton
           outline
           skin="dark"
-          text="add & view"
+          text="Add & View"
           @click="onAddAndView"
         />
         <FormButton
           outline
           skin="secondary"
-          text="add & view all"
+          text="Add & View all"
           @click="onAddAndViewAll"
         />
-        <FormButton outline skin="danger" text="clear" @click="onClear" />
+        <FormButton outline skin="danger" text="Clear" @click="onClear" />
       </FormButtonsContainer>
     </form>
 
@@ -312,10 +307,6 @@ const addUser = async (payload: NewUserDto) => {
 };
 
 const routeRedirect = ref("");
-
-const onAddClick = async () => {
-  if (validateForm()) await addUser(createUserPayload());
-};
 
 const onAddAndNewClick = async () => {
   if (validateForm()) {

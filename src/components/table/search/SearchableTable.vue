@@ -22,6 +22,7 @@
             :href="`/${name}s/create`"
             :text="`Add ${name}`"
             action="add"
+            class="btn-hover"
           />
         </div>
       </div>
@@ -130,5 +131,17 @@ watch(searchText, (value) => {
 #searchInput:focus {
   outline: 3px solid #dddddd;
   /*outline: 3px solid var(--bs-light);*/
+}
+
+.btn-hover:hover {
+  transform: translateY(-3px);
+  /*box-shadow: var(--bs-card-box-shadow);*/
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in;
+}
+
+.btn-hover:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
 }
 </style>

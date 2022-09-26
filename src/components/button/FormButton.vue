@@ -8,13 +8,12 @@
     type="submit"
     @click="onClick"
   >
-    {{ startCase(text) }}
+    {{ text }}
   </button>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from "vue";
-import startCase from "lodash/startCase";
 
 interface FormButtonProps {
   text: string;
