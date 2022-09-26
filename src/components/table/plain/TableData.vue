@@ -1,5 +1,5 @@
 <template>
-  <td v-for="fieldName in fieldNames" :key="fieldName">
+  <td v-for="fieldName in fieldNames" :key="fieldName" class="small">
     <template v-if="record">
       {{ record[fieldName] }}
     </template>
@@ -15,6 +15,4 @@ interface DataProps {
 defineProps<DataProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

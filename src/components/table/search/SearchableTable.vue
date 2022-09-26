@@ -92,12 +92,22 @@ const onFocusOutHandler = () => {
 
 const filterValue: Ref<string> = ref(props.searchBy);
 
-const propRecords = ref([...props.records.sort()]);
-
-const recordsClone = ref([...props.records.sort()]);
+const propRecords = ref(props.records);
+//
+// // const recordsClone = ref(props.records);
+// onUpdated(() => {
+//   propRecords.value = props.records.filter((value1) => {
+//     // if (value1) {
+//     //   //@ts-ignore
+//     //   const searchValue = value1[filterValue.value].toLowerCase();
+//     //   return searchValue.includes(value.toLowerCase());
+//     // }
+//     return true;
+//   });
+// });
 
 watch(searchText, (value) => {
-  propRecords.value = recordsClone.value.filter((value1) => {
+  propRecords.value = props.records.filter((value1) => {
     if (value1) {
       //@ts-ignore
       const searchValue = value1[filterValue.value].toLowerCase();

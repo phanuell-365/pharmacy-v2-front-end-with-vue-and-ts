@@ -137,8 +137,33 @@
           skin="info"
           @on-hidden-bs-toast="onHiddenBsToast"
         />
+
+        <LiveToast
+          ref="toastWarning"
+          skin="warning"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
+      <DeleteModal ref="deleteModalRef" name="delete-user">
+        <template #buttons>
+          <button
+            class="btn btn-lg btn-link text-danger fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"
+            data-bs-dismiss="modal"
+            type="button"
+            @click="onDeleteUser"
+          >
+            <strong>Yes</strong>
+          </button>
+          <button
+            class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+            data-bs-dismiss="modal"
+            type="button"
+          >
+            Cancel
+          </button>
+        </template>
+      </DeleteModal>
     </Teleport>
   </section>
 </template>
@@ -150,6 +175,7 @@ import LiveToast from "@/components/toast/LiveToast.vue";
 import FormButton from "@/components/button/FormButton.vue";
 import InputContainer from "@/components/form/InputContainer.vue";
 import FormButtonsContainer from "@/components/form/FormButtonsContainer.vue";
+import DeleteModal from "@/components/modal/delete/DeleteModal.vue";
 import startCase from "lodash/startCase";
 import { useUsersStore } from "@/stores/app/users/users";
 import type { Ref } from "vue";
@@ -169,8 +195,10 @@ const router = useRouter();
 const props = defineProps<ManageUserProps>();
 
 const formRef: Ref<HTMLFormElement | null> = ref(null);
-const toastSuccess = ref();
-const toastError = ref();
+const toastSuccess: Ref<InstanceType<LiveToast>> = ref();
+const toastWarning: Ref<InstanceType<LiveToast>> = ref();
+const toastError: Ref<InstanceType<LiveToast>> = ref();
+const deleteModalRef: Ref<InstanceType<DeleteModal> | null> = ref(null);
 
 const usersStore = useUsersStore();
 
@@ -375,7 +403,42 @@ const onDeleteClick = async () => {
 
     toastError.value?.show();
   } else {
-    await usersStore.deleteUser(props.userId);
+    deleteModalRef.value.setUpModal({
+      secondaryHeader: "Are you sure you want to delete this user?",
+      primaryHeader: "Click yes to delete and cancel to exit.",
+    });
+
+    deleteModalRef.value.showModal();
+  }
+};
+
+const response: Ref<string | undefined> = ref();
+
+const onDeleteUser = async () => {
+  try {
+    response.value = await usersStore.deleteUser(props.userId);
+    console.log("success");
+    toastWarning.value?.setupToast({
+      name: "Delete User Success",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Delete User Success",
+      text: response.value,
+      delay: 5000,
+    });
+
+    toastWarning.value?.show();
+
+    deleteModalRef.value.hideModal();
+  } catch (error: any) {
+    toastError.value?.setupToast({
+      name: "Delete User Error",
+      elapsedDuration: moment().startOf("second").fromNow(),
+      heading: "Delete User Error",
+      text: error.message,
+      delay: 5000,
+    });
+
+    toastError.value?.show();
   }
 };
 

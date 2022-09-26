@@ -1,8 +1,16 @@
 <template>
   <div class="accordion-item bg-success">
-    <AccordionHeader :active="active" :description="accordionHeaderDesc" :header-id="accordionHeaderId"
-                     :icon="accordionIcon" />
-    <AccordionCollapse :accordion-list-items="accordionList" :active="active" :header-id="accordionHeaderId" />
+    <AccordionHeader
+      :active="active"
+      :description="accordionHeaderDesc"
+      :header-id="accordionHeaderId"
+      :icon="accordionIcon"
+    />
+    <AccordionCollapse
+      :accordion-list-items="accordionList"
+      :active="active"
+      :header-id="accordionHeaderId"
+    />
   </div>
 </template>
 
@@ -26,6 +34,4 @@ interface SidebarAccordionItemProps {
 defineProps<SidebarAccordionItemProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

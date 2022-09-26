@@ -2,7 +2,7 @@
   <div :class="tableSize">
     <table
       :class="color"
-      class="table table-hover table-bordered table-striped table-sm table-responsive table-responsive-md table-responsive-sm"
+      class="table table-hover table-bordered table-striped table-sm table-responsive table-responsive-md table-responsive-sm rounded"
     >
       <slot />
     </table>
@@ -37,7 +37,7 @@ const color = computed(() =>
 
 .scroll-table-lg {
   position: relative;
-  max-height: 350px;
+  max-height: 400px;
   overflow: auto;
 }
 

@@ -133,7 +133,7 @@ export const useUsersStore = defineStore({
     },
     async fetchUsersRoles() {
       const response: Response = await fetch(
-        `${BASE_URL}/users?resource=roles`,
+        `${BASE_URL}/users/search?resource=roles`,
         {
           method: "GET",
           headers: {
@@ -211,14 +211,28 @@ export const useUsersStore = defineStore({
         },
       });
 
-      const data = await response.json();
+      // let data;
+      //
+      // if (response.body) {
+      //   data = await response.json();
+      // }
+      if (response.status === 204) return "Deleted the user successfully!";
+      else if (!response.ok) {
+        let data;
 
-      if (!response.ok) {
-        if (data.message === "Unauthorized") {
+        if (response.body) {
+          data = await response.json();
+
           throw new Error(data.message + "! Failed to delete the user!");
         }
-        throw new Error(data.message);
+        return "Failed to delete the user!";
       }
+      // else if (!response.ok) {
+      //   if (data.message === "Unauthorized") {
+      //     throw new Error(data.message + "! Failed to delete the user!");
+      //   }
+      //   throw new Error(data.message);
+      // }
     },
   },
 });

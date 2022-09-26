@@ -3,7 +3,7 @@
     id="modalSignin"
     ref="theModal"
     aria-hidden="true"
-    class="modal fade modal-signin d-block py-5"
+    class="modal fade modal-signin py-5"
     data-bs-backdrop="static"
     data-bs-keyboard="false"
     role="dialog"

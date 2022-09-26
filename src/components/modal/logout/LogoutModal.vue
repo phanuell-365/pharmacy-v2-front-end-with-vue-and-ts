@@ -1,10 +1,14 @@
 <template>
-  <div :id="`modal${name}`" ref="logoutModalRef" aria-hidden="true"
-       class="modal fade modal-alert d-block py-5"
-       data-bs-backdrop="static"
-       data-bs-keyboard="false"
-       role="dialog"
-       tabindex="-1">
+  <div
+    :id="`modal${name}`"
+    ref="logoutModalRef"
+    aria-hidden="true"
+    class="modal fade modal-alert py-5"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    role="dialog"
+    tabindex="-1"
+  >
     <div class="modal-dialog" role="document">
       <div class="modal-content rounded-4 shadow">
         <div class="modal-body p-4 text-center">
@@ -12,12 +16,20 @@
           <p class="mb-0">You will need to login again.</p>
         </div>
         <div class="modal-footer flex-nowrap p-0">
-          <button class="btn btn-lg btn-link text-danger fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"
-                  type="button" @click="onLogoutClick">
-            <strong>Yes, log out</strong></button>
-          <button class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal"
-                  type="button"
-                  @click="onCloseClick">No thanks
+          <button
+            class="btn btn-lg btn-link text-danger fs-6 text-decoration-none col-6 m-0 rounded-0 border-right"
+            type="button"
+            @click="onLogoutClick"
+          >
+            <strong>Yes, log out</strong>
+          </button>
+          <button
+            class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0"
+            data-bs-dismiss="modal"
+            type="button"
+            @click="onCloseClick"
+          >
+            No thanks
           </button>
         </div>
       </div>
@@ -26,11 +38,10 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onBeforeMount, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Modal } from "bootstrap";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
-import { useCleanUpModal } from "@/composables/clean-up-modal";
 
 interface LogoutModalProps {
   name: string;
@@ -39,9 +50,7 @@ interface LogoutModalProps {
 
 const props = defineProps<LogoutModalProps>();
 
-const href = computed(
-  () => props.to ? props.to : "/"
-);
+const href = computed(() => (props.to ? props.to : "/"));
 
 const logoutModalRef = ref();
 
@@ -51,12 +60,13 @@ const router = useRouter();
 
 const logoutModal = ref();
 
-onMounted(
-  () => {
-    logoutModal.value = new Modal(logoutModalRef.value);
-    logoutModal.value?.show();
-  }
-);
+onMounted(() => {
+  logoutModal.value = new Modal(logoutModalRef.value);
+});
+
+defineExpose({
+  showModal: () => logoutModal.value.show(),
+});
 
 const onLogoutClick = () => {
   authStore.logout();
@@ -66,26 +76,24 @@ const onLogoutClick = () => {
 
 const onCloseClick = () => {
   logoutModal.value?.hide();
-  router.go(0);
+  // router.go(0);
 };
 
-onBeforeMount(
-  () => useCleanUpModal()
-);
+// onBeforeMount(() => useCleanUpModal());
 </script>
 
 <style scoped>
-.fade:not(.show) {
+/*.fade:not(.show) {
   opacity: 1 !important;
 }
-
+*/
 .rounded-4 {
-  border-radius: .5rem;
+  border-radius: 0.5rem;
 }
 
 .modal-sheet .modal-dialog {
   width: 380px;
-  transition: bottom .75s ease-in-out;
+  transition: bottom 0.75s ease-in-out;
 }
 
 .modal-sheet .modal-footer {

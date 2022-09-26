@@ -20,15 +20,16 @@
     />
   </div>
   <Teleport to="body">
-    <Transition>
-      <template v-if="logout">
-        <LogoutModal :key="`loginStatus`" name="loginStatus" />
-      </template>
-    </Transition>
+    <!--    <Transition>-->
+    <!--      <template v-if="logout">-->
+    <LogoutModal :key="`loginStatus`" ref="logoutModalRef" name="loginStatus" />
+    <!--      </template>-->
+    <!--    </Transition>-->
   </Teleport>
 </template>
 
 <script lang="ts" setup>
+import type { Ref } from "vue";
 import { computed, ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import LogoutModal from "@/components/modal/logout/LogoutModal.vue";
@@ -41,6 +42,8 @@ interface LoginStatusProps {
 
 const props = defineProps<LoginStatusProps>();
 
+const logoutModalRef: Ref<InstanceType<LogoutModal | null>> = ref(null);
+
 const status = ref(authStore.isLoggedIn());
 
 const logout = ref(false);
@@ -52,7 +55,8 @@ const textContent = computed(() =>
 const switchInput = ref();
 
 const onLogoutClick = () => {
-  logout.value = true;
+  // logout.value = true;
+  logoutModalRef.value?.showModal();
 };
 </script>
 

@@ -30,7 +30,14 @@ export const useSidebarStore = defineStore({
           ))
       );
 
-      if (sidebar) sidebar.active = true;
+      if (sidebar) {
+        sidebar.active = true;
+        this.sidebarMenu = this.sidebarMenu.map((value) => {
+          if (value.accordionHeaderDesc !== sidebar.accordionHeaderDesc)
+            value.active = false;
+          return value;
+        });
+      }
 
       return sidebar;
     },

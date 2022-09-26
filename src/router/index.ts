@@ -64,7 +64,7 @@ const router = createRouter({
           return next({
             name: "un-authorized",
             path: "/un-authorized",
-            params: { action: "add-user" },
+            params: { action: "manage-users" },
           });
       },
     },
@@ -82,7 +82,7 @@ const router = createRouter({
           authStore.isAdmin() ||
           authStore.isChiefPharmacist() ||
           authStore.isPharmacist() ||
-          authStore.isPharmacyAssistant() ||
+          authStore.isPharmacistAssistant() ||
           authStore.isPharmacyTechnician()
         ) {
           return next();
@@ -90,7 +90,7 @@ const router = createRouter({
           return next({
             name: "un-authorized",
             path: "/un-authorized",
-            params: { action: "add-user" },
+            params: { action: "manage-user" },
           });
       },
     },
@@ -111,28 +111,55 @@ const router = createRouter({
       path: "/customers/create",
       name: "add-customer",
       component: () => import("../views/customers/AddCustomerView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-customer" },
+        });
+      },
     },
     {
       path: "/customers",
-      name: "view-customers",
-      component: () => import("../views/customers/ViewCustomers.vue"),
-    },
-    {
-      path: "/customers/update",
       name: "manage-customers",
       component: () => import("../views/customers/ManageCustomersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-customers" },
+        });
+      },
     },
     {
       path: "/customers/:id",
       name: "view-customer",
       component: () => import("../views/customers/id/ViewCustomerView.vue"),
-      props: true,
+      props: (route) => ({
+        params: route.params.id,
+        query: route.query.update,
+      }),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-customer" },
+        });
+      },
     },
     {
       path: "/customers/:id/update",
       name: "manage-customer",
       component: () => import("../views/customers/id/ManageCustomer.vue"),
-      props: true,
     },
 
     // sales routes
@@ -140,11 +167,32 @@ const router = createRouter({
       path: "/sales/create",
       name: "add-sale",
       component: () => import("../views/sales/AddSaleView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-sale" },
+        });
+      },
     },
     {
       path: "/sales",
       name: "manage-sales",
       component: () => import("../views/sales/ManageSalesView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-sale" },
+        });
+      },
     },
 
     // medicines routes
@@ -152,17 +200,52 @@ const router = createRouter({
       path: "/medicines/create",
       name: "add-medicine",
       component: () => import("../views/medicines/AddMedicineView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-medicine" },
+        });
+      },
     },
     {
       path: "/medicines",
       name: "manage-medicines",
       component: () => import("../views/medicines/ManageMedicinesView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-medicines" },
+        });
+      },
     },
     {
       path: "/medicines/:id",
       name: "manage-medicine",
       component: () => import("../views/medicines/id/ManageMedicineView.vue"),
-      props: true,
+      props: (route) => ({
+        params: route.params.id,
+        query: route.query.update,
+      }),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-medicine" },
+        });
+      },
     },
 
     // stocks routes
@@ -170,11 +253,33 @@ const router = createRouter({
       path: "/stocks/create",
       name: "add-stock",
       component: () => import("../views/stock/AddStockView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-stock" },
+        });
+      },
     },
     {
       path: "/stocks",
       name: "manage-stocks",
       component: () => import("../views/stock/ManageStocksView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-stocks" },
+        });
+      },
     },
 
     // suppliers routes
@@ -182,11 +287,32 @@ const router = createRouter({
       path: "/suppliers/create",
       name: "add-supplier",
       component: () => import("../views/suppliers/AddSupplierView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-supplier" },
+        });
+      },
     },
     {
       path: "/suppliers",
       name: "manage-suppliers",
       component: () => import("../views/suppliers/ManageSuppliersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-suppliers" },
+        });
+      },
     },
 
     // orders routes
@@ -194,11 +320,31 @@ const router = createRouter({
       path: "/orders/create",
       name: "add-order",
       component: () => import("../views/orders/AddOrderView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-order" },
+        });
+      },
     },
     {
       path: "/orders",
       name: "manage-orders",
       component: () => import("../views/orders/ManageOrdersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-orders" },
+        });
+      },
     },
 
     // purchases routes
@@ -206,11 +352,33 @@ const router = createRouter({
       path: "/purchases/create",
       name: "add-purchase",
       component: () => import("../views/purchases/AddPurchaseView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "add-purchases" },
+        });
+      },
     },
     {
       path: "/purchases",
       name: "manage-purchases",
       component: () => import("../views/purchases/ManagePurchasesView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-purchases" },
+        });
+      },
     },
 
     // UnAuthorized

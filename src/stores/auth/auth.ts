@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { BASE_URL } from "@/constants/base-url";
 import type { AuthDto } from "@/stores/auth/dto/auth.dto";
-import { useStorage } from "@vueuse/core";
 import { useTokenStore } from "@/stores/auth/token";
 
 let timer: number;
@@ -36,10 +35,13 @@ export const useAuthStore = defineStore({
       const expirationDate = new Date().getTime() + expiresIn;
       // const expirationDate = 10000;
 
-      useStorage("authData", {
-        ...data,
-        expirationDate,
-      });
+      localStorage.setItem(
+        "authData",
+        JSON.stringify({
+          ...data,
+          expirationDate,
+        })
+      );
     },
     getExpiryDate() {
       const data = localStorage.getItem("authData");
@@ -85,8 +87,8 @@ export const useAuthStore = defineStore({
     isPharmacist() {
       return this.getUserRole() === "pharmacist";
     },
-    isPharmacyAssistant() {
-      return this.getUserRole() === "pharmacyAssistant";
+    isPharmacistAssistant() {
+      return this.getUserRole() === "pharmacistAssistant";
     },
     isPharmacyTechnician() {
       return this.getUserRole() === "pharmacyTechnician";

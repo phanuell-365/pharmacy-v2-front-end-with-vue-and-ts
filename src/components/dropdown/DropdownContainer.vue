@@ -1,14 +1,23 @@
 <template>
   <div ref="dropdownRef" class="dropdown">
-    <a id="dropdownUser1" :aria-expanded="ariaExpanded" :class="{show}"
-       class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-       data-bs-toggle="dropdown" href="#" @click="onDropdownClickHandler">
+    <a
+      id="dropdownUser1"
+      :aria-expanded="ariaExpanded"
+      :class="{ show }"
+      class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+      data-bs-toggle="dropdown"
+      href="#"
+      @click="onDropdownClickHandler"
+    >
       <span class="fs-6 fw-bold p-1">{{ user?.username }}</span>
     </a>
-    <DropdownBody :show="show" dropdowns="">
+    <DropdownBody :show="show">
       <template #items>
         <DropdownItem :href="`/users/${user?.id}`" text="view profile" />
-        <DropdownItem :href="`/users/${user?.id}/update`" text="update profile" />
+        <DropdownItem
+          :href="`/users/${user?.id}?update=true`"
+          text="update profile"
+        />
         <DropdownItem href="#" text="switch user" @click="onSwitchUserClick" />
       </template>
     </DropdownBody>
@@ -49,15 +58,11 @@ interface DropdownContainerProps {
 
 defineProps<DropdownContainerProps>();
 
-const ariaExpanded = computed(
-  () => show.value ? "true" : "false"
-);
+const ariaExpanded = computed(() => (show.value ? "true" : "false"));
 
 const dropdown = ref();
 
-onMounted(
-  () => (dropdown.value = new Dropdown(dropdownRef.value))
-);
+onMounted(() => (dropdown.value = new Dropdown(dropdownRef.value)));
 
 const show = ref(false);
 

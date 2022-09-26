@@ -1,6 +1,11 @@
 <template>
   <th>#</th>
-  <th v-for="fieldName in fieldNames" :key="fieldName" :scope="scope">
+  <th
+    v-for="fieldName in fieldNames"
+    :key="fieldName"
+    :scope="scope"
+    class="small"
+  >
     {{ startCase(fieldName) }}
   </th>
 </template>
@@ -16,6 +21,4 @@ interface HeaderProps {
 defineProps<HeaderProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

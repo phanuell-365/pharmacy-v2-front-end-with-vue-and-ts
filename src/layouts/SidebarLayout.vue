@@ -4,27 +4,48 @@
       <SidebarContainer :menu="menu" />
     </aside>
     <main>
-      <div class="row mx-2 align-items-center">
-        <div class="col-6">
-          <p class="fw-bold text-muted mb-0 lead">
-            {{ startCase(sidebarStore.getSidebarMenuName) }}
-          </p>
+      <!--      <div class="row mx-2 align-items-center">-->
+      <!--        <div class="col-6">-->
+      <!--          <p class="fw-bold text-muted mb-0 lead">-->
+      <!--            {{ startCase(sidebarStore.getSidebarMenuName) }}-->
+      <!--          </p>-->
+      <!--        </div>-->
+      <!--        <div class="col-6 d-flex justify-content-end">-->
+      <!--          <LoginStatus />-->
+      <!--        </div>-->
+      <Teleport to="body">
+        <template v-if="!isLoggedIn">
+          <LoginModal ref="loginModal" />
+        </template>
+      </Teleport>
+      <!--      </div>-->
+      <div
+        class="d-flex align-items-center text-success justify-content-between mb-2"
+      >
+        <span class="text-start fw-bold fs-5 mx-3">
+          {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</span
+        >
+        <div class="logout-button">
+          <Teleport to="body">
+            <LogoutModal
+              :key="`loginStatus`"
+              ref="logoutModalRef"
+              name="loginStatus"
+            />
+          </Teleport>
+          <FontAwesome
+            :icon-name="LOGOUT_ICON"
+            class="text-success fa-lg mx-4 py-3 px-2 shadow-sm rounded bg-white"
+            @click="onLogoutClick"
+          />
         </div>
-        <div class="col-6 d-flex justify-content-end">
-          <LoginStatus />
-        </div>
-        <Teleport to="body">
-          <template v-if="!isLoggedIn">
-            <LoginModal ref="loginModal" />
-          </template>
-        </Teleport>
       </div>
       <CardLayout name="card">
-        <template #heading>
-          <small class="text-start fw-normal small p-0 m-auto m-0">
-            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</small
-          >
-        </template>
+        <!--        <template #heading>-->
+        <!--          <small class="text-start fw-normal small p-0 m-auto m-0">-->
+        <!--            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</small-->
+        <!--          >-->
+        <!--        </template>-->
         <template #body>
           <slot name="body" />
         </template>
@@ -38,18 +59,24 @@
 
 <script lang="ts" setup>
 import CardLayout from "./CardLayout.vue";
-import LoginStatus from "@/components/LoginStatus.vue";
+// import LoginStatus from "@/components/LoginStatus.vue";
 import LoginModal from "@/components/modal/login/LoginModal.vue";
+import LogoutModal from "@/components/modal/logout/LogoutModal.vue";
+import FontAwesome from "@/components/icons/FontAwesome.vue";
 import SidebarContainer from "@/components/sidebar/SidebarContainer.vue";
 import { useAuthStore } from "@/stores/auth";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useCleanUpModal } from "@/composables/clean-up-modal";
+import type { Ref } from "vue";
 import { ref } from "vue";
 import { menu } from "@/constants/sidebar";
 import { useSidebarStore } from "@/stores/sidebar/sidebar";
 import startCase from "lodash/startCase";
+import { LOGOUT_ICON } from "@/constants/icons";
 
 const loginModal = ref();
+
+const logoutModalRef: Ref<InstanceType<LogoutModal | null>> = ref(null);
 
 const route = useRoute();
 
@@ -62,6 +89,10 @@ sidebarStore.setUpSidebarMenu(routeName);
 
 const isLoggedIn = authStore.isLoggedIn();
 
+const onLogoutClick = () => {
+  logoutModalRef.value?.showModal();
+};
+
 onBeforeRouteLeave((to, from, next) => {
   useCleanUpModal(loginModal.value?.modal);
   next();
@@ -71,7 +102,7 @@ onBeforeRouteLeave((to, from, next) => {
 <style scoped>
 aside {
   width: 280px;
-  height: 100%;
+  height: 100vh;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -82,9 +113,15 @@ aside {
 }
 
 main {
-  height: 100%;
+  height: 100vh;
   margin-left: 280px;
   padding: 10px;
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(192, 255, 195, 0.55),
+    rgba(237, 243, 230, 0.91),
+    rgba(89, 253, 158, 0.55)
+  );
 }
 
 ::-webkit-scrollbar {

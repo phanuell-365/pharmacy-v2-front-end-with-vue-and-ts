@@ -2,6 +2,12 @@
 import { RouterView } from "vue-router";
 import FontAwesome from "@/components/icons/FontAwesome.vue";
 import { SPINNER } from "@/constants/icons";
+
+// window.onbeforeunload = function (event: Event) {
+//   event.preventDefault();
+//
+//   return "You have unsaved changes, Are you sure you want to leave this page?";
+// };
 </script>
 
 <template>
