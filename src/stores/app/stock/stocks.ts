@@ -19,6 +19,44 @@ interface StocksState {
   stocks: StockDto[];
 }
 
+export interface ExpiredMedicine {
+  name: string;
+  doseForm: string;
+  strength: string;
+  levelOfUse: number;
+  therapeuticClass: string;
+  expiryDate: string;
+}
+
+export interface OutOfStockMedicine {
+  name: string;
+  doseForm: string;
+  strength: string;
+  levelOfUse: number;
+  therapeuticClass: string;
+  packSizeQuantity: string;
+  issueQuantity: number;
+}
+
+const EXPIRED_MEDICINE_DEFAULT: ExpiredMedicine = {
+  name: "",
+  doseForm: "",
+  strength: "",
+  levelOfUse: 0,
+  therapeuticClass: "",
+  expiryDate: "",
+};
+
+const OUT_OF_STOCK_MEDICINE: OutOfStockMedicine = {
+  name: "",
+  doseForm: "",
+  strength: "",
+  levelOfUse: 0,
+  therapeuticClass: "",
+  packSizeQuantity: "",
+  issueQuantity: 0,
+};
+
 export const useStocksStore = defineStore({
   id: "stocks",
   state: (): StocksState => ({
@@ -27,6 +65,10 @@ export const useStocksStore = defineStore({
   getters: {
     getStockAttributes: (state) =>
       Object.keys(STOCKS_DEFAULT).filter((value) => value !== "id"),
+    getExpiredMedicinesAttributes: (state) =>
+      Object.keys(EXPIRED_MEDICINE_DEFAULT).filter((value) => value !== "id"),
+    getOutOfStockMedicinesAttributes: (state) =>
+      Object.keys(OUT_OF_STOCK_MEDICINE).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -50,7 +92,7 @@ export const useStocksStore = defineStore({
       return this.stocks;
     },
 
-    async fetchMedicinesOutOfStock() {
+    async fetchOutOfStock() {
       const response = await fetch(`${BASE_URL}/stocks?cat=out-of-stock`, {
         method: "GET",
         headers: {
@@ -95,6 +137,35 @@ export const useStocksStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as StockDto;
+    },
+
+    async fetchMedicineOutOfStock() {
+      const response = await fetch(
+        `${BASE_URL}/stocks?cat=medicine-out-of-stock`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      return data as OutOfStockMedicine[];
+    },
+
+    async fetchExpiredMedicines() {
+      const response = await fetch(`${BASE_URL}/stocks?cat=expired-medicines`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      return data as ExpiredMedicine[];
     },
   },
 });

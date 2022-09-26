@@ -296,6 +296,40 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/medicines/out-of-stock",
+      name: "medicines-out-of-stock",
+      component: () => import("../views/medicines/ViewMedicineOutOfStock.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "medicines-out-of-stock" },
+        });
+      },
+    },
+
+    {
+      path: "/medicines/expired",
+      name: "expired-medicines",
+      component: () => import("../views/medicines/ViewExpiredMedicines.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "expired-medicines" },
+        });
+      },
+    },
+
     // stocks routes
     {
       path: "/stocks/create",

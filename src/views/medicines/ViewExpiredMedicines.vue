@@ -1,8 +1,8 @@
 <template>
-  <section class="manage-medicines">
+  <section class="view-expired-medicines">
     <SidebarLayout>
       <template #body>
-        <ManageMedicines />
+        <MedicineCategory category="expired" />
       </template>
     </SidebarLayout>
   </section>
@@ -10,7 +10,6 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import ManageMedicines from "@/components/app/medicines/ManageMedicines.vue";
+import MedicineCategory from "@/components/app/medicines/MedicineCategory.vue";
 </script>
-
 <style scoped></style>

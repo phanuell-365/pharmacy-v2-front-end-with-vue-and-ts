@@ -10,6 +10,7 @@
           >
             <DashboardCardItem
               v-for="card in cardItem.cards"
+              :key="card.totalText"
               :href="card.href"
               :total-text="card.totalText"
               :total-value="card.totalValue"
@@ -72,7 +73,7 @@ import type { CustomerDto } from "@/stores/app/customers/dto";
 import { useStocksStore } from "@/stores/app/stock/stocks";
 import type { StockDto } from "@/stores/app/stock/dto";
 import { useSalesStore } from "@/stores/app/sales/sales";
-import type { SalesDto } from "@/stores/app/sales/dto";
+import type { SaleDto, SalesDto } from "@/stores/app/sales/dto";
 
 const ordersStore = useOrdersStore();
 const purchasesStore = usePurchasesStore();
@@ -97,8 +98,8 @@ const outOfStock: Ref<StockDto[]> = ref([]);
 const expiredStock: Ref<StockDto[]> = ref([]);
 const sales: Ref<SalesDto[]> = ref([]);
 const today_sSales: Ref<SalesDto[]> = ref([]);
-const issuedSales: Ref<SalesDto[]> = ref([]);
-const cancelledSales: Ref<SalesDto[]> = ref([]);
+const issuedSales: Ref<SalesDto[] | SaleDto[]> = ref([]);
+const cancelledSales: Ref<SalesDto[] | SaleDto[]> = ref([]);
 
 // onMounted(
 //   async () => {
@@ -114,7 +115,7 @@ try {
   suppliers.value = await suppliersStore.fetchSuppliers();
   customers.value = await customersStore.fetchCustomers();
   stocks.value = await stocksStore.fetchStocks();
-  outOfStock.value = await stocksStore.fetchMedicinesOutOfStock();
+  outOfStock.value = await stocksStore.fetchOutOfStock();
   expiredStock.value = await stocksStore.fetchExpiredStock();
   sales.value = await salesStore.fetchSales();
   today_sSales.value = await salesStore.fetchTodaySales();

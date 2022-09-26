@@ -110,7 +110,7 @@ watch(searchText, (value) => {
   propRecords.value = props.records.filter((value1) => {
     if (value1) {
       //@ts-ignore
-      const searchValue = value1[filterValue.value].toLowerCase();
+      const searchValue = value1[filterValue.value].toLowerCase() as string;
       return searchValue.includes(value.toLowerCase());
     }
     return true;
