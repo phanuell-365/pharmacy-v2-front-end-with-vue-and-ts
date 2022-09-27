@@ -399,9 +399,10 @@ const router = createRouter({
 
     // orders routes
     {
-      path: "/orders/create",
+      path: "/orders/create/:medicineId?",
       name: "add-order",
       component: () => import("../views/orders/AddOrderView.vue"),
+      props: true,
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
 

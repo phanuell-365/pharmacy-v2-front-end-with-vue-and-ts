@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import startCase from "lodash/startCase";
 import InputContainer from "@/components/form/InputContainer.vue";
-import { ref, watch } from "vue";
+import { onUpdated, ref, watch } from "vue";
 import { useField } from "vee-validate";
 
 interface SearchPairs {
@@ -72,7 +72,7 @@ const {
 } = useField("searchText", searchTextValidation);
 
 const filterArr = ref(props.filterArray);
-const filterArrayClone = ref([...props.filterArray.sort()]);
+const filterArrayClone = ref(props.filterArray);
 
 watch(searchText, (value) => {
   filterArr.value = filterArrayClone.value.filter((value1) =>
@@ -98,9 +98,18 @@ const onClickHandler = (item: SearchPairs) => {
   searchText.value = item.name;
 };
 
+onUpdated(() => {
+  if (searchText.value) {
+    emit("on-found-item", filterArr.value[0]);
+  }
+});
+
 defineExpose({
   clear: () => {
     searchText.value = "";
+  },
+  defaultText: (text: string) => {
+    searchText.value = text;
   },
 });
 </script>

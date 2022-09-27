@@ -35,7 +35,7 @@
           </Teleport>
           <FontAwesome
             :icon-name="LOGOUT_ICON"
-            class="text-success fa-lg mx-4 py-3 px-2 shadow-sm rounded bg-white"
+            class="text-success fa-lg mx-4 py-3 px-2 shadow-sm rounded bg-white btn-hover"
             @click="onLogoutClick"
           />
         </div>
@@ -122,6 +122,19 @@ main {
     rgba(237, 243, 230, 0.91),
     rgba(89, 253, 158, 0.55)
   );
+}
+
+.btn-hover:hover {
+  transform: translateY(-3px);
+  /*box-shadow: var(--bs-card-box-shadow);*/
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in;
+  cursor: pointer;
+}
+
+.btn-hover:hover::after {
+  transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
 }
 
 ::-webkit-scrollbar {

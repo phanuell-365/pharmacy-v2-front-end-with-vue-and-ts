@@ -2,7 +2,7 @@
   <section class="add-order">
     <SidebarLayout>
       <template #body>
-        <AddOrder />
+        <AddOrder :medicine-id="medicineId" />
       </template>
     </SidebarLayout>
   </section>
@@ -10,8 +10,13 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import AddOrder from "@/components/app/orders/AddOrder.vue";</script>
+import AddOrder from "@/components/app/orders/AddOrder.vue";
 
-<style scoped>
+interface AddOrderViewProps {
+  medicineId: string;
+}
 
-</style>
+defineProps<AddOrderViewProps>();
+</script>
+
+<style scoped></style>
