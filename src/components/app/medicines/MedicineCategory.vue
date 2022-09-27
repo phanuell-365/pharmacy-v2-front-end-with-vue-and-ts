@@ -62,10 +62,12 @@ try {
   console.error(error);
 
   toastError.value?.setupToast({
-    name: `Fetch ${startCase(props.category)} Sales Error`,
+    name: `Fetch ${startCase(props.category)} Medicines Error`,
     elapsedDuration: moment().startOf("second").fromNow(),
-    heading: `Fetch ${startCase(props.category)} Sales Error`,
-    text: `Failed to fetch ${startCase(props.category)} sales from the server`,
+    heading: `Fetch ${startCase(props.category)} Medicines Error`,
+    text: `Failed to fetch ${startCase(
+      props.category
+    )} medicines from the server`,
     delay: 5000,
   });
 

@@ -330,6 +330,23 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/medicines/order",
+      name: "place-medicine-order",
+      component: () => import("../views/medicines/PlaceAnOrderView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "place-medicine-order" },
+        });
+      },
+    },
+
     // stocks routes
     {
       path: "/stocks/create",

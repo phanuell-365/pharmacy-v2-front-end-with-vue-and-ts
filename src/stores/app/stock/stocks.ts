@@ -28,6 +28,17 @@ export interface ExpiredMedicine {
   expiryDate: string;
 }
 
+export interface MedicineStock {
+  id: string;
+  name: string;
+  doseForm: string;
+  strength: string;
+  levelOfUse: number;
+  therapeuticClass: string;
+  packSizeQuantity: string;
+  issueQuantity: number;
+}
+
 export interface OutOfStockMedicine {
   name: string;
   doseForm: string;
@@ -57,6 +68,17 @@ const OUT_OF_STOCK_MEDICINE: OutOfStockMedicine = {
   issueQuantity: 0,
 };
 
+const MEDICINE_STOCK: MedicineStock = {
+  id: "",
+  name: "",
+  doseForm: "",
+  strength: "",
+  levelOfUse: 0,
+  therapeuticClass: "",
+  packSizeQuantity: "",
+  issueQuantity: 0,
+};
+
 export const useStocksStore = defineStore({
   id: "stocks",
   state: (): StocksState => ({
@@ -69,6 +91,8 @@ export const useStocksStore = defineStore({
       Object.keys(EXPIRED_MEDICINE_DEFAULT).filter((value) => value !== "id"),
     getOutOfStockMedicinesAttributes: (state) =>
       Object.keys(OUT_OF_STOCK_MEDICINE).filter((value) => value !== "id"),
+    getMedicineStockAttributes: (state) =>
+      Object.keys(MEDICINE_STOCK).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -137,6 +161,19 @@ export const useStocksStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as StockDto;
+    },
+
+    async fetchMedicinesStock() {
+      const response = await fetch(`${BASE_URL}/stocks?cat=medicine-stock`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      return data as MedicineStock[];
     },
 
     async fetchMedicineOutOfStock() {
