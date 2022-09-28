@@ -1,4 +1,4 @@
-export interface UpdateMedicine {
+export interface UpdateMedicineDto {
   name?: string;
   doseForm?: string;
   strength?: string;

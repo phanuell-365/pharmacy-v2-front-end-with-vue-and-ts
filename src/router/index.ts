@@ -106,7 +106,7 @@ const router = createRouter({
     //   component: () => import("../views/users/UsersReportsView.vue"),
     // },
 
-    // customers' routes
+    // medicines' routes
     {
       path: "/customers/create",
       name: "add-customer",
@@ -280,8 +280,8 @@ const router = createRouter({
       name: "manage-medicine",
       component: () => import("../views/medicines/id/ManageMedicineView.vue"),
       props: (route) => ({
-        params: route.params.id,
-        query: route.query.update,
+        medicineId: route.params.id,
+        update: !!route.query.update,
       }),
 
       beforeEnter: (to, from, next) => {

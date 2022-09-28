@@ -26,7 +26,6 @@ const updateMode: Ref<boolean> = ref(props.update);
 watch(
   () => props.update,
   (value) => {
-    console.log(value);
     updateMode.value = value;
   }
 );

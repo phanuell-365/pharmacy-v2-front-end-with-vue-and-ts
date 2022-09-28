@@ -111,8 +111,6 @@ const onDeleteClick = async (recordId: string) => {
   try {
     selectedUser.value = await usersStore.fetchUserById(recordId);
 
-    console.warn("The user is -> ", selectedUser.value);
-
     if (selectedUser.value?.role && selectedUser.value?.role === "admin") {
       toastError.value?.setupToast({
         name: "Delete User Error",

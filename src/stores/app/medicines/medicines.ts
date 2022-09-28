@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import type { MedicineDto, NewMedicineDto } from "@/stores/app/medicines/dto";
+import type {
+  MedicineDto,
+  NewMedicineDto,
+  UpdateMedicineDto,
+} from "@/stores/app/medicines/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
@@ -120,6 +124,48 @@ export const useMedicinesStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as MedicineDto;
+    },
+
+    async updateMedicine(medicineId: string, payload: UpdateMedicineDto) {
+      const response = await fetch(`${BASE_URL}/medicines/${medicineId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as MedicineDto;
+    },
+
+    async deleteMedicine(medicineId: string) {
+      const response: Response = await fetch(
+        `${BASE_URL}/medicines/${medicineId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.getToken(),
+          },
+        }
+      );
+
+      if (response.status === 204) return "Deleted the medicine successfully!";
+      else if (!response.ok) {
+        let data;
+
+        if (response.body) {
+          data = await response.json();
+
+          throw new Error(data.message + "! Failed to delete the medicine!");
+        }
+        return "Failed to delete the medicine!";
+      }
     },
   },
 });

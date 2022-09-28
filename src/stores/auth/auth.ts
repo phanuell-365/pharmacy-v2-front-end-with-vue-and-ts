@@ -42,6 +42,11 @@ export const useAuthStore = defineStore({
           expirationDate,
         })
       );
+
+      // timer = setTimeout(() => {
+      //   this.logout();
+      //   console.warn("Logging out ..");
+      // }, expirationDate);
     },
     getExpiryDate() {
       const data = localStorage.getItem("authData");
@@ -51,11 +56,6 @@ export const useAuthStore = defineStore({
       }
     },
     isAuthenticated() {
-      timer = setTimeout(() => {
-        this.logout();
-        console.warn("Logging out ..");
-      }, this.getExpiryDate());
-
       const tokenStore = useTokenStore();
 
       return !!tokenStore.getStoredToken();
