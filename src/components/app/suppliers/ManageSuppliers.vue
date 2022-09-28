@@ -1,17 +1,29 @@
 <template>
   <section class="manage-suppliers">
-    <SearchTable :attributes="suppliersStore.getSupplierAttributes" :records="suppliers" name="supplier"
-                 null-comment="Supplier not found" search-by="name"
-                 search-term="supplier">
-      <template #actions="{recordId}">
+    <SearchTable
+      :attributes="suppliersStore.getSupplierAttributes"
+      :records="suppliers"
+      name="supplier"
+      null-comment="Supplier not found"
+      search-by="name"
+      search-term="supplier"
+    >
+      <template #actions="{ recordId }">
         <ButtonLinkIcon :href="`/suppliers/${recordId}`" action="view" />
-        <ButtonLinkIcon :href="`/suppliers/${recordId}/update`" action="update" />
+        <ButtonLinkIcon
+          :href="`/suppliers/${recordId}?update=true`"
+          action="update"
+        />
         <ButtonLinkIcon :href="`/suppliers/${recordId}`" action="delete" />
       </template>
     </SearchTable>
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast ref="toastSuccess" skin="info" @on-hidden-bs-toast="onHiddenBsToast" />
+        <LiveToast
+          ref="toastSuccess"
+          skin="info"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
     </Teleport>
@@ -40,7 +52,6 @@ const toastError = ref();
 try {
   suppliers.value = await suppliersStore.fetchSuppliers();
 } catch (error: any) {
-
   console.error(error);
 
   toastError.value?.setupToast({
@@ -48,13 +59,11 @@ try {
     elapsedDuration: moment().startOf("second").fromNow(),
     heading: "Fetch Suppliers Error",
     text: "Failed to fetch suppliers from the server",
-    delay: 5000
+    delay: 5000,
   });
 
   toastError.value?.show();
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

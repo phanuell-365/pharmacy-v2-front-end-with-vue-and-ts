@@ -8,8 +8,9 @@ const PURCHASE_DEFAULT: PurchaseDto = {
   medicine: "",
   supplier: "",
   packSizeQuantity: 0,
-  pricePerPackSize: 0,
-  totalPackSizePrice: 0,
+  pricePerPackSize: "",
+  totalPackSizePrice: "",
+  orderStatus: "",
   // OrderId: "",
   purchaseDate: "",
   orderDate: "",
@@ -35,8 +36,8 @@ export const usePurchasesStore = defineStore({
       return tokenStore.getStoredToken();
     },
 
-    async fetchPurchases(): Promise<PurchaseDto[]> {
-      const response = await fetch(`${BASE_URL}/purchases`, {
+    async fetchPurchases(withId: boolean = false): Promise<PurchaseDto[]> {
+      const response = await fetch(`${BASE_URL}/purchases?withId=${withId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${this.getToken()}`,
@@ -51,13 +52,16 @@ export const usePurchasesStore = defineStore({
 
       return this.purchases;
     },
-    async fetchTodayPurchases() {
-      const response = await fetch(`${BASE_URL}/purchases?today=true`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+    async fetchTodayPurchases(withId: boolean = false) {
+      const response = await fetch(
+        `${BASE_URL}/purchases?today=true&withId=${withId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 

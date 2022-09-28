@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import type { NewSupplierDto, SupplierDto } from "@/stores/app/suppliers/dto";
+import type {
+  NewSupplierDto,
+  SupplierDto,
+  UpdateSupplierDto,
+} from "@/stores/app/suppliers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
@@ -62,6 +66,64 @@ export const useSuppliersStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as SupplierDto;
+    },
+
+    async fetchSupplierById(supplierId: string) {
+      const response = await fetch(`${BASE_URL}/suppliers/${supplierId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as SupplierDto;
+    },
+
+    async updateSupplier(supplierId: string, payload: UpdateSupplierDto) {
+      const response = await fetch(`${BASE_URL}/suppliers/${supplierId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as SupplierDto;
+    },
+
+    async deleteSupplier(supplierId: string) {
+      const response: Response = await fetch(
+        `${BASE_URL}/suppliers/${supplierId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.getToken(),
+          },
+        }
+      );
+
+      if (response.status === 204) return "Deleted the supplier successfully!";
+      else if (!response.ok) {
+        let data;
+
+        if (response.body) {
+          data = await response.json();
+
+          throw new Error(data.message + "! Failed to delete the supplier!");
+        }
+        return "Failed to delete the supplier!";
+      }
     },
   },
 });

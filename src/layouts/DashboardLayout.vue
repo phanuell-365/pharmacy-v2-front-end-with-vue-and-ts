@@ -109,8 +109,8 @@ try {
   pendingOrders.value = await ordersStore.fetchPendingOrders();
   deliveredOrders.value = await ordersStore.fetchDeliveredOrders();
   today_sOrders.value = await ordersStore.fetchTodayOrders();
-  purchases.value = await purchasesStore.fetchPurchases();
-  today_sPurchases.value = await purchasesStore.fetchTodayPurchases();
+  purchases.value = await purchasesStore.fetchPurchases(true);
+  today_sPurchases.value = await purchasesStore.fetchTodayPurchases(true);
   medicines.value = await medicinesStore.fetchMedicines();
   suppliers.value = await suppliersStore.fetchSuppliers();
   customers.value = await customersStore.fetchCustomers();
@@ -246,7 +246,7 @@ const purchaseTotals = ref(
   today_sPurchases.value.map((value) => value.totalPackSizePrice)
 );
 
-const totalPurchases = calculateTotal(purchaseTotals.value);
+const totalPurchases = calculateTotal(purchaseTotals.value as number[]);
 
 const salesTotals = ref(today_sSales.value.map((value) => value.totalPrices));
 

@@ -32,7 +32,7 @@
         <TableHead class="sticky-top">
           <PlainTableHeader :field-names="attributes" scope="col" />
           <template v-if="!noAction">
-            <th>Action</th>
+            <th class="action">Action</th>
           </template>
         </TableHead>
         <TableBody>
@@ -143,5 +143,9 @@ watch(searchText, (value) => {
 .btn-hover:hover::after {
   transform: scaleX(1.4) scaleY(1.6);
   opacity: 0;
+}
+
+.action {
+  width: 150px;
 }
 </style>

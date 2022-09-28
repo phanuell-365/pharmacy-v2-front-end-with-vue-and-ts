@@ -117,11 +117,14 @@ main {
   margin-left: 280px;
   padding: 10px;
   background-image: linear-gradient(
-    to bottom right,
-    rgba(192, 255, 195, 0.55),
-    rgba(237, 243, 230, 0.91),
-    rgba(89, 253, 158, 0.55)
-  );
+      to bottom right,
+      rgba(192, 255, 195, 0.75),
+      rgba(237, 243, 230, 0.91),
+      rgba(89, 253, 158, 0.75)
+    ),
+    url("@/assets/images/pharmacy-background.webp");
+  background-size: cover !important;
+  background-position: bottom !important;
 }
 
 .btn-hover:hover {

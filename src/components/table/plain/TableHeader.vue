@@ -4,7 +4,7 @@
     v-for="fieldName in fieldNames"
     :key="fieldName"
     :scope="scope"
-    class="small"
+    class="small text-wrap word-wrap"
   >
     {{ startCase(fieldName) }}
   </th>
@@ -21,4 +21,8 @@ interface HeaderProps {
 defineProps<HeaderProps>();
 </script>
 
-<style scoped></style>
+<style scoped>
+.word-wrap {
+  word-break: break-word;
+}
+</style>

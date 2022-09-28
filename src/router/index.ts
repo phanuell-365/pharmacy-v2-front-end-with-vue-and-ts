@@ -414,6 +414,28 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/suppliers/:id",
+      name: "manage-supplier",
+      // name: "view-customer",
+      component: () => import("../views/suppliers/id/ManageSupplierView.vue"),
+      // component: () => import("../views/customers/id/ViewCustomerView.vue"),
+      props: (route) => ({
+        supplierId: route.params.id,
+        update: route.query.update,
+      }),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-supplier" },
+        });
+      },
+    },
+
     // orders routes
     {
       path: "/orders/create/:medicineId?",
@@ -504,6 +526,15 @@ const router = createRouter({
       path: "/errors/customers/:invalidId(.*)",
       name: "invalid-customer-id",
       component: () => import("../components/error/NotFoundCustomer.vue"),
+      props: true,
+    },
+
+    // suppliers
+
+    {
+      path: "/errors/suppliers/:invalidId(.*)",
+      name: "invalid-supplier-id",
+      component: () => import("../components/error/NotFoundSupplier.vue"),
       props: true,
     },
 

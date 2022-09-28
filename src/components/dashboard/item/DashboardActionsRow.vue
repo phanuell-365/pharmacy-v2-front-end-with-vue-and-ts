@@ -1,7 +1,12 @@
 <template>
   <div class="row">
-    <DashboardActionsItem v-for="action in dashboardActions" :key="action.text" :href="action.href" :icon="action.icon"
-                          :text="action.text" />
+    <DashboardActionsItem
+      v-for="action in dashboardActions"
+      :key="action.text"
+      :href="action.href"
+      :icon="action.icon"
+      :text="action.text"
+    />
   </div>
 </template>
 
@@ -21,6 +26,4 @@ interface DashboardActionsItemsProps {
 defineProps<DashboardActionsItemsProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -13,7 +13,7 @@
           :placeholder="`Find by ${name} name ... `"
           autocomplete="off"
           class="form-control shadow-sm"
-          type="text"
+          type="search"
           @focusin="onFocusInHandler"
           @focusout="onFocusOutHandler"
         />

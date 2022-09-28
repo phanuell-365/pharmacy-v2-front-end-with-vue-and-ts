@@ -1,0 +1,35 @@
+<template>
+  <section class="manage-supplier">
+    <SidebarLayout>
+      <template #body>
+        <ManageSupplier :supplier-id="supplierId" :update-mode="updateMode" />
+      </template>
+    </SidebarLayout>
+  </section>
+</template>
+
+<script lang="ts" setup>
+import SidebarLayout from "@/layouts/SidebarLayout.vue";
+import ManageSupplier from "@/components/app/suppliers/ManageSupplier.vue";
+import type { Ref } from "vue";
+import { ref, watch } from "vue";
+
+interface ManageSupplierViewProps {
+  supplierId: string;
+  update: boolean;
+}
+
+const props = defineProps<ManageSupplierViewProps>();
+
+const updateMode: Ref<boolean> = ref(props.update);
+
+watch(
+  () => props.update,
+  (value) => {
+    console.log(value);
+    updateMode.value = value;
+  }
+);
+</script>
+
+<style scoped></style>
