@@ -468,6 +468,66 @@ const router = createRouter({
         });
       },
     },
+    {
+      path: "/orders/active",
+      name: "active-orders",
+      component: () => import("../views/orders/ViewActiveOrdersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "active-orders" },
+        });
+      },
+    },
+    {
+      path: "/orders/pending",
+      name: "pending-orders",
+      component: () => import("../views/orders/ViewPendingOrdersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "pending-orders" },
+        });
+      },
+    },
+    {
+      path: "/orders/delivered",
+      name: "delivered-orders",
+      component: () => import("../views/orders/ViewDeliveredOrdersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "delivered-orders" },
+        });
+      },
+    },
+    {
+      path: "/orders/cancelled",
+      name: "cancelled-orders",
+      component: () => import("../views/orders/ViewCancelledOrdersView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "cancelled-orders" },
+        });
+      },
+    },
 
     // purchases routes
     {

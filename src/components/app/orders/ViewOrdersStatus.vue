@@ -1,29 +1,16 @@
 <template>
-  <section class="manage-orders">
+  <section :class="`manage-${status}`">
     <SearchTable
       :attributes="ordersStore.getOrderAttributes"
+      :null-comment="`No ${startCase(status)} orders found`"
       :records="orders"
       name="order"
-      null-comment="Order not found"
+      no-action
       search-by="medicine"
       search-term="medicine"
-    >
-      <template #actions="{ recordId }">
-        <ButtonLinkIcon :href="`/orders/${recordId}`" action="view" />
-        <ButtonLinkIcon
-          :href="`/orders/${recordId}?update=true`"
-          action="update"
-        />
-        <ButtonLinkIcon :href="`/orders/${recordId}`" action="delete" />
-      </template>
-    </SearchTable>
+    />
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast
-          ref="toastSuccess"
-          skin="info"
-          @on-hidden-bs-toast="onHiddenBsToast"
-        />
         <LiveToast ref="toastError" skin="danger" />
       </ToastContainer>
     </Teleport>
@@ -34,9 +21,9 @@
 import SearchTable from "@/components/table/search/SearchableTable.vue";
 import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
-import ButtonLinkIcon from "@/components/button/ButtonLinkIcon.vue";
 import { TOP_CENTER } from "@/constants/toasts";
 import { useOrdersStore } from "@/stores/app/orders/orders";
+import startCase from "lodash/startCase";
 import type { Ref } from "vue";
 import { ref } from "vue";
 import type { OrderDto } from "@/stores/app/orders/dto/order.dto";
@@ -44,21 +31,39 @@ import moment from "moment";
 
 const ordersStore = useOrdersStore();
 
-const orders: Ref<OrderDto[] | undefined> = ref();
+interface ViewOrdersStatusProps {
+  status: "delivered" | "cancelled" | "pending" | "active";
+}
 
-const toastSuccess = ref();
-const toastError = ref();
+const props = defineProps<ViewOrdersStatusProps>();
+
+const orders: Ref<OrderDto[]> = ref([]);
+
+const toastError: Ref<InstanceType<LiveToast>> = ref();
 
 try {
-  orders.value = await ordersStore.fetchOrders();
+  switch (props.status) {
+    case "active":
+      orders.value = await ordersStore.fetchActiveOrders();
+      break;
+    case "cancelled":
+      orders.value = await ordersStore.fetchCancelledOrders();
+      break;
+    case "pending":
+      orders.value = await ordersStore.fetchPendingOrders();
+      break;
+    case "delivered":
+      orders.value = await ordersStore.fetchDeliveredOrders();
+      break;
+  }
 } catch (error: any) {
   console.error(error);
 
   toastError.value?.setupToast({
-    name: "Fetch Orders Error",
+    name: `Fetch ${startCase(props.status)} Orders Error`,
     elapsedDuration: moment().startOf("second").fromNow(),
-    heading: "Fetch Orders Error",
-    text: "Failed to fetch orders from the server",
+    heading: `Fetch ${startCase(props.status)} Orders Error`,
+    text: `Failed to fetch ${startCase(props.status)} orders from the server`,
     delay: 5000,
   });
 

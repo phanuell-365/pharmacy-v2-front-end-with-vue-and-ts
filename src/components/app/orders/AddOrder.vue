@@ -238,14 +238,14 @@ onMounted(async () => {
   }
 });
 
-const onFoundMedicineItem = (item: SearchPairs) => {
+const onFoundMedicineItem = (item: SearchPairs, name: string) => {
   // console.log("this is the found item -> ", item);
-  MedicineId.value = item.id;
+  if (item?.id && name === "click") MedicineId.value = item.id;
 };
 
-const onFoundSupplierItem = (item: SearchPairs) => {
+const onFoundSupplierItem = (item: SearchPairs, name: string) => {
   // console.log("this is the found item -> ", item);
-  SupplierId.value = item.id;
+  if (item?.id && name === "click") SupplierId.value = item.id;
 };
 
 const MedicineIdValidation = (value: string) => {

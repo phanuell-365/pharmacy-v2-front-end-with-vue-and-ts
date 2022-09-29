@@ -16,5 +16,25 @@ export const ORDERS_MENU: AccordionItemProps = {
       description: "manage orders",
       routeName: "manage-orders",
     },
+    {
+      href: "/orders/active",
+      description: "active orders",
+      routeName: "active-orders",
+    },
+    {
+      href: "/orders/pending",
+      description: "pending orders",
+      routeName: "pending-orders",
+    },
+    {
+      href: "/orders/delivered",
+      description: "delivered orders",
+      routeName: "delivered-orders",
+    },
+    {
+      href: "/orders/cancelled",
+      description: "cancelled orders",
+      routeName: "cancelled-orders",
+    },
   ],
 };

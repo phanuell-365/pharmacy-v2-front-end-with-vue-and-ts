@@ -91,16 +91,18 @@ const onFocusOutHandler = () => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const emit = defineEmits<{ (e: "on-found-item", item: SearchPairs): void }>();
+const emit = defineEmits<{
+  (e: "on-found-item", item: SearchPairs, name: string): void;
+}>();
 
 const onClickHandler = (item: SearchPairs) => {
-  emit("on-found-item", item);
+  emit("on-found-item", item, "click");
   searchText.value = item.name;
 };
 
 onUpdated(() => {
   if (searchText.value) {
-    emit("on-found-item", filterArr.value[0]);
+    emit("on-found-item", filterArr.value[0], "updated");
   }
 });
 
