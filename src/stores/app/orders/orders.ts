@@ -1,8 +1,12 @@
 import { defineStore } from "pinia";
-import type { OrderDto } from "@/stores/app/orders/dto/order.dto";
+import type {
+  OrderDto,
+  OrderDtoWithId,
+} from "@/stores/app/orders/dto/order.dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import type { NewOrderDto } from "@/stores/app/orders/dto";
+import type { UpdateOrderDto } from "@/stores/app/orders/dto/update-order.dto";
 
 const ORDER_DEFAULT: OrderDto = {
   id: "",
@@ -25,7 +29,7 @@ export const useOrdersStore = defineStore({
     orderStatuses: [],
   }),
   getters: {
-    getOrderAttributes: (state) =>
+    getOrderAttributes: () =>
       Object.keys(ORDER_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
@@ -54,14 +58,17 @@ export const useOrdersStore = defineStore({
       return this.orders;
     },
 
-    async fetchOrderById(orderId: string) {
-      const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-          "Content-Type": "application/json",
-        },
-      });
+    async fetchOrderById(orderId: string, withId: boolean) {
+      const response = await fetch(
+        `${BASE_URL}/orders/${orderId}?withId=${withId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -69,6 +76,7 @@ export const useOrdersStore = defineStore({
         throw new Error(data?.message);
       }
 
+      if (withId) return data as OrderDtoWithId;
       return data as OrderDto;
     },
     async fetchCancelledOrders() {
@@ -161,9 +169,9 @@ export const useOrdersStore = defineStore({
       return data as OrderDto[];
     },
 
-    async fetchOrderStatus() {
+    async fetchOrderStatus(mode: "create" | "update" = "create") {
       const response = await fetch(
-        `${BASE_URL}/orders?resource=status&meta=create`,
+        `${BASE_URL}/orders?resource=status&meta=${mode}`,
         {
           method: "GET",
           headers: {
@@ -201,6 +209,45 @@ export const useOrdersStore = defineStore({
       }
 
       return data as OrderDto;
+    },
+
+    async updateOrder(payload: UpdateOrderDto, orderId: string) {
+      const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as OrderDto;
+    },
+
+    async deleteOrder(orderId: string) {
+      const response: Response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + this.getToken(),
+        },
+      });
+
+      if (response.status === 204) return "Deleted the order successfully!";
+      else if (!response.ok) {
+        let data;
+
+        if (response.body) {
+          data = await response.json();
+
+          throw new Error(data.message + "! Failed to delete the order!");
+        }
+        return "Failed to delete the order!";
+      }
     },
   },
 });

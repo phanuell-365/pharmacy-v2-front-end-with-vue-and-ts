@@ -2,7 +2,7 @@
   <NotFoundBase :path="currentPath" name="order" page-name="Order">
     <template #text-content>
       <span class="fs-5 fw-light d-block">
-        Sorry, we couldn't find a order with the id
+        Sorry, we couldn't find an order with the id
         <span class="text-success">"{{ invalidId }}"</span>
       </span>
     </template>
@@ -51,6 +51,7 @@ defineProps<NotFoundOrderProps>();
 
 const currentPath = route.path;
 
+console.log(route.fullPath);
 const onGoBackClick = () => {
   router.go(-2);
 };

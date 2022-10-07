@@ -551,7 +551,7 @@ const router = createRouter({
       component: () => import("../views/orders/id/ManageOrderView.vue"),
       props: (route) => ({
         orderId: route.params.id,
-        update: route.query.update,
+        update: !!route.query.update,
       }),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
