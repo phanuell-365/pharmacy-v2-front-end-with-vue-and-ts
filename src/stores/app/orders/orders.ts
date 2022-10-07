@@ -53,6 +53,24 @@ export const useOrdersStore = defineStore({
 
       return this.orders;
     },
+
+    async fetchOrderById(orderId: string) {
+      const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message);
+      }
+
+      return data as OrderDto;
+    },
     async fetchCancelledOrders() {
       const response = await fetch(`${BASE_URL}/orders?status=cancelled`, {
         method: "GET",

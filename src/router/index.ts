@@ -545,6 +545,25 @@ const router = createRouter({
         });
       },
     },
+    {
+      path: "/orders/:id",
+      name: "manage-order",
+      component: () => import("../views/orders/id/ManageOrderView.vue"),
+      props: (route) => ({
+        orderId: route.params.id,
+        update: route.query.update,
+      }),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-order" },
+        });
+      },
+    },
 
     // purchases routes
     {
@@ -620,6 +639,14 @@ const router = createRouter({
       path: "/errors/medicines/:invalidId(.*)",
       name: "invalid-medicine-id",
       component: () => import("../components/error/NotFoundMedicine.vue"),
+      props: true,
+    },
+
+    // orders
+    {
+      path: "/errors/orders/:invalidId(.*)",
+      name: "invalid-order-id",
+      component: () => import("../components/error/NotFoundOrder.vue"),
       props: true,
     },
 
