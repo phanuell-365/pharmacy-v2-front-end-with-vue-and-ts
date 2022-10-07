@@ -7,23 +7,32 @@ const PURCHASE_DEFAULT: PurchaseDto = {
   id: "",
   medicine: "",
   supplier: "",
-  packSizeQuantity: 0,
+  purchasedPackSizeQuantity: 0,
   pricePerPackSize: "",
-  totalPackSizePrice: "",
-  orderStatus: "",
+  totalPurchasePrice: "",
+  // profitMarginPercentagePerIssueUnit: 0,
+  // profitMarginPercentagePerPackSize: 0,
+  // issueUnitPerPackSize: 0,
+  // totalIssueUnitQuantity: 0,
+  // orderStatus: "",
+  // profitPerIssueUnit: 0,
+  // profitPerPackSize: 0,
   // OrderId: "",
   purchaseDate: "",
   orderDate: "",
+  expiryDate: "",
 };
 
 interface PurchasesState {
   purchases: PurchaseDto[];
+  profitPercentage: number;
 }
 
 export const usePurchasesStore = defineStore({
   id: "purchases",
   state: (): PurchasesState => ({
     purchases: [],
+    profitPercentage: 0,
   }),
   getters: {
     getPurchaseAttributes: (state) =>
@@ -49,6 +58,12 @@ export const usePurchasesStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       this.purchases = data as PurchaseDto[];
+
+      this.purchases = this.purchases.map((value) => {
+        value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
+
+        return value;
+      });
 
       return this.purchases;
     },
@@ -85,6 +100,23 @@ export const usePurchasesStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       return data as PurchaseDto;
+    },
+    async fetchPurchaseProfitPercentage() {
+      const response = await fetch(`${BASE_URL}/purchases?resource=profit`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      this.profitPercentage = data;
+
+      return this.profitPercentage;
     },
   },
 });

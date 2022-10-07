@@ -1,5 +1,7 @@
 export interface NewPurchaseDto {
-  packSizeQuantity: number;
+  purchasedPackSizeQuantity: number;
   pricePerPackSize: number;
+  issueUnitPerPackSize: number;
+  expiryDate: Date;
   OrderId: string;
 }

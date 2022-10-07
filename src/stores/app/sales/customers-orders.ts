@@ -89,9 +89,7 @@ export const useCustomersOrdersStore = defineStore({
           quantity: payload.quantity,
           totalPrice: itemTotalPrice,
           levelOfUse: medicine.levelOfUse,
-          expiryDate: new Date(
-            medicineStock.expirationDate
-          ).toLocaleDateString(),
+          expiryDate: new Date(medicineStock.expiryDate).toLocaleDateString(),
         });
 
         this.calculateTotalCost();

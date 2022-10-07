@@ -1,12 +1,19 @@
 export interface PurchaseDto {
   id: string;
-  packSizeQuantity: number;
+  purchasedPackSizeQuantity: number;
   pricePerPackSize: string;
-  totalPackSizePrice: string | number;
-  orderStatus: string;
+  totalPurchasePrice: string | number;
+  issueUnitPerPackSize?: number;
+  totalIssueUnitQuantity?: number;
+  profitPerPackSize?: number;
+  profitPerIssueUnit?: number;
+  profitMarginPercentagePerPackSize?: number;
+  profitMarginPercentagePerIssueUnit?: number;
+  orderStatus?: string;
   OrderId?: string;
   purchaseDate: string;
   medicine: string;
   supplier: string;
+  expiryDate: string;
   orderDate: string;
 }

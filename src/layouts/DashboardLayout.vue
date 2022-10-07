@@ -245,7 +245,7 @@ const calculateTotal = (val: number[]) => {
 };
 
 const purchaseTotals = ref(
-  today_sPurchases.value.map((value) => value.totalPackSizePrice)
+  today_sPurchases.value.map((value) => value.totalPurchasePrice)
 );
 
 const totalPurchases = calculateTotal(purchaseTotals.value as number[]);

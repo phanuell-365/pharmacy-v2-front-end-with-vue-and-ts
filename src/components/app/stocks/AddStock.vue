@@ -81,21 +81,20 @@
       />
     </InputContainer>
 
-    <!--  expirationDate  -->
+    <!--  expiryDate  -->
     <InputContainer
-      :invalid-feedback="expirationDateErrorMessage"
-      input-id="expirationDate"
-      input-label="expirationDate"
+      :invalid-feedback="expiryDateErrorMessage"
+      input-id="expiryDate"
+      input-label="expiryDate"
     >
       <input
         id="validationExpirationDate"
-        v-model.trim="expirationDate"
+        v-model.trim="expiryDate"
         :class="{
-          'is-invalid':
-            !expirationDateMeta.valid && expirationDateMeta.validated,
+          'is-invalid': !expiryDateMeta.valid && expiryDateMeta.validated,
         }"
         class="form-control"
-        name="expirationDate"
+        name="expiryDate"
         required
         type="date"
       />
@@ -242,7 +241,7 @@ const packSizePriceValidation = (value: string) => {
   return true;
 };
 
-const expirationDateValidation = (value: string) => {
+const expiryDateValidation = (value: string) => {
   if (!value) return "This is a required field";
 
   if (new Date(value) < new Date()) return "Enter a valid date.";
@@ -275,10 +274,10 @@ const {
 } = useField("packSizePrice", packSizePriceValidation);
 
 const {
-  value: expirationDate,
-  errorMessage: expirationDateErrorMessage,
-  meta: expirationDateMeta,
-} = useField("expirationDate", expirationDateValidation);
+  value: expiryDate,
+  errorMessage: expiryDateErrorMessage,
+  meta: expiryDateMeta,
+} = useField("expiryDate", expiryDateValidation);
 
 const {
   value: MedicineId,
@@ -292,7 +291,7 @@ const validateForm = () => {
     issueUnitPriceMeta.valid &&
     packSizeMeta.valid &&
     packSizePriceMeta.valid &&
-    expirationDateMeta.valid &&
+    expiryDateMeta.valid &&
     MedicineIdMeta.valid
   )
     return true;
@@ -315,7 +314,7 @@ const createStockPayload = () => {
     issueUnitPerPackSize: +issueUnitPerPackSize.value,
     packSize: startCase(packSize.value),
     packSizePrice: +packSizePrice.value,
-    expirationDate: new Date(expirationDate.value),
+    expiryDate: new Date(expiryDate.value),
     MedicineId: MedicineId.value as string,
   };
 

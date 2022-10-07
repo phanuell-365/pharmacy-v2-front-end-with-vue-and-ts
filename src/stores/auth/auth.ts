@@ -32,27 +32,27 @@ export const useAuthStore = defineStore({
 
       const expiresInHours = Number.parseInt(data?.expires_in);
       const expiresIn = expiresInHours * 60 * 60 * 1000;
-      const expirationDate = new Date().getTime() + expiresIn;
-      // const expirationDate = 10000;
+      const expiryDate = new Date().getTime() + expiresIn;
+      // const expiryDate = 10000;
 
       localStorage.setItem(
         "authData",
         JSON.stringify({
           ...data,
-          expirationDate,
+          expiryDate,
         })
       );
 
       // timer = setTimeout(() => {
       //   this.logout();
       //   console.warn("Logging out ..");
-      // }, expirationDate);
+      // }, expiryDate);
     },
     getExpiryDate() {
       const data = localStorage.getItem("authData");
       if (data) {
         const dataJson = JSON.parse(data);
-        return dataJson["expirationDate"];
+        return dataJson["expiryDate"];
       }
     },
     isAuthenticated() {

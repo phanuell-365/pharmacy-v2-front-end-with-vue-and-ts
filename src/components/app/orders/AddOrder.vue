@@ -1,7 +1,13 @@
 <template>
   <hr class="my-3" />
 
-  <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
+  <form
+    ref="formRef"
+    autocomplete="off"
+    class="row g-3 m-4"
+    novalidate
+    @submit.prevent
+  >
     <div class="col-lg-4 col-md-4">
       <SearchPanel
         ref="medicineSearchPanelRef"
@@ -72,23 +78,37 @@
     <!--      </select>-->
     <!--    </InputContainer>-->
     <!--  orderQuantity  -->
-    <InputContainer
-      :invalid-feedback="orderQuantityErrorMessage"
-      input-id="orderQuantity"
-      input-label="orderQuantity"
-    >
-      <input
-        id="validationOrderQuantity"
-        v-model.trim="orderQuantity"
-        :class="{
-          'is-invalid': !orderQuantityMeta.valid && orderQuantityMeta.validated,
-        }"
-        class="form-control"
-        name="orderQuantity"
-        required
-        type="text"
-      />
-    </InputContainer>
+    <!--    <InputContainer-->
+    <!--      :invalid-feedback="orderQuantityErrorMessage"-->
+    <!--      class="w-25"-->
+    <!--      input-id="orderQuantity"-->
+    <!--      input-label="orderQuantity"-->
+    <!--    >-->
+
+    <div class="col-md-4">
+      <div class="col-md-10 pt-2">
+        <label
+          :for="`validation${startCase('orderQuantity')}`"
+          class="form-label fw-bold"
+        >
+          {{ startCase("orderQuantity") }}:
+        </label>
+        <input
+          id="validationOrderQuantity"
+          v-model.trim="orderQuantity"
+          :class="{
+            'is-invalid':
+              !orderQuantityMeta.valid && orderQuantityMeta.validated,
+          }"
+          class="form-control"
+          name="orderQuantity"
+          required
+          type="text"
+        />
+        <div class="invalid-feedback">{{ orderQuantityErrorMessage }}</div>
+      </div>
+    </div>
+    <!--    </InputContainer>-->
 
     <!--  status  -->
     <InputContainer
@@ -116,16 +136,16 @@
 
     <hr class="my-3" />
     <FormButtonsContainer>
-      <FormButton skin="primary" text="add" @click="onAddClick" />
-      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
-      <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
+      <FormButton skin="primary" text="Add" @click="onAddAndNewClick" />
+      <!--      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />-->
+      <FormButton outline skin="dark" text="Add & View" @click="onAddAndView" />
       <FormButton
         outline
         skin="secondary"
-        text="add & view all"
+        text="Add & View All"
         @click="onAddAndViewAll"
       />
-      <FormButton outline skin="danger" text="clear" @click="onClear" />
+      <FormButton outline skin="danger" text="Clear" @click="onClear" />
     </FormButtonsContainer>
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">

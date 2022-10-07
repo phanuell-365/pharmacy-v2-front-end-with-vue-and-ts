@@ -2,65 +2,127 @@
   <main class="container">
     <form class="needs-validation" novalidate @submit.prevent>
       <div class="row g-3 mb-3">
-        <CheckoutContainer :customer-name="Customer" :list="[{medicineName: 'Mara Moja', medicinePrice: 15}]"
-                           @update-item="onUpdateItem" />
+        <CheckoutContainer
+          :customer-name="Customer"
+          :list="[{ medicineName: 'Mara Moja', medicinePrice: 15 }]"
+          @update-item="onUpdateItem"
+        />
         <div class="col-md-7 flex-grow-1">
           <div class="row g-3">
             <div class="col-md-2">
               <div class="form-check form-check-inline">
-                <input id="inlineRadioCustomer" v-model="radio" :checked="showCustomersTable" class="form-check-input"
-                       name="radioTableOptions"
-                       type="radio" value="customer">
-                <label class="form-check-label" for="inlineRadioCustomer">Customers</label>
+                <input
+                  id="inlineRadioCustomer"
+                  v-model="radio"
+                  :checked="showCustomersTable"
+                  class="form-check-input"
+                  name="radioTableOptions"
+                  type="radio"
+                  value="customer"
+                />
+                <label class="form-check-label" for="inlineRadioCustomer"
+                  >Customers</label
+                >
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-check form-check-inline">
-                <input id="inlineRadioMedicine" v-model="radio" class="form-check-input" name="radioTableOptions"
-                       type="radio"
-                       value="medicine">
-                <label class="form-check-label" for="inlineRadioMedicine">Medicines</label>
+                <input
+                  id="inlineRadioMedicine"
+                  v-model="radio"
+                  class="form-check-input"
+                  name="radioTableOptions"
+                  type="radio"
+                  value="medicine"
+                />
+                <label class="form-check-label" for="inlineRadioMedicine"
+                  >Medicines</label
+                >
               </div>
             </div>
 
             <Transition mode="out-in" name="table">
               <div v-if="showMedicinesTable" class="row">
-                <InputContainer :invalid-feedback="MedicineIdErrorMessage" input-id="Medicine" input-label="Medicine">
-                  <input id="validationMedicineId" v-model="Medicine"
-                         :class="{'is-invalid': !MedicineIdMeta.valid && MedicineIdMeta.validated}"
-                         :placeholder="MedicinePlaceholder"
-                         class="form-control"
-                         name="name" required
-                         type="text" />
+                <InputContainer
+                  :invalid-feedback="MedicineIdErrorMessage"
+                  input-id="Medicine"
+                  input-label="Medicine"
+                >
+                  <input
+                    id="validationMedicineId"
+                    v-model="Medicine"
+                    :class="{
+                      'is-invalid':
+                        !MedicineIdMeta.valid && MedicineIdMeta.validated,
+                    }"
+                    :placeholder="MedicinePlaceholder"
+                    class="form-control"
+                    name="name"
+                    required
+                    type="text"
+                  />
                 </InputContainer>
 
-                <InputContainer :invalid-feedback="issueUnitQuantityErrorMessage" input-id="issueUnitQuantity"
-                                input-label="issueUnitQuantity">
-                  <input id="validationIssueUnitQuantity" v-model="issueUnitQuantity"
-                         :class="{'is-invalid': !issueUnitQuantityMeta.valid && issueUnitQuantityMeta.validated}"
-                         class="form-control"
-                         name="issueUnitQuantity" required
-                         type="text">
+                <InputContainer
+                  :invalid-feedback="issueUnitQuantityErrorMessage"
+                  input-id="issueUnitQuantity"
+                  input-label="issueUnitQuantity"
+                >
+                  <input
+                    id="validationIssueUnitQuantity"
+                    v-model="issueUnitQuantity"
+                    :class="{
+                      'is-invalid':
+                        !issueUnitQuantityMeta.valid &&
+                        issueUnitQuantityMeta.validated,
+                    }"
+                    class="form-control"
+                    name="issueUnitQuantity"
+                    required
+                    type="text"
+                  />
                 </InputContainer>
 
                 <TableContainer class="my-2" skin="light">
                   <TableHead class="sticky-top">
-                    <PlainTableHeader :field-names="medicineRecordAttributes" scope="col" />
-                    <th>
-                      Actions
-                    </th>
+                    <PlainTableHeader
+                      :field-names="medicineRecordAttributes"
+                      scope="col"
+                    />
+                    <th>Actions</th>
                   </TableHead>
                   <TableBody>
-                    <TableRow :col-count="medicineRecordAttributes.length + 1" :records="medicineRecords">
-                      <template #default="{record}">
-                        <PlainTableData :field-names="medicineRecordAttributes" :record="record" />
+                    <TableRow
+                      :col-count="medicineRecordAttributes.length + 1"
+                      :records="medicineRecords"
+                    >
+                      <template #default="{ record }">
+                        <PlainTableData
+                          :field-names="medicineRecordAttributes"
+                          :record="record"
+                        />
                         <td class="text-center">
-                          <FormButton skin="primary" text="Select"
-                                      @click="onMedicineChoiceClick(record)" />
-                          <FormButton v-if="updateMode" skin="secondary" text="Update" @click="onUpdateMedicineClick" />
-                          <FormButton v-else :disabled="!issueUnitQuantityMeta.valid || !MedicineIdMeta.valid"
-                                      skin="success" text="Add"
-                                      @click="onAddMedicineClick( +issueUnitQuantity)" />
+                          <FormButton
+                            skin="primary"
+                            text="Select"
+                            @click="onMedicineChoiceClick(record)"
+                          />
+                          <FormButton
+                            v-if="updateMode"
+                            skin="secondary"
+                            text="Update"
+                            @click="onUpdateMedicineClick"
+                          />
+                          <FormButton
+                            v-else
+                            :disabled="
+                              !issueUnitQuantityMeta.valid ||
+                              !MedicineIdMeta.valid
+                            "
+                            skin="success"
+                            text="Add"
+                            @click="onAddMedicineClick(+issueUnitQuantity)"
+                          />
                         </td>
                       </template>
                     </TableRow>
@@ -69,28 +131,50 @@
               </div>
 
               <div v-else-if="showCustomersTable" class="row">
-                <InputContainer :invalid-feedback="CustomerIdErrorMessage" input-id="CustomerId" input-label="Customer">
-                  <input id="validationMedicineId" v-model="Customer"
-                         :class="{'is-invalid': !CustomerIdMeta.valid && CustomerIdMeta.validated}"
-                         :placeholder="CustomerPlaceholder"
-                         class="form-control"
-                         name="name" required
-                         type="text" />
+                <InputContainer
+                  :invalid-feedback="CustomerIdErrorMessage"
+                  input-id="CustomerId"
+                  input-label="Customer"
+                >
+                  <input
+                    id="validationMedicineId"
+                    v-model="Customer"
+                    :class="{
+                      'is-invalid':
+                        !CustomerIdMeta.valid && CustomerIdMeta.validated,
+                    }"
+                    :placeholder="CustomerPlaceholder"
+                    class="form-control"
+                    name="name"
+                    required
+                    type="text"
+                  />
                 </InputContainer>
 
                 <TableContainer class="my-2" skin="light">
                   <TableHead class="sticky-top">
-                    <PlainTableHeader :field-names="customerAttributes" scope="col" />
-                    <th>
-                      Actions
-                    </th>
+                    <PlainTableHeader
+                      :field-names="customerAttributes"
+                      scope="col"
+                    />
+                    <th>Actions</th>
                   </TableHead>
                   <TableBody>
-                    <TableRow :col-count="customerAttributes.length + 1" :records="customers">
-                      <template #default="{record}">
-                        <PlainTableData :field-names="customerAttributes" :record="record" />
+                    <TableRow
+                      :col-count="customerAttributes.length + 1"
+                      :records="customers"
+                    >
+                      <template #default="{ record }">
+                        <PlainTableData
+                          :field-names="customerAttributes"
+                          :record="record"
+                        />
                         <td class="text-center">
-                          <FormButton skin="primary" text="Select" @click="onCustomerChoiceClick(record)" />
+                          <FormButton
+                            skin="primary"
+                            text="Select"
+                            @click="onCustomerChoiceClick(record)"
+                          />
                           <!--              <button class="btn btn-primary btn-sm px-2" >Select</button>-->
                         </td>
                       </template>
@@ -166,32 +250,39 @@ const medicineRecords: Ref<MedicineRecord[]> = ref([]);
 const medicineRecordAttributes: Ref<string[]> = ref([]);
 const customerAttributes: Ref<string[]> = ref([]);
 
-medicineRecords.value = stocks.value.map(
-  (value) => {
-    const tempMedicine = medicines.value.find(value1 => value1.name === value.medicine);
+medicineRecords.value = stocks.value.map((value) => {
+  const tempMedicine = medicines.value.find(
+    (value1) => value1.name === value.medicine
+  );
 
-    const tempVal: MedicineRecord = {
-      medicine: value.medicine,
-      doseForm: tempMedicine?.doseForm,
-      price: `Kshs. ${value.issueUnitPrice}`,
-      // levelOfUse: tempMedicine?.levelOfUse,
-      expiryDate: new Date(value.expirationDate).toLocaleDateString()
-    };
+  const tempVal: MedicineRecord = {
+    medicine: value.medicine,
+    doseForm: tempMedicine?.doseForm,
+    price: `Kshs. ${value.issueUnitPrice}`,
+    // levelOfUse: tempMedicine?.levelOfUse,
+    expiryDate: new Date(value.expiryDate).toLocaleDateString(),
+  };
 
-    return tempVal;
-  });
+  return tempVal;
+});
 
 medicineRecordAttributes.value = Object.keys(medicineRecords.value[0]);
-customerAttributes.value = Object.keys(customers.value[0]).filter(value => value !== "id");
+customerAttributes.value = Object.keys(customers.value[0]).filter(
+  (value) => value !== "id"
+);
 
-const medicineNames = ref(medicines.value.map(value => value.name));
-const customerNames = ref(customers.value.map(value => value.name));
+const medicineNames = ref(medicines.value.map((value) => value.name));
+const customerNames = ref(customers.value.map((value) => value.name));
 
 const CustomerIdValidation = (value: string) => {
   // if (!value)
   //   return "This is a required field";
 
-  if (!customerNames.value.some(value1 => value1?.toLowerCase().includes(value?.toLowerCase())))
+  if (
+    !customerNames.value.some((value1) =>
+      value1?.toLowerCase().includes(value?.toLowerCase())
+    )
+  )
     return "The customer should be one of the ones on the table";
 
   return true;
@@ -201,17 +292,18 @@ const MedicineIdValidation = (value: string) => {
   // if (!value)
   //   return "This is a required field";
 
-  if (!medicineNames.value.some(value1 => value1?.toLowerCase().includes(value?.toLowerCase())))
+  if (
+    !medicineNames.value.some((value1) =>
+      value1?.toLowerCase().includes(value?.toLowerCase())
+    )
+  )
     return "The medicine should be one of the ones on the table";
-
 
   return true;
 };
 
 const issueUnitQuantityValidation = (value: string) => {
-
-  if (!value)
-    return "This is a required field";
+  if (!value) return "This is a required field";
 
   if (!useIsNumeric(value).value)
     return "The issue unit quantity should be a number";
@@ -226,19 +318,19 @@ const issueUnitQuantityValidation = (value: string) => {
 const {
   value: Customer,
   errorMessage: CustomerIdErrorMessage,
-  meta: CustomerIdMeta
+  meta: CustomerIdMeta,
 } = useField("CustomerId", CustomerIdValidation);
 
 const {
   value: Medicine,
   errorMessage: MedicineIdErrorMessage,
-  meta: MedicineIdMeta
+  meta: MedicineIdMeta,
 } = useField("MedicineId", MedicineIdValidation);
 
 const {
   value: issueUnitQuantity,
   errorMessage: issueUnitQuantityErrorMessage,
-  meta: issueUnitQuantityMeta
+  meta: issueUnitQuantityMeta,
 } = useField("issueUnitQuantity", issueUnitQuantityValidation);
 
 const showCustomersTable = ref(true);
@@ -261,37 +353,33 @@ const CustomerPlaceholder = ref("Search ...");
 
 const medicineRecordsClone = ref([...medicineRecords.value]);
 
-watch(Medicine,
-  (value) => {
-    medicineRecords.value = medicineRecordsClone.value.sort().filter(value1 => {
-      if (value1) {
-        const searchValue = value1.medicine.toLowerCase();
-        return searchValue.includes(value.toLowerCase());
-      }
-      return true;
-    });
+watch(Medicine, (value) => {
+  medicineRecords.value = medicineRecordsClone.value.sort().filter((value1) => {
+    if (value1) {
+      const searchValue = value1.medicine.toLowerCase();
+      return searchValue.includes(value.toLowerCase());
+    }
+    return true;
+  });
 
-    MedicinePlaceholder.value = medicineRecords.value[0]?.medicine;
-  }
-);
+  MedicinePlaceholder.value = medicineRecords.value[0]?.medicine;
+});
 
 const customersClone = ref([...customers.value]);
 
-watch(Customer,
-  (value) => {
-    customers.value = customersClone.value.sort().filter(value1 => {
-      if (value1) {
-        const searchValue = value1.name.toLowerCase();
+watch(Customer, (value) => {
+  customers.value = customersClone.value.sort().filter((value1) => {
+    if (value1) {
+      const searchValue = value1.name.toLowerCase();
 
-        return searchValue.includes(value.toLowerCase());
-      }
+      return searchValue.includes(value.toLowerCase());
+    }
 
-      return true;
-    });
+    return true;
+  });
 
-    CustomerPlaceholder.value = customers.value[0]?.name;
-  }
-);
+  CustomerPlaceholder.value = customers.value[0]?.name;
+});
 
 const onCustomerChoiceClick = (customer: CustomerDto) => {
   Customer.value = customer.name;
@@ -299,20 +387,22 @@ const onCustomerChoiceClick = (customer: CustomerDto) => {
 
   showCustomersTable.value = false;
   showMedicinesTable.value = true;
-
 };
 
 const onMedicineChoiceClick = (medicine: MedicineRecord) => {
   Medicine.value = medicine.medicine;
-  MedicineId.value = medicines.value.find(value => value.name === medicine.medicine)?.id as string;
+  MedicineId.value = medicines.value.find(
+    (value) => value.name === medicine.medicine
+  )?.id as string;
 };
 
 const onAddMedicineClick = (quantity: number) => {
-
   customersOrdersStore.addItem({
     medicineName: Medicine.value,
-    medicinePrice: stocks.value.find(value => value.medicine === Medicine.value)?.issueUnitPrice as number,
-    medicineQuantity: quantity
+    medicinePrice: stocks.value.find(
+      (value) => value.medicine === Medicine.value
+    )?.issueUnitPrice as number,
+    medicineQuantity: quantity,
   });
 
   Medicine.value = "";
@@ -330,7 +420,9 @@ const updateMode = ref(false);
 
 const onUpdateItem = (medicine: MedicineQuantityUpdate) => {
   updateMode.value = true;
-  medicineRecords.value = medicineRecordsClone.value.filter(value => value.medicine === medicine.productName);
+  medicineRecords.value = medicineRecordsClone.value.filter(
+    (value) => value.medicine === medicine.productName
+  );
   Medicine.value = medicine.productName;
   issueUnitQuantity.value = medicine.productQuantity.toString();
 };
@@ -338,7 +430,7 @@ const onUpdateItem = (medicine: MedicineQuantityUpdate) => {
 const onUpdateMedicineClick = () => {
   customersOrdersStore.updateItemQuantity({
     medicineName: Medicine.value,
-    newQuantity: +issueUnitQuantity.value
+    newQuantity: +issueUnitQuantity.value,
   });
 
   medicineRecords.value = [...medicineRecordsClone.value];
@@ -356,7 +448,8 @@ const onUpdateMedicineClick = () => {
   transform: translateX(-60px);
 }
 
-.table-enter-active, .table-leave-active {
+.table-enter-active,
+.table-leave-active {
   transition: all 0.6s ease-in;
   opacity: 0.5;
 }
