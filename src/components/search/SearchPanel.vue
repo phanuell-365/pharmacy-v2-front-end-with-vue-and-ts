@@ -92,6 +92,7 @@ const onFocusOutHandler = () => {
 
 // eslint-disable-next-line no-unused-vars
 const emit = defineEmits<{
+  // eslint-disable-next-line no-unused-vars
   (e: "on-found-item", item: SearchPairs, name: string): void;
 }>();
 

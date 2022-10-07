@@ -299,7 +299,7 @@ const router = createRouter({
     {
       path: "/medicines/out-of-stock",
       name: "medicines-out-of-stock",
-      component: () => import("../views/medicines/ViewMedicineOutOfStock.vue"),
+      component: () => import("../views/medicines/ViewOutOfStockView.vue"),
 
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
@@ -314,9 +314,9 @@ const router = createRouter({
     },
 
     {
-      path: "/medicines/expired",
-      name: "expired-medicines",
-      component: () => import("../views/medicines/ViewExpiredMedicines.vue"),
+      path: "/medicines/stock",
+      name: "medicines-stock",
+      component: () => import("../views/medicines/ManageStockView.vue"),
 
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
@@ -325,7 +325,24 @@ const router = createRouter({
         return next({
           name: "un-authorized",
           path: "/un-authorized",
-          params: { action: "expired-medicines" },
+          params: { action: "medicines-stock" },
+        });
+      },
+    },
+
+    {
+      path: "/medicines/expired",
+      name: "expired-stock",
+      component: () => import("../views/medicines/ViewExpiredStockView.vue"),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "expired-stock" },
         });
       },
     },

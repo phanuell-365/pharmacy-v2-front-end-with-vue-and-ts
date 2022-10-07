@@ -4,4 +4,5 @@ export interface NewMedicineDto {
   strength: string;
   levelOfUse: number;
   therapeuticClass: string;
+  packSize: string;
 }

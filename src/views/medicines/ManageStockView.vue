@@ -2,7 +2,7 @@
   <section class="manage-medicines">
     <SidebarLayout>
       <template #body>
-        <ManageMedicines manage="medicine" />
+        <ManageMedicines manage="stock" />
       </template>
     </SidebarLayout>
   </section>

@@ -1,4 +1,4 @@
-export interface StockDto {
+export interface MedicineStockDto {
   id: string;
   name: string;
   packSize: string;
@@ -9,7 +9,7 @@ export interface StockDto {
   profitPerIssueUnit?: number;
   packSizeQuantity: number;
   packSizePurchasePrice?: number;
-  packSizeSellingPrice: number;
+  packSizeSellingPrice?: number;
   profitPerPackSize?: number;
   expiryDate: string;
 }

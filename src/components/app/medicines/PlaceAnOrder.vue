@@ -1,7 +1,7 @@
 <template>
   <section class="place-an-order">
     <SearchTable
-      :attributes="stocksStore.getMedicineStockAttributes"
+      :attributes="medicinesStore.getMedicineStockAttributes"
       :records="medicines"
       name="medicine"
       search-by="name"
@@ -31,17 +31,21 @@ import LiveToast from "@/components/toast/LiveToast.vue";
 import { TOP_CENTER } from "@/constants/toasts";
 import type { Ref } from "vue";
 import { ref } from "vue";
-import { MedicineStock, useStocksStore } from "@/stores/app/stock/stocks";
+// import { useStocksStore } from "@/stores/app/stock/stocks";
 import moment from "moment";
+import { useMedicinesStore } from "@/stores/app/medicines/medicines";
+import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
 
-const stocksStore = useStocksStore();
+// const stocksStore = useStocksStore();
+const medicinesStore = useMedicinesStore();
 
-const medicines: Ref<MedicineStock[]> = ref([]);
+const medicines: Ref<MedicineStockDto[]> = ref([]);
 
 const toastError: Ref<InstanceType<LiveToast>> = ref();
 
 try {
-  medicines.value = await stocksStore.fetchMedicinesStock();
+  await medicinesStore.fetchMedicines();
+  medicines.value = medicinesStore.medicineStock;
 } catch (error: any) {
   console.error(error);
 

@@ -6,6 +6,9 @@ import type {
 } from "@/stores/app/medicines/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
+import type { ExpiredMedicineDto } from "@/stores/app/medicines/dto/expired-medicine.dto";
+import type { MedicineOutOfStockDto } from "@/stores/app/medicines/dto/medicine-out-of-stock.dto";
 
 const MEDICINE_DEFAULT: MedicineDto = {
   id: "",
@@ -14,10 +17,48 @@ const MEDICINE_DEFAULT: MedicineDto = {
   strength: "",
   levelOfUse: 0,
   therapeuticClass: "",
+  packSize: "",
+};
+
+const MEDICINE_STOCK_DEFAULT: MedicineStockDto = {
+  id: "",
+  name: "",
+  packSize: "",
+  // issueUnitPurchasePrice: 0,
+  issueUnitSellingPrice: 0,
+  issueUnitQuantity: 0,
+  issueUnitPerPackSize: 0,
+  // profitPerIssueUnit: 0,
+  // packSizePurchasePrice: 0,
+  // packSizeSellingPrice: 0,
+  packSizeQuantity: 0,
+  // profitPerPackSize: 0,
+  expiryDate: "",
+};
+
+const EXPIRED_MEDICINE_DEFAULT: ExpiredMedicineDto = {
+  name: "",
+  packSizeQuantity: 0,
+  issueUnitQuantity: 0,
+  issueUnitPerPackSize: 0,
+  issueUnitSellingPrice: 0,
+  expiryDate: "",
+};
+
+const MEDICINE_OUT_OF_STOCK: MedicineOutOfStockDto = {
+  name: "",
+  packSize: "",
+  packSizeQuantity: 0,
+  packSizePurchasePrice: 0,
+  issueUnitQuantity: 0,
+  issueUnitPerPackSize: 0,
+  issueUnitSellingPrice: 0,
+  expiryDate: "",
 };
 
 interface MedicinesState {
   medicines: MedicineDto[];
+  medicineStock: MedicineStockDto[];
   doseForms: string[];
   strengths: string[];
 }
@@ -26,12 +67,19 @@ export const useMedicinesStore = defineStore({
   id: "medicines",
   state: (): MedicinesState => ({
     medicines: [],
+    medicineStock: [],
     doseForms: [],
     strengths: [],
   }),
   getters: {
-    getMedicineAttributes: (state) =>
+    getMedicineAttributes: () =>
       Object.keys(MEDICINE_DEFAULT).filter((value) => value !== "id"),
+    getExpiredMedicinesAttributes: () =>
+      Object.keys(EXPIRED_MEDICINE_DEFAULT).filter((value) => value !== "id"),
+    getMedicineStockAttributes: () =>
+      Object.keys(MEDICINE_STOCK_DEFAULT).filter((value) => value !== "id"),
+    getMedicineOutOfStockAttributes: () =>
+      Object.keys(MEDICINE_OUT_OF_STOCK).filter((value) => value !== "id"),
   },
   actions: {
     getToken() {
@@ -53,8 +101,48 @@ export const useMedicinesStore = defineStore({
       if (!response.ok) throw new Error(data?.message);
 
       this.medicines = data as MedicineDto[];
+      this.medicineStock = data as MedicineStockDto[];
+
+      this.medicineStock = this.medicineStock.map((value) => {
+        value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
+
+        return value;
+      });
 
       return this.medicines;
+    },
+
+    async fetchMedicinesOutOfStock() {
+      const response = await fetch(
+        `${BASE_URL}/medicines?resource=out-of-stock`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
+
+      const data: MedicineOutOfStockDto[] = await response.json();
+
+      return data.map((value) => {
+        value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
+
+        return value;
+      });
+    },
+
+    async fetchExpiredMedicines() {
+      const response = await fetch(`${BASE_URL}/medicines?resource=expired`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      return data as ExpiredMedicineDto[];
     },
 
     async fetchMedicineDoseForms() {

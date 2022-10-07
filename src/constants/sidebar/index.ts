@@ -3,7 +3,7 @@ import { MEDICINES_MENU } from "@/constants/sidebar/medicines";
 import { CUSTOMERS_MENU } from "@/constants/sidebar/customers";
 import { HOME_MENU } from "@/constants/sidebar/home";
 import { SALES_MENU } from "@/constants/sidebar/sales";
-import { STOCKS_MENU } from "@/constants/sidebar/stocks";
+// import { STOCKS_MENU } from "@/constants/sidebar/stocks";
 import { SUPPLIERS_MENU } from "@/constants/sidebar/suppliers";
 import { ORDERS_MENU } from "@/constants/sidebar/orders";
 import { PURCHASES_MENU } from "@/constants/sidebar/purchases";
@@ -14,7 +14,7 @@ export const menu = [
   { ...CUSTOMERS_MENU },
   { ...MEDICINES_MENU },
   { ...SUPPLIERS_MENU },
-  { ...STOCKS_MENU },
+  // { ...STOCKS_MENU },
   { ...ORDERS_MENU },
   { ...PURCHASES_MENU },
   { ...SALES_MENU },

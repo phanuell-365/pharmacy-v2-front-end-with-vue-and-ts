@@ -5,14 +5,18 @@ import { BASE_URL } from "@/constants/base-url";
 
 const STOCKS_DEFAULT: StockDto = {
   id: "",
-  medicine: "",
-  issueUnitPrice: 0,
-  issueQuantity: 0,
-  issueUnitPerPackSize: 0,
+  name: "",
   packSize: "",
-  packSizePrice: 0,
+  // issueUnitPurchasePrice: 0,
+  issueUnitSellingPrice: 0,
+  issueUnitQuantity: 0,
+  issueUnitPerPackSize: 0,
+  // profitPerIssueUnit: 0,
+  // packSizePurchasePrice: 0,
+  packSizeSellingPrice: 0,
   packSizeQuantity: 0,
-  expirationDate: "",
+  // profitPerPackSize: 0,
+  expiryDate: "",
 };
 
 interface StocksState {

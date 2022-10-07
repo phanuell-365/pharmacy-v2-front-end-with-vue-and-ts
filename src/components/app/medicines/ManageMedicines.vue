@@ -1,7 +1,7 @@
 <template>
   <section class="manage-medicines">
     <SearchTable
-      :attributes="medicinesStore.getMedicineAttributes"
+      :attributes="attributes"
       :records="medicines"
       name="medicine"
       null-comment="Medicine not found"
@@ -70,12 +70,20 @@ import { ref } from "vue";
 import type { MedicineDto } from "@/stores/app/medicines/dto";
 import moment from "moment";
 import { useRouter } from "vue-router";
+import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
+
+interface ManageMedicinesProps {
+  manage: "stock" | "medicine";
+}
+
+const props = defineProps<ManageMedicinesProps>();
 
 const router = useRouter();
 
 const medicinesStore = useMedicinesStore();
 
-const medicines: Ref<MedicineDto[] | undefined> = ref();
+const medicines: Ref<MedicineDto[] | MedicineStockDto[] | undefined> = ref();
+const attributes: Ref<string[]> = ref([]);
 
 const toastSuccess = ref();
 const toastError = ref();
@@ -83,7 +91,17 @@ const toastWarning: Ref<InstanceType<LiveToast>> = ref();
 const deleteModalRef: Ref<InstanceType<DeleteModal> | null> = ref(null);
 
 try {
-  medicines.value = await medicinesStore.fetchMedicines();
+  await medicinesStore.fetchMedicines();
+  switch (props.manage) {
+    case "medicine":
+      medicines.value = medicinesStore.medicines;
+      attributes.value = medicinesStore.getMedicineAttributes;
+      break;
+    case "stock":
+      medicines.value = medicinesStore.medicineStock;
+      attributes.value = medicinesStore.getMedicineStockAttributes;
+      break;
+  }
 } catch (error: any) {
   console.error(error);
 

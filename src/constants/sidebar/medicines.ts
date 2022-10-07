@@ -17,9 +17,14 @@ export const MEDICINES_MENU: AccordionItemProps = {
       routeName: "manage-medicines",
     },
     {
+      href: "/medicines/stock",
+      description: "manage stock",
+      routeName: "medicines-stock",
+    },
+    {
       href: "/medicines/expired",
-      description: "expired medicines",
-      routeName: "expired-medicines",
+      description: "expired stock",
+      routeName: "expired-stock",
     },
     {
       href: "/medicines/order",
