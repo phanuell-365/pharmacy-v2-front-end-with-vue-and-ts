@@ -94,17 +94,33 @@
       />
     </InputContainer>
 
+    <InputContainer
+      :invalid-feedback="packSizeErrorMessage"
+      input-id="packSize"
+      input-label="packSize"
+    >
+      <input
+        id="validationPackSize"
+        v-model.trim="packSize"
+        :class="{ 'is-invalid': !packSizeMeta.valid && packSizeMeta.validated }"
+        class="form-control"
+        name="packSize"
+        required
+        type="text"
+      />
+    </InputContainer>
+
     <FormButtonsContainer>
-      <FormButton skin="primary" text="add" @click="onAddClick" />
-      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
-      <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
+      <FormButton skin="primary" text="Add" @click="onAddAndNewClick" />
+      <!--      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />-->
+      <FormButton outline skin="dark" text="Add & View" @click="onAddAndView" />
       <FormButton
         outline
         skin="secondary"
-        text="add & view all"
+        text="Add & View All"
         @click="onAddAndViewAll"
       />
-      <FormButton outline skin="danger" text="clear" @click="onClear" />
+      <FormButton outline skin="danger" text="Clear" @click="onClear" />
     </FormButtonsContainer>
   </form>
   <Teleport to="body">
@@ -229,11 +245,20 @@ const therapeuticClassValidation = (value: string) => {
   return true;
 };
 
+const packSizeValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  return true;
+};
+
 const {
   value: name,
   errorMessage: nameErrorMessage,
   meta: nameMeta,
 } = useField("name", nameValidation);
+
 const {
   value: doseForm,
   errorMessage: doseFormErrorMessage,
@@ -258,13 +283,20 @@ const {
   meta: therapeuticClassMeta,
 } = useField("therapeuticClass", therapeuticClassValidation);
 
+const {
+  value: packSize,
+  errorMessage: packSizeErrorMessage,
+  meta: packSizeMeta,
+} = useField("packSize", packSizeValidation);
+
 const validateForm = () => {
   if (
     doseFormMeta.valid &&
     nameMeta.valid &&
     strengthMeta.valid &&
     levelOfUseMeta &&
-    therapeuticClassMeta.valid
+    therapeuticClassMeta.valid &&
+    packSizeMeta.valid
   ) {
     return true;
   } else {
@@ -287,6 +319,7 @@ const createMedicinePayload = () => {
     strength: strength.value,
     levelOfUse: +levelOfUse.value,
     therapeuticClass: startCase(therapeuticClass.value),
+    packSize: packSize.value,
   };
 
   return payload;
@@ -322,12 +355,12 @@ const addMedicine = async (payload: NewMedicineDto) => {
 
 const routeRedirect = ref("");
 
-const onAddClick = async () => {
-  // validate the form
-  if (validateForm()) {
-    await addMedicine(createMedicinePayload());
-  }
-};
+// const onAddClick = async () => {
+//   // validate the form
+//   if (validateForm()) {
+//     await addMedicine(createMedicinePayload());
+//   }
+// };
 
 const onAddAndNewClick = async () => {
   // validate the form

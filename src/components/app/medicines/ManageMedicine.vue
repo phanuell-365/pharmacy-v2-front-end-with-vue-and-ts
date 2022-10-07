@@ -99,6 +99,23 @@
       />
     </InputContainer>
 
+    <InputContainer
+      :invalid-feedback="packSizeErrorMessage"
+      input-id="packSize"
+      input-label="packSize"
+    >
+      <input
+        id="validationPackSize"
+        v-model.trim="packSize"
+        :class="{ 'is-invalid': !packSizeMeta.valid && packSizeMeta.validated }"
+        :disabled="!setUpdateMode && setViewMode"
+        class="form-control"
+        name="packSize"
+        required
+        type="text"
+      />
+    </InputContainer>
+
     <FormButtonsContainer>
       <FormButton skin="primary" text="Update" @click="onUpdateClick" />
       <FormButton skin="secondary" text="Add New" @click="onAddNewClick" />
@@ -296,6 +313,14 @@ const therapeuticClassValidation = (value: string) => {
   return true;
 };
 
+const packSizeValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  return true;
+};
+
 const {
   value: name,
   errorMessage: nameErrorMessage,
@@ -325,11 +350,18 @@ const {
   meta: therapeuticClassMeta,
 } = useField("therapeuticClass", therapeuticClassValidation);
 
+const {
+  value: packSize,
+  errorMessage: packSizeErrorMessage,
+  meta: packSizeMeta,
+} = useField("packSize", packSizeValidation);
+
 name.value = medicine.value?.name;
 doseForm.value = medicine.value?.doseForm;
 strength.value = medicine.value?.strength as string;
 levelOfUse.value = medicine.value?.levelOfUse;
 therapeuticClass.value = medicine.value?.therapeuticClass as string;
+packSize.value = medicine.value?.packSize as string;
 
 const validateForm = () => {
   if (
