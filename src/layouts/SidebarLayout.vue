@@ -22,9 +22,11 @@
       <div
         class="d-flex align-items-center text-success justify-content-between mb-2"
       >
-        <span class="text-start fw-bold fs-5 mx-3">
-          {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</span
-        >
+        <slot name="entity-title">
+          <span class="text-start fw-bold fs-5 mx-3">
+            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</span
+          >
+        </slot>
         <div class="logout-button">
           <Teleport to="body">
             <LogoutModal

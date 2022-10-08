@@ -4,7 +4,7 @@
     <InputContainer
       :invalid-feedback="MedicineIdErrorMessage"
       input-id="MedicineId"
-      input-label="MedicineId"
+      input-label="Medicine"
     >
       <select
         id="validationMedicineId"
@@ -30,7 +30,7 @@
     <InputContainer
       :invalid-feedback="SupplierIdErrorMessage"
       input-id="SupplierId"
-      input-label="SupplierId"
+      input-label="Supplier"
     >
       <select
         id="validationSupplierId"

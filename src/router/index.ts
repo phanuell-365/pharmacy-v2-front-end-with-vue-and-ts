@@ -144,8 +144,8 @@ const router = createRouter({
       component: () => import("../views/customers/id/ManageCustomerView.vue"),
       // component: () => import("../views/customers/id/ViewCustomerView.vue"),
       props: (route) => ({
-        params: route.params.id,
-        query: route.query.update,
+        customerId: route.params.id,
+        query: !!route.query.update,
       }),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();

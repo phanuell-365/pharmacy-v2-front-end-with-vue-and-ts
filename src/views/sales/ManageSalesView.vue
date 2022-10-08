@@ -1,5 +1,5 @@
 <template>
-  <section class="manage-medicines">
+  <section class="manage-suppliers">
     <SidebarLayout>
       <template #body>
         <ManageSales />
