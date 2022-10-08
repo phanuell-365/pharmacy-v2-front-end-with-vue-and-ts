@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { useMedicinesStore } from "@/stores/app/medicines/medicines";
-import { useStocksStore } from "@/stores/app/stock/stocks";
 
 export interface CustomersOrders {
   id: string;
@@ -44,7 +43,7 @@ export const useCustomersOrdersStore = defineStore({
   getters: {
     getItems: (state): CustomersOrders[] => state.items,
     getTotalCost: (state) => state.totalCost,
-    getAttributes: (state) =>
+    getAttributes: () =>
       Object.keys(EMPTY_CUS_ORDER).filter((value) => value !== "id"),
     getItemNames: (state) => state.items.map((value) => value.medicine),
   },
@@ -59,45 +58,33 @@ export const useCustomersOrdersStore = defineStore({
      */
     async addItem(payload: AddCustomerOrder) {
       const medicinesStore = useMedicinesStore();
-      const stocksStore = useStocksStore();
 
       const medicine = await medicinesStore.fetchMedicineById(payload.id);
 
-      const stocks = await stocksStore.fetchStocks();
-
-      const medicineStock = stocks.find(
-        (value) => value.medicine === medicine.name
+      const medicineStock = await medicinesStore.fetchMedicineStockById(
+        payload.id
       );
 
-      if (!medicineStock) {
-        throw new Error("No stock was found for the medicine");
-      }
+      const itemTotalPrice = this.calculateItemTotalPrice({
+        price: medicineStock.issueUnitSellingPrice,
+        quantity: payload.quantity,
+      });
 
-      let itemTotalPrice: number;
+      this.items.push({
+        id: payload.id,
+        medicine: medicine.name,
+        doseForm: medicine.doseForm,
+        price: medicineStock.issueUnitSellingPrice,
+        quantity: payload.quantity,
+        totalPrice: itemTotalPrice,
+        levelOfUse: medicine.levelOfUse,
+        expiryDate: new Date(medicineStock.expiryDate).toLocaleDateString(),
+      });
 
-      if (medicineStock) {
-        itemTotalPrice = this.calculateItemTotalPrice({
-          price: medicineStock.issueUnitPrice,
-          quantity: payload.quantity,
-        });
-
-        this.items.push({
-          id: payload.id,
-          medicine: medicine.name,
-          doseForm: medicine.doseForm,
-          price: medicineStock.issueUnitPrice,
-          quantity: payload.quantity,
-          totalPrice: itemTotalPrice,
-          levelOfUse: medicine.levelOfUse,
-          expiryDate: new Date(medicineStock.expiryDate).toLocaleDateString(),
-        });
-
-        this.calculateTotalCost();
-      }
+      this.calculateTotalCost();
     },
 
     removeItem(medicineId: string) {
-      console.log("removing -> ", medicineId);
       this.items = this.items.filter((value) => value.id !== medicineId);
       this.calculateTotalCost();
     },

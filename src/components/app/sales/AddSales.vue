@@ -167,13 +167,13 @@ import { ref } from "vue";
 import type { CustomerDto } from "@/stores/app/customers/dto";
 import { useMedicinesStore } from "@/stores/app/medicines/medicines";
 import type { MedicineDto } from "@/stores/app/medicines/dto";
-import { useStocksStore } from "@/stores/app/stock/stocks";
-import type { StockDto } from "@/stores/app/stock/dto";
+// import { useStocksStore } from "@/stores/app/stock/stocks";
+// import type { StockDto } from "@/stores/app/stock/dto";
 import { useCustomersOrdersStore } from "@/stores/app/sales/customers-orders";
 import { useIsNumeric } from "@/composables/is-numeric";
 import { useField } from "vee-validate";
 import type { NewSaleDto, NewSalesDto } from "@/stores/app/sales/dto";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import moment from "moment";
 import { useSalesStore } from "@/stores/app/sales/sales";
 
@@ -181,13 +181,13 @@ const router = useRouter();
 
 const customersStore = useCustomersStore();
 const medicineStore = useMedicinesStore();
-const stocksStore = useStocksStore();
+// const stocksStore = useStocksStore();
 const customersOrdersStore = useCustomersOrdersStore();
 const salesStore = useSalesStore();
 
 const customers: Ref<CustomerDto[]> = ref([]);
 const medicines: Ref<MedicineDto[]> = ref([]);
-const stocks: Ref<StockDto[]> = ref([]);
+// const stocks: Ref<StockDto[]> = ref([]);
 
 const formRef: Ref<HTMLFormElement | null> = ref(null);
 const customerSearchPanelRef: Ref<
@@ -198,7 +198,8 @@ const toastError = ref();
 
 customers.value = await customersStore.fetchCustomers();
 medicines.value = await medicineStore.fetchMedicines();
-stocks.value = await stocksStore.fetchStocks();
+
+// stocks.value = await stocksStore.fetchStocks();
 
 interface SearchPairs {
   name: string;
@@ -315,6 +316,7 @@ const createSalesPayload = () => {
         issueUnitQuantity: value.quantity,
         MedicineId: value.id,
         CustomerId: foundCustomerId.value,
+        amountReceived: +amountReceived.value,
       };
 
       return cusOrder;
@@ -411,5 +413,9 @@ const onHiddenBsToast = () => {
 
   router.push(routeRedirect.value);
 };
+
+onBeforeRouteLeave(() => {
+  customersOrdersStore.$reset();
+});
 </script>
 <style scoped></style>

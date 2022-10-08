@@ -145,7 +145,7 @@ const router = createRouter({
       // component: () => import("../views/customers/id/ViewCustomerView.vue"),
       props: (route) => ({
         customerId: route.params.id,
-        query: !!route.query.update,
+        update: !!route.query.update,
       }),
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore();
@@ -179,6 +179,47 @@ const router = createRouter({
         });
       },
     },
+
+    {
+      path: "/sales/customer/:id",
+      name: "manage-customer-sales",
+      component: () =>
+        import("../views/sales/id/ManageSalesByCustomerView.vue"),
+      props: true,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-customer-sales" },
+        });
+      },
+    },
+
+    {
+      path: "/sales/:id",
+      name: "manage-sale",
+      component: () => import("../views/sales/id/ManageSaleView.vue"),
+
+      props: (route) => ({
+        saleId: route.params.id,
+        update: !!route.query.update,
+      }),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-sale" },
+        });
+      },
+    },
+
     {
       path: "/sales",
       name: "manage-sales",

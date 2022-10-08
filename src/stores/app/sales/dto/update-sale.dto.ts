@@ -1,5 +1,6 @@
 export interface UpdateSaleDto {
   issueUnitQuantity?: number;
-  MedicineId?: string;
-  CustomerId?: string;
+  amountReceived?: number;
+  MedicineId: string;
+  CustomerId: string;
 }

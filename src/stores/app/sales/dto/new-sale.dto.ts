@@ -1,5 +1,6 @@
 export interface NewSaleDto {
   issueUnitQuantity: number;
+  amountReceived: number;
   MedicineId: string;
   CustomerId: string;
 }

@@ -9,12 +9,14 @@
       search-term="customer"
     >
       <template #actions="{ recordId }">
-        <ButtonLinkIcon :href="`/medicines/${recordId}`" action="view" />
-        <ButtonLinkIcon
-          :href="`/medicines/${recordId}/update`"
-          action="update"
+        <ButtonIcon
+          :icon-name="VIEW_ICON"
+          skin="success"
+          @click="onGetSaleIdClick(recordId)"
         />
-        <ButtonLinkIcon :href="`/medicines/${recordId}`" action="delete" />
+        <!--        <ButtonLinkIcon :href="`/sales/${recordId}`" action="view" />-->
+        <!--        <ButtonLinkIcon :href="`/sales/${recordId}/update`" action="update" />-->
+        <!--        <ButtonLinkIcon :href="`/sales/${recordId}`" action="delete" />-->
       </template>
     </SearchTable>
     <Teleport to="body">
@@ -30,23 +32,29 @@
 import SearchTable from "@/components/table/search/SearchableTable.vue";
 import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
-import ButtonLinkIcon from "@/components/button/ButtonLinkIcon.vue";
+import ButtonIcon from "@/components/button/ButtonIcon.vue";
+import { VIEW_ICON } from "@/constants/icons";
 import { TOP_CENTER } from "@/constants/toasts";
 import { useSalesStore } from "@/stores/app/sales/sales";
 import type { Ref } from "vue";
 import { ref } from "vue";
-import type { SalesDto } from "@/stores/app/sales/dto";
+import type { SalesDto, SalesWithCustomerIdDto } from "@/stores/app/sales/dto";
 import moment from "moment";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const salesStore = useSalesStore();
 
 const sales: Ref<SalesDto[]> = ref([]);
+const salesWithIds: Ref<SalesWithCustomerIdDto[]> = ref([]);
 
 const toastSuccess = ref();
 const toastError = ref();
 
 try {
   sales.value = await salesStore.fetchSales();
+  salesWithIds.value = await salesStore.fetchSalesWithId();
 } catch (error: any) {
   console.error(error);
 
@@ -60,6 +68,12 @@ try {
 
   toastError.value?.show();
 }
+
+const onGetSaleIdClick = (saleId: string) => {
+  const sale = salesWithIds.value.find((value) => value.id === saleId);
+
+  router.push(`/sales/customer/${sale?.CustomerId}`);
+};
 </script>
 
 <style scoped></style>

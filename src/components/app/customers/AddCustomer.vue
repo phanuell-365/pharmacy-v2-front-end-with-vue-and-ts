@@ -1,5 +1,11 @@
 <template>
-  <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
+  <form
+    ref="formRef"
+    autocomplete="off"
+    class="row g-3 m-4"
+    novalidate
+    @submit.prevent
+  >
     <!--  name  -->
     <InputContainer
       :invalid-feedback="nameErrorMessage"
@@ -52,16 +58,16 @@
     </InputContainer>
 
     <FormButtonsContainer class="mt-5">
-      <FormButton skin="primary" text="add" @click="onAddClick" />
-      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />
-      <FormButton outline skin="dark" text="add & view" @click="onAddAndView" />
+      <FormButton skin="primary" text="Add" @click="onAddAndNewClick" />
+      <!--      <FormButton skin="secondary" text="add & new" @click="onAddAndNewClick" />-->
+      <FormButton outline skin="dark" text="Add & View" @click="onAddAndView" />
       <FormButton
         outline
         skin="secondary"
-        text="add & view all"
+        text="Add & View All"
         @click="onAddAndViewAll"
       />
-      <FormButton outline skin="danger" text="clear" @click="onClear" />
+      <FormButton outline skin="danger" text="Clear" @click="onClear" />
     </FormButtonsContainer>
 
     <Teleport to="body">
@@ -199,9 +205,9 @@ const addCustomer = async (payload: NewCustomerDto) => {
 
 const routeRedirect = ref("");
 
-const onAddClick = async () => {
-  if (validateForm()) await addCustomer(createCustomerPayload());
-};
+// const onAddClick = async () => {
+//   if (validateForm()) await addCustomer(createCustomerPayload());
+// };
 
 const onAddAndNewClick = async () => {
   if (validateForm()) {

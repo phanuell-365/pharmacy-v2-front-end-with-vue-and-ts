@@ -186,7 +186,7 @@ onMounted(() => {
         {
           totalText: "Out of stock",
           totalValue: outOfStock.value.length,
-          href: "/stocks/out-of-stock",
+          href: "/medicines/out-of-stock",
         },
         {
           totalText: "Cancelled Orders",
@@ -211,7 +211,7 @@ onMounted(() => {
         {
           totalText: "Expired Stock",
           totalValue: expiredStock.value.length,
-          href: "/stocks/expired",
+          href: "/medicines/expired",
         },
         {
           totalText: "Delivered Orders",
