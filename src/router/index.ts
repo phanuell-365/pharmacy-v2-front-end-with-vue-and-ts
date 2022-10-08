@@ -282,6 +282,7 @@ const router = createRouter({
       props: (route) => ({
         medicineId: route.params.id,
         update: !!route.query.update,
+        stock: !!route.query.stock,
       }),
 
       beforeEnter: (to, from, next) => {

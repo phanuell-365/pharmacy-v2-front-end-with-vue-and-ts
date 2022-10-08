@@ -197,6 +197,21 @@ export const useMedicinesStore = defineStore({
       return data as MedicineDto;
     },
 
+    async fetchMedicineStockById(medicineId: string) {
+      const response = await fetch(`${BASE_URL}/medicines/${medicineId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as MedicineStockDto;
+    },
+
     async addMedicine(payload: NewMedicineDto) {
       const response = await fetch(`${BASE_URL}/medicines`, {
         method: "POST",

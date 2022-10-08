@@ -219,7 +219,7 @@
       <ToastContainer :placement="TOP_CENTER">
         <LiveToast
           ref="toastSuccess"
-          skin="info"
+          skin="success"
           @on-hidden-bs-toast="onHiddenBsToast"
         />
         <LiveToast ref="toastError" skin="danger" />
@@ -355,6 +355,9 @@ const packSizeQuantityValidation = (value: string) => {
   if (+value <= 0) {
     return "The pack size quantity should not be less than or equal to 0";
   }
+
+  if (+value > orderQuantity.value)
+    return "The pack size quantity is greater than the ordered quantity";
 
   return true;
 };

@@ -116,8 +116,150 @@
       />
     </InputContainer>
 
+    <template v-if="!setUpdateMode && setViewMode && setStockMode">
+      <InputContainer
+        input-id="issueUnitQuantity"
+        input-label="issueUnitQuantity"
+      >
+        <input
+          id="validationIssueUnitQuantity"
+          v-model="issueUnitQuantity"
+          class="form-control shadow-sm"
+          disabled
+          name="issueUnitQuantity"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="issueUnitPerPackSize"
+        input-label="issueUnitPerPackSize"
+      >
+        <input
+          id="validationIssueUnitPerPackSize"
+          v-model="issueUnitPerPackSize"
+          class="form-control shadow-sm"
+          disabled
+          name="issueUnitPerPackSize"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="issueUnitPurchasePrice"
+        input-label="issueUnitPurchasePrice"
+      >
+        <input
+          id="validationIssueUnitPurchasePrice"
+          v-model="issueUnitPurchasePrice"
+          class="form-control shadow-sm"
+          disabled
+          name="issueUnitPurchasePrice"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="issueUnitSellingPrice"
+        input-label="issueUnitSellingPrice"
+      >
+        <input
+          id="validationIssueUnitSellingPrice"
+          v-model="issueUnitSellingPrice"
+          class="form-control shadow-sm"
+          disabled
+          name="issueUnitSellingPrice"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitPerIssueUnit"
+        input-label="profitPerIssueUnit"
+      >
+        <input
+          id="validationProfitPerIssueUnit"
+          v-model="profitPerIssueUnit"
+          class="form-control shadow-sm"
+          disabled
+          name="profitPerIssueUnit"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="packSizeQuantity"
+        input-label="packSizeQuantity"
+      >
+        <input
+          id="validationPackSizeQuantity"
+          v-model="packSizeQuantity"
+          class="form-control shadow-sm"
+          disabled
+          name="packSizeQuantity"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="packSizePurchasePrice"
+        input-label="packSizePurchasePrice"
+      >
+        <input
+          id="validationPackSizePurchasePrice"
+          v-model="packSizePurchasePrice"
+          class="form-control shadow-sm"
+          disabled
+          name="packSizePurchasePrice"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="packSizeSellingPrice"
+        input-label="packSizeSellingPrice"
+      >
+        <input
+          id="validationPackSizeSellingPrice"
+          v-model="packSizeSellingPrice"
+          class="form-control shadow-sm"
+          disabled
+          name="packSizeSellingPrice"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitPerPackSize"
+        input-label="profitPerPackSize"
+      >
+        <input
+          id="validationProfitPerPackSize"
+          v-model="profitPerPackSize"
+          class="form-control shadow-sm"
+          disabled
+          name="profitPerPackSize"
+          required
+          type="number"
+        />
+      </InputContainer>
+    </template>
+
     <FormButtonsContainer>
-      <FormButton skin="primary" text="Update" @click="onUpdateClick" />
+      <FormButton
+        v-if="!setStockMode"
+        skin="primary"
+        text="Update"
+        @click="onUpdateClick"
+      />
       <FormButton skin="secondary" text="Add New" @click="onAddNewClick" />
       <FormButton
         v-if="setUpdateMode && !setViewMode"
@@ -127,10 +269,18 @@
         @click="onViewClick"
       />
       <FormButton
+        v-if="!stockMode"
         outline
         skin="secondary"
         text="View All"
-        @click="onViewAllClick"
+        @click="onViewAllClick('')"
+      />
+      <FormButton
+        v-if="stockMode"
+        outline
+        skin="secondary"
+        text="View All"
+        @click="onViewAllClick('/stock')"
       />
       <FormButton outline skin="danger" text="Delete" @click="onDeleteClick" />
     </FormButtonsContainer>
@@ -191,10 +341,12 @@ import { useIsNumeric } from "@/composables/is-numeric";
 import { useField } from "vee-validate";
 import moment from "moment";
 import startCase from "lodash/startCase";
+import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
 
 interface ManageMedicineProps {
   medicineId: string;
   updateMode?: boolean;
+  stockMode?: boolean;
 }
 
 const router = useRouter();
@@ -204,6 +356,7 @@ const props = defineProps<ManageMedicineProps>();
 const medicinesStore = useMedicinesStore();
 
 const medicine: Ref<MedicineDto | null> = ref(null);
+const medicineStock: Ref<MedicineStockDto | null> = ref(null);
 const medicineDoseForms: Ref<string[]> = ref([]);
 const medicineStrengths: Ref<string[]> = ref([]);
 
@@ -215,6 +368,17 @@ const deleteModalRef: Ref<InstanceType<DeleteModal> | null> = ref(null);
 
 const setUpdateMode: Ref<boolean | undefined> = ref(props.updateMode);
 const setViewMode: Ref<boolean | undefined> = ref(!props.updateMode);
+const setStockMode: Ref<boolean | undefined> = ref(props.stockMode);
+
+const issueUnitQuantity: Ref<number> = ref(0);
+const issueUnitPerPackSize: Ref<number> = ref(0);
+const issueUnitPurchasePrice: Ref<number> = ref(0);
+const issueUnitSellingPrice: Ref<number> = ref(0);
+const profitPerIssueUnit: Ref<number> = ref(0);
+const packSizeQuantity: Ref<number> = ref(0);
+const packSizePurchasePrice: Ref<number> = ref(0);
+const packSizeSellingPrice: Ref<number> = ref(0);
+const profitPerPackSize: Ref<number> = ref(0);
 
 watch(
   () => props.updateMode,
@@ -224,8 +388,18 @@ watch(
   }
 );
 
+watch(
+  () => props.stockMode,
+  (value) => {
+    setStockMode.value = value;
+  }
+);
+
 try {
   medicine.value = await medicinesStore.fetchMedicineById(props.medicineId);
+  medicineStock.value = await medicinesStore.fetchMedicineStockById(
+    props.medicineId
+  );
   medicineDoseForms.value = await medicinesStore.fetchMedicineDoseForms();
   medicineStrengths.value = await medicinesStore.fetchMedicineStrengths();
 } catch (error: any) {
@@ -363,6 +537,25 @@ levelOfUse.value = medicine.value?.levelOfUse;
 therapeuticClass.value = medicine.value?.therapeuticClass as string;
 packSize.value = medicine.value?.packSize as string;
 
+if (medicineStock.value?.issueUnitQuantity)
+  issueUnitQuantity.value = medicineStock.value?.issueUnitQuantity;
+if (medicineStock.value?.issueUnitPerPackSize)
+  issueUnitPerPackSize.value = medicineStock.value?.issueUnitPerPackSize;
+if (medicineStock.value?.issueUnitPurchasePrice)
+  issueUnitPurchasePrice.value = medicineStock.value?.issueUnitPurchasePrice;
+if (medicineStock.value?.issueUnitSellingPrice)
+  issueUnitSellingPrice.value = medicineStock.value?.issueUnitSellingPrice;
+if (medicineStock.value?.profitPerIssueUnit)
+  profitPerIssueUnit.value = medicineStock.value?.profitPerIssueUnit;
+if (medicineStock.value?.packSizeQuantity)
+  packSizeQuantity.value = medicineStock.value?.packSizeQuantity;
+if (medicineStock.value?.packSizePurchasePrice)
+  packSizePurchasePrice.value = medicineStock.value?.packSizePurchasePrice;
+if (medicineStock.value?.packSizeSellingPrice)
+  packSizeSellingPrice.value = medicineStock.value?.packSizeSellingPrice;
+if (medicineStock.value?.profitPerPackSize)
+  profitPerPackSize.value = medicineStock.value?.profitPerPackSize;
+
 const validateForm = () => {
   if (
     doseFormMeta.valid &&
@@ -450,8 +643,8 @@ const onAddNewClick = async () => {
   await router.push("/medicines/create");
 };
 
-const onViewAllClick = async () => {
-  await router.push("/medicines");
+const onViewAllClick = async (path: string) => {
+  await router.push(`/medicines${path}`);
 };
 
 const onDeleteClick = async () => {

@@ -4,10 +4,15 @@
       <template #entity-title>
         <span class="text-start fw-bold fs-5 mx-3">
           Manage {{ medicine?.name }}
+          <template v-if="stockMode">Stock</template>
         </span>
       </template>
       <template #body>
-        <ManageMedicine :medicine-id="medicineId" :update-mode="updateMode" />
+        <ManageMedicine
+          :medicine-id="medicineId"
+          :stock-mode="stockMode"
+          :update-mode="updateMode"
+        />
       </template>
     </SidebarLayout>
   </section>
@@ -25,6 +30,7 @@ import { useRouter } from "vue-router";
 interface ManageMedicineProps {
   medicineId: string;
   update: boolean;
+  stock: boolean;
 }
 
 const router = useRouter();
@@ -48,12 +54,19 @@ onMounted(async () => {
 });
 
 const updateMode: Ref<boolean> = ref(props.update);
+const stockMode: Ref<boolean> = ref(props.stock);
 
 watch(
   () => props.update,
   (value) => {
-    console.log(value);
     updateMode.value = value;
+  }
+);
+
+watch(
+  () => props.stock,
+  (value) => {
+    stockMode.value = value;
   }
 );
 </script>

@@ -1,5 +1,11 @@
 <template>
-  <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
+  <form
+    ref="formRef"
+    autocomplete="off"
+    class="row g-3 m-4"
+    novalidate
+    @submit.prevent
+  >
     <!--    <InputContainer-->
     <!--      :invalid-feedback="MedicineIdErrorMessage"-->
     <!--      input-id="MedicineId"-->

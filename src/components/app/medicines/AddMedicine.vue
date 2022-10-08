@@ -1,5 +1,11 @@
 <template>
-  <form ref="formRef" class="row g-3 m-4" novalidate @submit.prevent>
+  <form
+    ref="formRef"
+    autocomplete="off"
+    class="row g-3 m-4"
+    novalidate
+    @submit.prevent
+  >
     <!--  name  -->
     <InputContainer
       :invalid-feedback="nameErrorMessage"
@@ -127,7 +133,7 @@
     <ToastContainer :placement="TOP_CENTER">
       <LiveToast
         ref="toastSuccess"
-        skin="info"
+        skin="success"
         @on-hidden-bs-toast="onHiddenBsToast"
       />
       <LiveToast ref="toastError" skin="danger" />

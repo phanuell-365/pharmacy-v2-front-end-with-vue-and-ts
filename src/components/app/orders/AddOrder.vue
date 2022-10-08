@@ -151,7 +151,7 @@
       <ToastContainer :placement="TOP_CENTER">
         <LiveToast
           ref="toastSuccess"
-          skin="info"
+          skin="success"
           @on-hidden-bs-toast="onHiddenBsToast"
         />
         <LiveToast ref="toastError" skin="danger" />
@@ -377,9 +377,9 @@ const addOrder = async (payload: NewOrderDto) => {
 
 const routeRedirect = ref("");
 
-const onAddClick = async () => {
-  if (validateForm()) await addOrder(createOrderPayload());
-};
+// const onAddClick = async () => {
+//   if (validateForm()) await addOrder(createOrderPayload());
+// };
 
 const onAddAndNewClick = async () => {
   if (validateForm()) {

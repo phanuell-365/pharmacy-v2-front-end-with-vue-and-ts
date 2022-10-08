@@ -9,11 +9,26 @@
       search-term="medicine"
     >
       <template #actions="{ recordId }">
-        <ButtonLinkIcon :href="`/medicines/${recordId}`" action="view" />
         <ButtonLinkIcon
+          v-if="manage === 'medicine'"
+          :href="`/medicines/${recordId}`"
+          action="view"
+        />
+        <ButtonLinkIcon
+          v-if="manage === 'stock'"
+          :href="`/medicines/${recordId}?stock=true`"
+          action="view"
+        />
+        <ButtonLinkIcon
+          v-if="manage === 'medicine'"
           :href="`/medicines/${recordId}?update=true`"
           action="update"
         />
+        <!--        <ButtonLinkIcon-->
+        <!--          v-if="manage === 'stock'"-->
+        <!--          :href="`/medicines/${recordId}?update=true&stock=true`"-->
+        <!--          action="update"-->
+        <!--        />-->
         <ButtonIcon
           :icon-name="DELETE_ICON"
           class="mx-1"
