@@ -1,8 +1,8 @@
 <template>
-  <section class="manage-order">
+  <section class="manage-purchase">
     <SidebarLayout>
       <template #body>
-        <ManageOrder :order-id="orderId" :update-mode="updateMode" />
+        <ManagePurchase :purchase-id="purchaseId" :update-mode="updateMode" />
       </template>
     </SidebarLayout>
   </section>
@@ -10,16 +10,16 @@
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import ManageOrder from "@/components/app/orders/ManageOrder.vue";
+import ManagePurchase from "@/components/app/purchases/ManagePurchase.vue";
 import type { Ref } from "vue";
 import { ref, watch } from "vue";
 
-interface ManageOrderProps {
-  orderId: string;
+interface ManagePurchaseProps {
+  purchaseId: string;
   update: boolean;
 }
 
-const props = defineProps<ManageOrderProps>();
+const props = defineProps<ManagePurchaseProps>();
 
 const updateMode: Ref<boolean> = ref(props.update);
 

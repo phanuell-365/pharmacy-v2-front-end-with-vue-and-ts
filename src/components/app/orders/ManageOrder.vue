@@ -346,7 +346,7 @@ const updateOrder = async (payload: UpdateOrderDto) => {
     const order = await ordersStore.updateOrder(payload, props.orderId);
 
     toastUpdate.value?.setupToast({
-      name: "Add Success",
+      name: "Update Success",
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Update Order",
       text: "Updated the order successfully!",
@@ -363,7 +363,7 @@ const updateOrder = async (payload: UpdateOrderDto) => {
       name: "Update Order Error",
       elapsedDuration: moment().startOf("second").fromNow(),
       heading: "Update Order Error",
-      text: "Failed to place the order. " + error?.message,
+      text: "Failed to update the order. " + error?.message,
       delay: 5000,
     });
 

@@ -1,5 +1,9 @@
 import { defineStore } from "pinia";
-import type { NewPurchaseDto, PurchaseDto } from "@/stores/app/purchases/dto";
+import type {
+  NewPurchaseDto,
+  PurchaseDto,
+  UpdatePurchaseDto,
+} from "@/stores/app/purchases/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 
@@ -35,7 +39,7 @@ export const usePurchasesStore = defineStore({
     profitPercentage: 0,
   }),
   getters: {
-    getPurchaseAttributes: (state) =>
+    getPurchaseAttributes: () =>
       Object.keys(PURCHASE_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
@@ -67,6 +71,22 @@ export const usePurchasesStore = defineStore({
 
       return this.purchases;
     },
+
+    async fetchPurchaseById(purchaseId: string) {
+      const response = await fetch(`${BASE_URL}/purchases/${purchaseId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as PurchaseDto;
+    },
+
     async fetchTodayPurchases(withId: boolean = false) {
       const response = await fetch(
         `${BASE_URL}/purchases?today=true&withId=${withId}`,
@@ -101,6 +121,7 @@ export const usePurchasesStore = defineStore({
 
       return data as PurchaseDto;
     },
+
     async fetchPurchaseProfitPercentage() {
       const response = await fetch(`${BASE_URL}/purchases?resource=profit`, {
         method: "GET",
@@ -117,6 +138,48 @@ export const usePurchasesStore = defineStore({
       this.profitPercentage = data;
 
       return this.profitPercentage;
+    },
+
+    async updatePurchase(purchaseId: string, payload: UpdatePurchaseDto) {
+      const response = await fetch(`${BASE_URL}/purchases/${purchaseId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data?.message);
+
+      return data as PurchaseDto;
+    },
+
+    async deletePurchase(purchaseId: string) {
+      const response: Response = await fetch(
+        `${BASE_URL}/purchases/${purchaseId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + this.getToken(),
+          },
+        }
+      );
+
+      if (response.status === 204) return "Deleted the purchase successfully!";
+      else if (!response.ok) {
+        let data;
+
+        if (response.body) {
+          data = await response.json();
+
+          throw new Error(data.message + "! Failed to delete the purchase!");
+        }
+        return "Failed to delete the purchase!";
+      }
     },
   },
 });

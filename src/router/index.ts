@@ -599,6 +599,28 @@ const router = createRouter({
       },
     },
 
+    {
+      path: "/purchases/:id",
+      name: "manage-purchase",
+      component: () => import("../views/purchases/id/ManagePurchaseView.vue"),
+
+      props: (route) => ({
+        purchaseId: route.params.id,
+        update: !!route.query.update,
+      }),
+
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "manage-purchase" },
+        });
+      },
+    },
+
     // UnAuthorized
     {
       path: "/un-authorized/:action?",
@@ -650,6 +672,13 @@ const router = createRouter({
       props: true,
     },
 
+    // purchases
+    {
+      path: "/errors/purchases/:invalidId(.*)",
+      name: "invalid-order-id",
+      component: () => import("../components/error/NotFoundPurchase.vue"),
+      props: true,
+    },
     // all
     {
       path: "/:notFound(.*)*",

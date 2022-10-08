@@ -14,7 +14,7 @@ import { SPINNER } from "@/constants/icons";
   <RouterView #="{ Component, route }">
     <template v-if="Component">
       <KeepAlive :max="1">
-        <Suspense :timeout="0">
+        <Suspense :timeout="3">
           <Transition mode="in-out" name="router">
             <component :is="Component" :key="route.name"></component>
           </Transition>
@@ -48,7 +48,7 @@ import { SPINNER } from "@/constants/icons";
 
 .router-enter-active {
   transform: translateY(25px);
-  transition: all 0.3s ease-in;
+  transition: all 0.4s ease-in;
   opacity: 0.5;
   /*transition: all 1s ease-in;*/
 }
@@ -67,7 +67,7 @@ import { SPINNER } from "@/constants/icons";
   /*transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);*/
   opacity: 0.5;
   transform: translateY(25px);
-  transition: all 0.3s ease-out;
+  transition: all 0.8s ease-out;
 }
 
 .router-leave-to {

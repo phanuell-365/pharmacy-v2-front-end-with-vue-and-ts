@@ -1,6 +1,6 @@
 <template>
   <section class="add-purchase">
-    <form ref="formRef" novalidate @submit.prevent>
+    <form ref="formRef" autocomplete="off" novalidate @submit.prevent>
       <div class="row">
         <div class="col-md-12 col-sm-6">
           <div class="row g-3 m-2">
