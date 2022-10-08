@@ -201,6 +201,108 @@
         type="text"
       />
     </InputContainer>
+
+    <template v-if="!setUpdateMode && setViewMode">
+      <InputContainer
+        input-id="totalIssueUnitQuantity"
+        input-label="totalIssueUnitQuantity"
+      >
+        <input
+          id="validationTotalIssueUnitQuantity"
+          v-model="totalIssueUnitQuantity"
+          class="form-control shadow-sm"
+          disabled
+          name="totalIssueUnitQuantity"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitMarginPercentagePerPackSize"
+        input-label="profitMarginPercentagePerPackSize"
+      >
+        <input
+          id="validationProfitMarginPercentagePerPackSize"
+          v-model="profitMarginPercentagePerPackSize"
+          class="form-control shadow-sm"
+          disabled
+          name="profitMarginPercentagePerPackSize"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitPerPackSize"
+        input-label="profitPerPackSize"
+      >
+        <input
+          id="validationProfitPerPackSize"
+          v-model="profitPerPackSize"
+          class="form-control shadow-sm"
+          disabled
+          name="profitPerPackSize"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitMarginPercentagePerIssueUnit"
+        input-label="profitMarginPercentagePerIssueUnit"
+      >
+        <input
+          id="validationProfitMarginPercentagePerIssueUnit"
+          v-model="profitMarginPercentagePerIssueUnit"
+          class="form-control shadow-sm"
+          disabled
+          name="profitMarginPercentagePerIssueUnit"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer
+        input-id="profitPerIssueUnit"
+        input-label="profitPerIssueUnit"
+      >
+        <input
+          id="validationProfitPerIssueUnit"
+          v-model="profitPerIssueUnit"
+          class="form-control shadow-sm"
+          disabled
+          name="profitPerIssueUnit"
+          required
+          type="number"
+        />
+      </InputContainer>
+
+      <InputContainer input-id="purchaseDate" input-label="purchaseDate">
+        <input
+          id="validationPurchaseDate"
+          v-model="purchaseDate"
+          class="form-control shadow-sm"
+          disabled
+          name="purchaseDate"
+          required
+          type="text"
+        />
+      </InputContainer>
+
+      <InputContainer input-id="orderDate" input-label="orderDate">
+        <input
+          id="validationOrderDate"
+          v-model="orderDate"
+          class="form-control shadow-sm"
+          disabled
+          name="orderDate"
+          required
+          type="text"
+        />
+      </InputContainer>
+    </template>
+
     <FormButtonsContainer>
       <FormButton skin="primary" text="Update" @click="onUpdateClick" />
       <FormButton skin="secondary" text="Add New" @click="onAddNewClick" />
@@ -314,6 +416,13 @@ const medicine: Ref<MedicineDto | null> = ref(null);
 const order: Ref<OrderDtoWithId | null> = ref(null);
 
 const totalPackSizePrice: Ref<number> = ref(0);
+const totalIssueUnitQuantity: Ref<number> = ref(0);
+const profitMarginPercentagePerPackSize: Ref<number> = ref(0);
+const profitPerPackSize: Ref<number> = ref(0);
+const profitMarginPercentagePerIssueUnit: Ref<number> = ref(0);
+const profitPerIssueUnit: Ref<number> = ref(0);
+const purchaseDate: Ref<string> = ref("");
+const orderDate: Ref<string> = ref("");
 
 watch(
   () => props.updateMode,
@@ -493,6 +602,25 @@ if (purchase.value?.expiryDate)
 
 if (purchase.value?.totalPurchasePrice)
   totalPackSizePrice.value = purchase.value?.totalPurchasePrice as number;
+if (purchase.value?.totalIssueUnitQuantity)
+  totalIssueUnitQuantity.value = purchase.value?.totalIssueUnitQuantity;
+if (purchase.value?.profitMarginPercentagePerPackSize)
+  profitMarginPercentagePerPackSize.value =
+    purchase.value?.profitMarginPercentagePerPackSize;
+if (purchase.value?.pricePerPackSize)
+  profitPerPackSize.value = purchase.value?.profitPerPackSize as number;
+if (purchase.value?.profitMarginPercentagePerIssueUnit)
+  profitMarginPercentagePerIssueUnit.value =
+    purchase.value?.profitMarginPercentagePerIssueUnit;
+if (purchase.value?.profitPerIssueUnit)
+  profitPerIssueUnit.value = purchase.value?.profitPerIssueUnit;
+if (purchase.value?.purchaseDate)
+  purchaseDate.value = new Date(
+    purchase.value?.purchaseDate
+  ).toLocaleDateString();
+if (purchase.value?.OrderId)
+  orderDate.value = new Date(purchase.value?.orderDate).toLocaleDateString();
+
 if (order.value?.SupplierId) SupplierId.value = order.value?.SupplierId;
 if (order.value?.MedicineId) MedicineId.value = order.value?.MedicineId;
 

@@ -65,6 +65,8 @@ export const usePurchasesStore = defineStore({
 
       this.purchases = this.purchases.map((value) => {
         value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
+        value.orderDate = new Date(value.orderDate).toLocaleDateString();
+        value.purchaseDate = new Date(value.purchaseDate).toLocaleDateString();
 
         return value;
       });
