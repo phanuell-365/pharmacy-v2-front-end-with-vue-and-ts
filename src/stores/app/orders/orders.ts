@@ -7,6 +7,7 @@ import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import type { NewOrderDto } from "@/stores/app/orders/dto";
 import type { UpdateOrderDto } from "@/stores/app/orders/dto/update-order.dto";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const ORDER_DEFAULT: OrderDto = {
   id: "",
@@ -247,6 +248,23 @@ export const useOrdersStore = defineStore({
           throw new Error(data.message + "! Failed to delete the order!");
         }
         return "Failed to delete the order!";
+      }
+    },
+
+    async generateOrdersReport(
+      category: "active" | "pending" | "cancelled" | "delivered"
+    ) {
+      switch (category) {
+        case "active":
+          return await useFetchReport(`orders?category=${category}`);
+        case "cancelled":
+          return await useFetchReport(`orders?category=${category}`);
+        case "delivered":
+          return await useFetchReport(`orders?category=${category}`);
+        case "pending":
+          return await useFetchReport(`orders?category=${category}`);
+        default:
+          return await useFetchReport("orders");
       }
     },
   },

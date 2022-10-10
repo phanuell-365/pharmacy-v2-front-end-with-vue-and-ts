@@ -11,11 +11,11 @@ interface CardTotalProps {
 
 const props = defineProps<CardTotalProps>();
 
-const icon = computed(
-  () => props.rate > 10 ? "fa-arrow-trend-up text-warning" : "fa-sort-amount-down text-danger"
+const icon = computed(() =>
+  props.rate > 4
+    ? "fa-arrow-trend-up text-warning"
+    : "fa-sort-amount-down text-danger"
 );
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

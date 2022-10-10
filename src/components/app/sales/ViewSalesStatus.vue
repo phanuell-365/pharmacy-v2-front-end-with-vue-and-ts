@@ -1,7 +1,7 @@
 <template>
   <section :class="`manage-${status}`">
     <SearchTable
-      :attributes="salesStore.getSaleAttributes"
+      :attributes="salesStore.getAllSaleAttributes"
       :null-comment="`No ${startCase(status)} sales found`"
       :records="sales"
       name="sale"

@@ -6,6 +6,7 @@ import type {
 } from "@/stores/app/customers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const CUSTOMER_DEFAULT: CustomerDto = {
   id: "",
@@ -123,6 +124,10 @@ export const useCustomersStore = defineStore({
         }
         return "Failed to delete the customer!";
       }
+    },
+
+    async generateCustomersReport() {
+      return await useFetchReport("customers");
     },
   },
 });

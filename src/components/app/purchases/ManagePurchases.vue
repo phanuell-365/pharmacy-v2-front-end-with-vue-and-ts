@@ -3,7 +3,7 @@
     <SearchTable
       :attributes="purchasesStore.getPurchaseAttributes"
       :records="purchases"
-      name="purchases"
+      name="purchase"
       null-comment="Purchase not found"
       search-by="medicine"
       search-term="medicine"

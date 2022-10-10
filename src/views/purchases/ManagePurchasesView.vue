@@ -4,14 +4,32 @@
       <template #body>
         <ManagePurchases />
       </template>
+      <template #footer>
+        <FormButtonsContainer>
+          <FormButton
+            class="my-1"
+            skin="dark"
+            text="Generate Report"
+            @click="onGeneratePurchasesReportClick"
+          />
+        </FormButtonsContainer>
+      </template>
     </SidebarLayout>
   </section>
 </template>
 
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
-import ManagePurchases from "@/components/app/purchases/ManagePurchases.vue";</script>
+import ManagePurchases from "@/components/app/purchases/ManagePurchases.vue";
+import FormButton from "@/components/button/FormButton.vue";
+import FormButtonsContainer from "@/components/form/FormButtonsContainer.vue";
+import { usePurchasesStore } from "@/stores/app/purchases/purchases";
 
-<style scoped>
+const purchasesStore = usePurchasesStore();
 
-</style>
+const onGeneratePurchasesReportClick = async () => {
+  await purchasesStore.generatePurchasesReport();
+};
+</script>
+
+<style scoped></style>

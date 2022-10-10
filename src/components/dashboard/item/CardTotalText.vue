@@ -5,19 +5,17 @@
 </template>
 
 <script lang="ts" setup>
-import {computed} from "vue";
+import { computed } from "vue";
 
 interface CardTotalTextProps {
   totalText?: string;
 }
 
-const props = defineProps<CardTotalTextProps>()
+const props = defineProps<CardTotalTextProps>();
 
-const text = computed(
-    () => props.totalText ? props.totalText : "Total Value"
-)
+const text = computed(() =>
+  props.totalText ? props.totalText : "Total Value"
+);
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

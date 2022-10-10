@@ -6,6 +6,7 @@ import type {
 } from "@/stores/app/suppliers/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const SUPPLIER_DEFAULT: SupplierDto = {
   id: "",
@@ -124,6 +125,10 @@ export const useSuppliersStore = defineStore({
         }
         return "Failed to delete the supplier!";
       }
+    },
+
+    async generateSuppliersReport() {
+      return await useFetchReport("suppliers");
     },
   },
 });

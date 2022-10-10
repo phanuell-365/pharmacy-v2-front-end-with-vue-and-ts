@@ -40,27 +40,27 @@ export const DashboardActions: DashboardActionsItemProps[] = [
   },
   {
     text: "order reports",
-    href: "/orders/reports",
+    href: "/orders",
     icon: ORDERS_ICON,
   },
   {
     text: "sales reports",
-    href: "/sales/reports",
+    href: "/sales",
     icon: SALES_ICON,
   },
   {
     text: "stock reports",
-    href: "/stocks/report",
+    href: "/medicines/stock",
     icon: INVENTORY_ICON,
   },
   {
     text: "purchase reports",
-    href: "/purchases/reports",
+    href: "/purchases",
     icon: SUPPLIES_ICON,
   },
   {
     text: "out of stock reports",
-    href: "/medicines?reports=out-of-stock",
+    href: "/medicines/out-of-stock",
     icon: MEDICINE_ICON,
   },
 ];

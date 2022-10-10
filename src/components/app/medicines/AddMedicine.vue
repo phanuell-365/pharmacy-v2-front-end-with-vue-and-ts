@@ -324,7 +324,7 @@ const createMedicinePayload = () => {
     doseForm: doseForm.value,
     strength: strength.value,
     levelOfUse: +levelOfUse.value,
-    therapeuticClass: startCase(therapeuticClass.value),
+    therapeuticClass: startCase(therapeuticClass.value.toLowerCase()),
     packSize: packSize.value,
   };
 

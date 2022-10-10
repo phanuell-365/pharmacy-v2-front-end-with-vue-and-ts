@@ -4,6 +4,16 @@
       <template #body>
         <ViewSalesStatus status="issued" />
       </template>
+      <template #footer>
+        <FormButtonsContainer>
+          <FormButton
+            class="my-1"
+            skin="dark"
+            text="Generate Issued Sales Report"
+            @click="onGenerateIssuedSalesReportClick"
+          />
+        </FormButtonsContainer>
+      </template>
     </SidebarLayout>
   </section>
 </template>
@@ -11,6 +21,15 @@
 <script lang="ts" setup>
 import SidebarLayout from "@/layouts/SidebarLayout.vue";
 import ViewSalesStatus from "@/components/app/sales/ViewSalesStatus.vue";
+import FormButton from "@/components/button/FormButton.vue";
+import FormButtonsContainer from "@/components/form/FormButtonsContainer.vue";
+import { useSalesStore } from "@/stores/app/sales/sales";
+
+const salesStore = useSalesStore();
+
+const onGenerateIssuedSalesReportClick = async () => {
+  await salesStore.generateSalesReports("ungrouped", "issued");
+};
 </script>
 
 <style scoped></style>

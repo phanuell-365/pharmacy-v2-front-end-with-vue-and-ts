@@ -6,6 +6,7 @@ import type {
 } from "@/stores/app/purchases/dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const PURCHASE_DEFAULT: PurchaseDto = {
   id: "",
@@ -63,10 +64,19 @@ export const usePurchasesStore = defineStore({
 
       this.purchases = data as PurchaseDto[];
 
+      const formatter = new Intl.NumberFormat("en-KE", {
+        style: "currency",
+        currency: "KSH",
+      });
+
       this.purchases = this.purchases.map((value) => {
         value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
         value.orderDate = new Date(value.orderDate).toLocaleDateString();
         value.purchaseDate = new Date(value.purchaseDate).toLocaleDateString();
+        value.pricePerPackSize = formatter.format(+value.pricePerPackSize);
+        value.totalPurchasePrice = formatter.format(
+          <number>value.totalPurchasePrice
+        );
 
         return value;
       });
@@ -182,6 +192,10 @@ export const usePurchasesStore = defineStore({
         }
         return "Failed to delete the purchase!";
       }
+    },
+
+    async generatePurchasesReport() {
+      await useFetchReport("purchases");
     },
   },
 });

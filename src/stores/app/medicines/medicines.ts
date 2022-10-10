@@ -9,6 +9,7 @@ import { BASE_URL } from "@/constants/base-url";
 import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
 import type { ExpiredMedicineDto } from "@/stores/app/medicines/dto/expired-medicine.dto";
 import type { MedicineOutOfStockDto } from "@/stores/app/medicines/dto/medicine-out-of-stock.dto";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const MEDICINE_DEFAULT: MedicineDto = {
   id: "",
@@ -269,6 +270,22 @@ export const useMedicinesStore = defineStore({
         }
         return "Failed to delete the medicine!";
       }
+    },
+
+    async generateMedicinesReport() {
+      return await useFetchReport("medicines");
+    },
+
+    async generateMedicinesStockReport() {
+      return await useFetchReport("medicines/stock");
+    },
+
+    async generateOutOfStockReport() {
+      return await useFetchReport("medicines/out-of-stock");
+    },
+
+    async generateExpiredStockReport() {
+      return await useFetchReport("medicines/expired");
     },
   },
 });

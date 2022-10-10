@@ -123,7 +123,7 @@
       <ToastContainer :placement="TOP_CENTER">
         <LiveToast
           ref="toastSuccess"
-          skin="info"
+          skin="success"
           @on-hidden-bs-toast="onHiddenBsToast"
         />
         <LiveToast ref="toastError" skin="danger" />

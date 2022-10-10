@@ -8,6 +8,7 @@ import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import startCase from "lodash/startCase";
 import has from "lodash/has";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const USER_DEFAULT: UserDto = {
   id: "",
@@ -82,54 +83,9 @@ export const useUsersStore = defineStore({
 
       return data as UserDto;
     },
+
     async generateUsersReports() {
-      const response: Response = await fetch(`${BASE_URL}/reports/users`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + this.getToken(),
-          "Content-Disposition": "attachment;filename=users-reports.pdf",
-        },
-        redirect: "follow",
-      });
-
-      if (!response.ok) {
-        // if (response.status === 401) {
-        //   const tokenStore = useTokenStore();
-        //   tokenStore.clearToken();
-        // }
-        throw new Error("Failed to load the report");
-      }
-
-      const blob = await response.blob();
-
-      const file = window.URL.createObjectURL(blob);
-
-      window.location.assign(file);
-
-      // Response.redirect("http://localhost:5173/users/reports/view", 200)
-
-      // await fetch("http://localhost:5173/users/reports", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/pdf",
-      //     "Content-Disposition": "attachment;filename=users-reports.pdf",
-      //   },
-      //   mode: "same-origin",
-      //   body: response,
-      // });
-
-      if (response.body) {
-        const streams = response.body.tee();
-
-        streams.forEach((value) => {
-          console.log(value);
-        });
-      }
-
-      console.log(response);
-
-      return response;
+      return await useFetchReport("users");
     },
     async fetchUsersRoles() {
       const response: Response = await fetch(

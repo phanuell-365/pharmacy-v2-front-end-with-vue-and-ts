@@ -29,7 +29,7 @@
           name="amountReceived"
           readonly
           required
-          type="number"
+          type="text"
         />
       </InputContainer>
     </form>
@@ -132,9 +132,13 @@ const amountReceived: Ref<number> = ref(0);
 try {
   customer.value = await customersStore.fetchCustomerById(props.customerId);
   sales.value = await salesStore.fetchSalesByCustomerId(props.customerId);
-  amountReceived.value = sales.value.map(
-    (value) => value?.amountReceived
-  )[0] as number;
+  const totalAmountArr = sales.value.map((value) => value.totalPrice);
+
+  amountReceived.value = totalAmountArr.reduce(
+    (previousValue, currentValue) => {
+      return previousValue + currentValue;
+    }
+  );
 } catch (error: any) {
   console.error(error);
 

@@ -8,6 +8,7 @@ import type {
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import type { NewSalesDto, UpdateSaleDto } from "@/stores/app/sales/dto";
+import { useFetchReport } from "@/composables/use-fetch-report";
 
 const SALES_DEFAULT: SalesDto = {
   id: "",
@@ -30,6 +31,18 @@ const SALE_DEFAULT: SaleDto = {
   // amountReceived: 0,
 };
 
+const ALL_SALE_DEFAULT: SaleDto = {
+  id: "",
+  customer: "",
+  medicine: "",
+  issueUnitQuantity: 0,
+  issueUnitPrice: "",
+  status: "",
+  saleDate: "",
+  totalPrice: 0,
+  amountReceived: 0,
+};
+
 interface SalesState {
   sales: SalesDto[];
   sale: SaleDto | null;
@@ -48,6 +61,10 @@ export const useSalesStore = defineStore({
       Object.keys(SALES_DEFAULT).filter((value) => value !== "id"),
     getSaleAttributes: () =>
       Object.keys(SALE_DEFAULT).filter((value) => value !== "id"),
+    getAllSaleAttributes: () =>
+      Object.keys(ALL_SALE_DEFAULT).filter(
+        (value) => value !== "id" && value !== "amountReceived"
+      ),
   },
   actions: {
     getToken() {
@@ -271,6 +288,19 @@ export const useSalesStore = defineStore({
         }
         return "Failed to delete the sale!";
       }
+    },
+
+    async generateSalesReports(
+      category?: "ungrouped" | "grouped",
+      selection?: string
+    ) {
+      return await useFetchReport(
+        `sales?${category}=true&selection=${selection}`
+      );
+    },
+
+    async generateSalesReceipt(customerId: string) {
+      return await useFetchReport(`sales/customers/${customerId}`);
     },
   },
 });
