@@ -41,6 +41,7 @@ import { ref } from "vue";
 import type { SalesDto, SalesWithCustomerIdDto } from "@/stores/app/sales/dto";
 import moment from "moment";
 import { useRouter } from "vue-router";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
 
 const router = useRouter();
 
@@ -54,6 +55,13 @@ const toastError = ref();
 
 try {
   sales.value = await salesStore.fetchSales();
+  sales.value = sales.value.map((value) => {
+    // value.issueUnitPrice = useCurrencyFormatter(+value.issueUnitPrice).value;
+    value.totalPrices = useCurrencyFormatter(+value.totalPrices).value;
+    value.amountReceived = useCurrencyFormatter(+value.amountReceived).value;
+    return value;
+  });
+
   salesWithIds.value = await salesStore.fetchSalesWithId();
 } catch (error: any) {
   console.error(error);

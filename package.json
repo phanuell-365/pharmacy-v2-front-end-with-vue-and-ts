@@ -47,6 +47,7 @@
     "url": "git+https://github.com/phanuell-365/pharmacy-front-end-with-vue.git"
   },
   "scripts": {
+    "start": "npm run dev",
     "dev": "vite",
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",

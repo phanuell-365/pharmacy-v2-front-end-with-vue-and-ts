@@ -3,7 +3,6 @@
     <CheckoutHeading :customer-name="customerName" />
     <CheckoutList @update-item="onUpdateItemHandler" />
   </div>
-
 </template>
 
 <script lang="ts" setup>

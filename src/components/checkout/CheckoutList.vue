@@ -32,7 +32,7 @@ interface MedicineQuantityUpdate {
   productQuantity: number;
 }
 
-const emit = defineEmits<{ (e: "update-item", medicine: MedicineQuantityUpdate): void }>();
+const emit = defineEmits<{(e: "update-item", medicine: MedicineQuantityUpdate): void }>();
 
 const onUpdateItemClick = (medicine: MedicineQuantityUpdate) => {
   emit("update-item", medicine);

@@ -27,6 +27,7 @@
                 id="floatingInput"
                 ref="refUsername"
                 v-model="username"
+                autofocus="autofocus"
                 class="form-control rounded-4"
                 placeholder="John Doe"
                 required

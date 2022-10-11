@@ -43,5 +43,4 @@ const onUpdateClickHandler = (product: CheckoutListItemProps) => {
 </script>
 
 <style scoped>
-
 </style>

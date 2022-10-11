@@ -28,6 +28,7 @@ import { ref } from "vue";
 import type { SaleDto } from "@/stores/app/sales/dto";
 import startCase from "lodash/startCase";
 import moment from "moment";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
 
 interface ViewSalesStatusProps {
   status: "issued" | "cancelled" | "pending";
@@ -45,12 +46,45 @@ try {
   switch (props.status) {
     case "issued":
       sales.value = await salesStore.fetchIssuedSales();
+      sales.value = sales.value.map((value) => {
+        value.issueUnitPrice = useCurrencyFormatter(
+          +value.issueUnitPrice
+        ).value;
+        value.totalPrice = useCurrencyFormatter(+value.totalPrice).value;
+        if (value.amountReceived)
+          value.amountReceived = useCurrencyFormatter(
+            +value.amountReceived
+          ).value;
+        return value;
+      });
       break;
     case "cancelled":
       sales.value = await salesStore.fetchCancelledSales();
+      sales.value = sales.value.map((value) => {
+        value.issueUnitPrice = useCurrencyFormatter(
+          +value.issueUnitPrice
+        ).value;
+        value.totalPrice = useCurrencyFormatter(+value.totalPrice).value;
+        if (value.amountReceived)
+          value.amountReceived = useCurrencyFormatter(
+            +value.amountReceived
+          ).value;
+        return value;
+      });
       break;
     case "pending":
       sales.value = await salesStore.fetchPendingSales();
+      sales.value = sales.value.map((value) => {
+        value.issueUnitPrice = useCurrencyFormatter(
+          +value.issueUnitPrice
+        ).value;
+        value.totalPrice = useCurrencyFormatter(+value.totalPrice).value;
+        if (value.amountReceived)
+          value.amountReceived = useCurrencyFormatter(
+            +value.amountReceived
+          ).value;
+        return value;
+      });
       break;
   }
 } catch (error: any) {

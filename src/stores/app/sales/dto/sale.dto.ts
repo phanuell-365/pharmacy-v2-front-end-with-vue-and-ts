@@ -6,8 +6,8 @@ export interface SaleDto {
   issueUnitPrice: string;
   status: string;
   saleDate: string;
-  totalPrice: number;
-  amountReceived?: number;
+  totalPrice: number | string;
+  amountReceived?: number | string;
 }
 
 export interface SalesDto {
@@ -15,8 +15,8 @@ export interface SalesDto {
   customer: string;
   medicines: string;
   saleDate: string;
-  totalPrices: number;
-  amountReceived: number;
+  totalPrices: number | string;
+  amountReceived: number | string;
 }
 
 export interface SalesWithCustomerIdDto {
@@ -24,8 +24,8 @@ export interface SalesWithCustomerIdDto {
   CustomerId: string;
   medicines: string;
   saleDate: string;
-  totalPrices: number;
-  amountReceived: number;
+  totalPrices: number | string;
+  amountReceived: number | string;
 }
 
 export interface SalesWithIdsDto {
@@ -33,9 +33,9 @@ export interface SalesWithIdsDto {
   MedicineId: string;
   CustomerId: string;
   issueUnitQuantity: number;
-  issueUnitPrice: number;
+  issueUnitPrice: number | string;
   status: string;
   saleDate: string;
-  totalPrice: number;
-  amountReceived?: number;
+  totalPrice: number | string;
+  amountReceived?: number | string;
 }

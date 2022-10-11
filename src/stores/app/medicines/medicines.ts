@@ -10,6 +10,7 @@ import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock
 import type { ExpiredMedicineDto } from "@/stores/app/medicines/dto/expired-medicine.dto";
 import type { MedicineOutOfStockDto } from "@/stores/app/medicines/dto/medicine-out-of-stock.dto";
 import { useFetchReport } from "@/composables/use-fetch-report";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
 
 const MEDICINE_DEFAULT: MedicineDto = {
   id: "",
@@ -141,9 +142,15 @@ export const useMedicinesStore = defineStore({
         },
       });
 
-      const data = await response.json();
+      const data: ExpiredMedicineDto[] = await response.json();
 
-      return data as ExpiredMedicineDto[];
+      return data.map((value) => {
+        value.expiryDate = new Date(value.expiryDate).toLocaleDateString();
+        value.issueUnitSellingPrice = useCurrencyFormatter(
+          +value.issueUnitSellingPrice
+        ).value;
+        return value;
+      });
     },
 
     async fetchMedicineDoseForms() {

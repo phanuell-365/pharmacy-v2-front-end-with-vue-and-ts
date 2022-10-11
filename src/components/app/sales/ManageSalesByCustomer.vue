@@ -109,6 +109,7 @@ import moment from "moment";
 import { useCustomersStore } from "@/stores/app/customers/customers";
 import type { CustomerDto } from "@/stores/app/customers/dto";
 import { useRouter } from "vue-router";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
 
 interface ManageSalesByCustomerProps {
   customerId: string;
@@ -128,17 +129,26 @@ const deleteModalRef: Ref<InstanceType<DeleteModal> | null> = ref(null);
 const sales: Ref<SaleDto[]> = ref([]);
 const customer: Ref<CustomerDto | null> = ref(null);
 const amountReceived: Ref<number> = ref(0);
+const totalAmountArr: Ref<(number | string)[]> = ref([]);
 
 try {
   customer.value = await customersStore.fetchCustomerById(props.customerId);
   sales.value = await salesStore.fetchSalesByCustomerId(props.customerId);
-  const totalAmountArr = sales.value.map((value) => value.totalPrice);
 
-  amountReceived.value = totalAmountArr.reduce(
+  totalAmountArr.value = sales.value.map((value) => value.totalPrice);
+
+  amountReceived.value = +totalAmountArr.value.reduce(
     (previousValue, currentValue) => {
-      return previousValue + currentValue;
+      return +previousValue + +currentValue;
     }
   );
+  sales.value = sales.value.map((value) => {
+    value.issueUnitPrice = useCurrencyFormatter(+value.issueUnitPrice).value;
+    value.totalPrice = useCurrencyFormatter(+value.totalPrice).value;
+    if (value.amountReceived)
+      value.amountReceived = useCurrencyFormatter(+value.amountReceived).value;
+    return value;
+  });
 } catch (error: any) {
   console.error(error);
 

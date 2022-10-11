@@ -3,6 +3,6 @@ export interface ExpiredMedicineDto {
   packSizeQuantity: number;
   issueUnitQuantity: number;
   issueUnitPerPackSize: number;
-  issueUnitSellingPrice: number;
+  issueUnitSellingPrice: number | string;
   expiryDate: string;
 }
