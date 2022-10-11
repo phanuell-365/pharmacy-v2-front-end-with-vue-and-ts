@@ -106,25 +106,25 @@
             </h6>
           </div>
           <FormButtonContainer class="my-2">
-            <FormButton skin="primary" text="add" @click="onAddClick" />
-            <FormButton
-              skin="secondary"
-              text="add & new"
-              @click="onAddAndNewClick"
-            />
+            <FormButton skin="primary" text="Add" @click="onAddAndNewClick" />
+            <!--            <FormButton-->
+            <!--              skin="secondary"-->
+            <!--              text="add & new"-->
+            <!--              @click="onAddAndNewClick"-->
+            <!--            />-->
             <FormButton
               outline
               skin="dark"
-              text="add & view"
+              text="Add & View"
               @click="onAddAndView"
             />
             <FormButton
               outline
               skin="secondary"
-              text="add & view all"
+              text="Add & View All"
               @click="onAddAndViewAll"
             />
-            <FormButton outline skin="danger" text="clear" @click="onClear" />
+            <FormButton outline skin="danger" text="Clear" @click="onClear" />
           </FormButtonContainer>
         </div>
       </div>
@@ -364,9 +364,9 @@ const addSales = async (payload: NewSalesDto) => {
 
 const routeRedirect = ref("");
 
-const onAddClick = async () => {
-  if (validateForm()) await addSales(createSalesPayload());
-};
+// const onAddClick = async () => {
+//   if (validateForm()) await addSales(createSalesPayload());
+// };
 
 const onAddAndNewClick = async () => {
   if (validateForm()) {
