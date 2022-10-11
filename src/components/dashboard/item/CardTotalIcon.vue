@@ -13,8 +13,8 @@ const props = defineProps<CardTotalProps>();
 
 const icon = computed(() =>
   props.rate > 4
-    ? "fa-arrow-trend-up text-warning"
-    : "fa-sort-amount-down text-danger"
+    ? "fas fa-arrow-trend-up text-warning"
+    : "fas fa-sort-amount-down text-danger"
 );
 </script>
 
