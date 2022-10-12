@@ -1,5 +1,5 @@
 <template>
-  <i :class="icon" class="fa-solid lead fs-4"></i>
+  <i :class="icon" class="fa-solid"></i>
 </template>
 
 <script lang="ts" setup>
