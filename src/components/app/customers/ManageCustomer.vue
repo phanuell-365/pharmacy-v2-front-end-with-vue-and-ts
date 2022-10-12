@@ -301,7 +301,7 @@ const response: Ref<string | undefined> = ref();
 const onDeleteCustomer = async () => {
   try {
     response.value = await customersStore.deleteCustomer(props.customerId);
-    console.log("success");
+
     toastWarning.value?.setupToast({
       name: "Delete Customer Success",
       elapsedDuration: moment().startOf("second").fromNow(),
