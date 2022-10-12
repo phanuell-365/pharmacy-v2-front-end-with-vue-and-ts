@@ -1,5 +1,5 @@
 <template>
-  <i :class="icon" class="fa-solid"></i>
+  <i :class="icon" class="fa-solid fa-2x"></i>
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +12,9 @@ interface CardTotalProps {
 const props = defineProps<CardTotalProps>();
 
 const icon = computed(() =>
-  props.rate > 4 ? "fa-user text-warning" : "fa-user-tie text-danger"
+  props.rate > 4
+    ? "fa-arrow-up-wide-short text-warning"
+    : "fa-arrow-down-wide-short text-danger"
 );
 // <i class="fa-solid fa-arrow-trend-up"></i>;
 </script>
