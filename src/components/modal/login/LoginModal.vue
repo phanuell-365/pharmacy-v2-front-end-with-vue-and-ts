@@ -151,15 +151,17 @@ const onFormSubmit = async () => {
       });
 
       modal.value?.hide();
-      // router.go(0);
+      router.go(0);
     } catch (error: any) {
       console.error(error);
 
       usernameEl.classList.add("is-invalid");
-      usernameInvalidFeedback.value = "Invalid username or password";
+      // usernameInvalidFeedback.value = "Invalid username or password";
+      usernameInvalidFeedback.value = error.message;
 
       passwordEl.classList.add("is-invalid");
-      passwordInvalidFeedback.value = "Invalid username or password";
+      // passwordInvalidFeedback.value = "Invalid username or password";
+      passwordInvalidFeedback.value = error.message;
     }
   }
 };
@@ -174,7 +176,6 @@ onBeforeMount(() => {
 
   for (let modal = 0; modal < modalBackDrops.length; modal++) {
     const modalEl = modalBackDrops[modal];
-    console.log(modalEl);
     document.body.removeChild(modalEl);
   }
 });
