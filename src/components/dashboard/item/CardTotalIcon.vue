@@ -12,9 +12,7 @@ interface CardTotalProps {
 const props = defineProps<CardTotalProps>();
 
 const icon = computed(() =>
-  props.rate > 4
-    ? "fa-user text-warning"
-    : "fa-arrow-down-wide-short text-danger"
+  props.rate > 4 ? "fa-user text-warning" : "fa-user-tie text-danger"
 );
 // <i class="fa-solid fa-arrow-trend-up"></i>;
 </script>
