@@ -746,6 +746,8 @@ const onDeletePurchase = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/purchases");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Purchase Error",

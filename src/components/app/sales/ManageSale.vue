@@ -355,8 +355,8 @@ if (sale.value?.status) status.value = sale.value?.status;
 if (sale.value?.issueUnitQuantity)
   issueUnitQuantity.value = sale.value?.issueUnitQuantity.toString();
 if (sale.value?.issueUnitPrice)
-  issueUnitPrice.value = sale.value?.issueUnitPrice;
-if (sale.value?.totalPrice) totalPrice.value = sale.value?.totalPrice;
+  issueUnitPrice.value = +sale.value?.issueUnitPrice;
+if (sale.value?.totalPrice) totalPrice.value = +sale.value?.totalPrice;
 if (sale.value?.saleDate)
   saleDate.value = new Date(sale.value?.saleDate).toLocaleDateString();
 
@@ -388,7 +388,7 @@ const createUpdateSalePayload = () => {
     const currentAmountReceived = sale.value?.amountReceived;
 
     const revertedAmountReceived =
-      currentAmountReceived - sale.value?.totalPrice;
+      +currentAmountReceived - +sale.value?.totalPrice;
 
     newAmountReceived = revertedAmountReceived + totalPrice.value;
   }
@@ -482,6 +482,8 @@ const onDeleteSale = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/sales");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Sale Error",

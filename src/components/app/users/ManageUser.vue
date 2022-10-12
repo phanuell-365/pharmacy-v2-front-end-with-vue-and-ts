@@ -70,7 +70,7 @@
           id="validationRole"
           v-model="role"
           :class="{ 'is-invalid': !roleMeta.valid && roleMeta.validated }"
-          :disabled="!setUpdateMode && setViewMode"
+          :disabled="(!setUpdateMode && setViewMode) || setAvatarMode"
           class="form-select"
           name="role"
           required
@@ -106,37 +106,39 @@
 
       <hr class="my-3" />
       <FormButtonsContainer>
-        <FormButton skin="primary" text="update" @click="onUpdateClick" />
-        <FormButton skin="secondary" text="add new" @click="onAddNewClick" />
+        <FormButton skin="primary" text="Update" @click="onUpdateClick" />
+        <template v-if="!setAvatarMode">
+          <FormButton skin="secondary" text="Add New" @click="onAddNewClick" />
+        </template>
         <FormButton
           v-if="setUpdateMode && !setViewMode"
           outline
           skin="secondary"
-          text="view"
+          text="View"
           @click="onViewClick"
         />
-        <FormButton
-          outline
-          skin="secondary"
-          text="view all"
-          @click="onViewAllClick"
-        />
-        <FormButton
-          outline
-          skin="danger"
-          text="delete"
-          @click="onDeleteClick"
-        />
+        <template v-if="!setAvatarMode">
+          <FormButton
+            outline
+            skin="secondary"
+            text="View All"
+            @click="onViewAllClick"
+          />
+          <FormButton
+            outline
+            skin="danger"
+            text="Delete"
+            @click="onDeleteClick"
+          />
+        </template>
       </FormButtonsContainer>
     </form>
 
     <Teleport to="body">
       <ToastContainer :placement="TOP_CENTER">
-        <LiveToast
-          ref="toastSuccess"
-          skin="info"
-          @on-hidden-bs-toast="onHiddenBsToast"
-        />
+        <LiveToast ref="toastSuccess" skin="info" />
+        <!--          @on-hidden-bs-toast="onHiddenBsToast"-->
+        <!--        />-->
 
         <LiveToast
           ref="toastWarning"
@@ -188,6 +190,7 @@ import moment from "moment";
 interface ManageUserProps {
   userId: string;
   updateMode?: boolean;
+  avatarMode?: boolean;
 }
 
 const router = useRouter();
@@ -206,6 +209,7 @@ const user: Ref<UserDto | null> = ref(null);
 const usersRoles: Ref<string[]> = ref([]);
 const setUpdateMode: Ref<boolean | undefined> = ref(props.updateMode);
 const setViewMode: Ref<boolean | undefined> = ref(!props.updateMode);
+const setAvatarMode: Ref<boolean | undefined> = ref(props.avatarMode);
 
 watch(
   () => props.updateMode,
@@ -213,6 +217,11 @@ watch(
     setUpdateMode.value = value;
     setViewMode.value = !value;
   }
+);
+
+watch(
+  () => props.avatarMode,
+  (value) => (setAvatarMode.value = value)
 );
 
 try {
@@ -379,6 +388,7 @@ const onUpdateClick = async () => {
 const onViewClick = () => {
   setUpdateMode.value = false;
   setViewMode.value = true;
+  router.go(0);
 };
 
 const onAddNewClick = async () => {
@@ -437,6 +447,8 @@ const onDeleteUser = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/users");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete User Error",

@@ -313,6 +313,8 @@ const onDeleteCustomer = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/customers");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Customer Error",

@@ -673,6 +673,8 @@ const onDeleteMedicine = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/medicines");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Medicine Error",

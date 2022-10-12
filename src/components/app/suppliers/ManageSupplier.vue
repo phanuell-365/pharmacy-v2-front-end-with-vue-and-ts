@@ -328,6 +328,8 @@ const onDeleteSupplier = async () => {
     toastWarning.value?.show();
 
     deleteModalRef.value.hideModal();
+
+    await router.push("/suppliers");
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Supplier Error",
