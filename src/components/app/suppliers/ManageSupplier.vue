@@ -59,22 +59,22 @@
     <hr class="my-3" />
 
     <FormButtonsContainer>
-      <FormButton skin="primary" text="update" @click="onUpdateClick" />
-      <FormButton skin="secondary" text="add new" @click="onAddNewClick" />
+      <FormButton skin="primary" text="Update" @click="onUpdateClick" />
+      <FormButton skin="secondary" text="Add New" @click="onAddNewClick" />
       <FormButton
         v-if="setUpdateMode && !setViewMode"
         outline
         skin="secondary"
-        text="view"
+        text="View"
         @click="onViewClick"
       />
       <FormButton
         outline
         skin="secondary"
-        text="view all"
+        text="View All"
         @click="onViewAllClick"
       />
-      <FormButton outline skin="danger" text="delete" @click="onDeleteClick" />
+      <FormButton outline skin="danger" text="Delete" @click="onDeleteClick" />
     </FormButtonsContainer>
 
     <Teleport to="body">
