@@ -396,6 +396,7 @@ const createUpdateSalePayload = () => {
     MedicineId: MedicineId.value,
     CustomerId: CustomerId.value,
     issueUnitQuantity: +issueUnitQuantity.value,
+    status: status.value,
     amountReceived: newAmountReceived,
   };
 
