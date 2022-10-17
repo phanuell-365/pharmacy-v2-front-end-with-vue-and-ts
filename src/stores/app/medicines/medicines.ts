@@ -100,7 +100,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.medicines = data as MedicineDto[];
       this.medicineStock = data as MedicineStockDto[];
@@ -166,7 +166,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.doseForms = data as string[];
 
@@ -183,7 +183,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.strengths = data as string[];
 
@@ -200,7 +200,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as MedicineDto;
     },
@@ -215,7 +215,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as MedicineStockDto;
     },
@@ -232,7 +232,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as MedicineDto;
     },
@@ -249,7 +249,7 @@ export const useMedicinesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as MedicineDto;
     },

@@ -45,7 +45,7 @@ export const useSuppliersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.suppliers = data as SupplierDto[];
 
@@ -64,7 +64,7 @@ export const useSuppliersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SupplierDto;
     },
@@ -80,7 +80,7 @@ export const useSuppliersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SupplierDto;
     },
@@ -97,7 +97,7 @@ export const useSuppliersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SupplierDto;
     },

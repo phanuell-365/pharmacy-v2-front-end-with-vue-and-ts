@@ -83,7 +83,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.sales = data as SalesDto[];
 
@@ -100,7 +100,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SalesWithCustomerIdDto[];
     },
@@ -115,7 +115,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SalesDto[];
     },
@@ -133,7 +133,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto[];
     },
@@ -151,7 +151,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto[];
     },
@@ -169,7 +169,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto[];
     },
@@ -189,7 +189,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto;
     },
@@ -207,7 +207,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.saleStatus = data;
 
@@ -227,7 +227,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto[];
     },
@@ -245,7 +245,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       if (withId) return data as SalesWithIdsDto;
       return data as SaleDto;
@@ -263,7 +263,7 @@ export const useSalesStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as SaleDto;
     },

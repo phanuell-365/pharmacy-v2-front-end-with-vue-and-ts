@@ -45,7 +45,7 @@ export const useCustomersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       this.customers = data as CustomerDto[];
 
@@ -64,7 +64,7 @@ export const useCustomersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as CustomerDto;
     },
@@ -79,7 +79,10 @@ export const useCustomersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) {
+        console.log(data);
+        throw data as Error;
+      }
 
       return data as CustomerDto;
     },
@@ -96,7 +99,7 @@ export const useCustomersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as CustomerDto;
     },

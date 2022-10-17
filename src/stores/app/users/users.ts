@@ -55,7 +55,7 @@ export const useUsersStore = defineStore({
           const tokenStore = useTokenStore();
           tokenStore.clearToken();
         }
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       this.users = data as UserDto[];
@@ -78,7 +78,7 @@ export const useUsersStore = defineStore({
           const tokenStore = useTokenStore();
           tokenStore.clearToken();
         }
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as UserDto;

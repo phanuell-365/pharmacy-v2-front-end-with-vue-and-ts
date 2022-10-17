@@ -51,7 +51,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       this.orders = data as OrderDto[];
@@ -74,7 +74,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       if (withId) return data as OrderDtoWithId;
@@ -92,7 +92,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto[];
@@ -110,7 +110,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto[];
@@ -128,7 +128,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto[];
@@ -146,7 +146,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto[];
@@ -164,7 +164,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto[];
@@ -185,7 +185,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       this.orderStatuses = data as string[];
@@ -206,7 +206,7 @@ export const useOrdersStore = defineStore({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.message);
+        throw data as Error;
       }
 
       return data as OrderDto;
@@ -224,7 +224,7 @@ export const useOrdersStore = defineStore({
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data?.message);
+      if (!response.ok) throw data as Error;
 
       return data as OrderDto;
     },
