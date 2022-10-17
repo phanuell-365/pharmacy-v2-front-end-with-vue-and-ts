@@ -17,14 +17,16 @@
             />
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 text-end">
-          <ButtonLink
-            :href="`/${name}s/create`"
-            :text="`Add ${name}`"
-            action="add"
-            class="btn-hover"
-          />
-        </div>
+        <template v-if="userRoles?.includes(loggedInUserRole)">
+          <div class="col-lg-6 col-md-6 text-end">
+            <ButtonLink
+              :href="`/${name}s/create`"
+              :text="`Add ${name}`"
+              action="add"
+              class="btn-hover"
+            />
+          </div>
+        </template>
       </div>
     </div>
     <div class="col-lg-12 col-md-12">
@@ -65,6 +67,7 @@ import TableRow from "@/components/table/TableRow.vue";
 import PlainTableData from "@/components/table/plain/TableData.vue";
 import ButtonLink from "@/components/button/ButtonLink.vue";
 import { Ref, ref, watch } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
 interface SearchableTableProps {
   name: string;
@@ -73,6 +76,8 @@ interface SearchableTableProps {
   attributes: string[];
   searchBy: string;
   nullComment?: string;
+  // an array of user roles that can access the add button
+  userRoles?: string[];
   // href: string;
   noAction?: boolean;
 }
@@ -82,6 +87,10 @@ const props = defineProps<SearchableTableProps>();
 const searchText: Ref<string> = ref("");
 
 const show = ref(false);
+
+const authStore = useAuthStore();
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 const onFocusInHandler = () => {
   show.value = true;

@@ -4,6 +4,7 @@
       :attributes="ordersStore.getOrderAttributes"
       :null-comment="`No ${startCase(status)} orders found`"
       :records="orders"
+      :user-roles="userRoles"
       name="order"
       no-action
       search-by="medicine"
@@ -30,6 +31,8 @@ import type { OrderDto } from "@/stores/app/orders/dto/order.dto";
 import moment from "moment";
 
 const ordersStore = useOrdersStore();
+
+const userRoles: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
 
 interface ViewOrdersStatusProps {
   status: "delivered" | "cancelled" | "pending" | "active";

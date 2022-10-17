@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="medicinesStore.getMedicineStockAttributes"
       :records="medicines"
+      :user-roles="userRoles"
       name="medicine"
       search-by="name"
       search-term="medicine"
@@ -38,6 +39,12 @@ import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock
 
 // const stocksStore = useStocksStore();
 const medicinesStore = useMedicinesStore();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacistAssistant",
+]);
 
 const medicines: Ref<MedicineStockDto[]> = ref([]);
 

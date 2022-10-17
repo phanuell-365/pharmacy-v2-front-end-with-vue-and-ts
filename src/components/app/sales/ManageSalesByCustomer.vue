@@ -39,6 +39,7 @@
     <SearchTable
       :attributes="salesStore.getSaleAttributes"
       :records="sales"
+      :user-roles="userRoles"
       name="sale"
       null-comment="Sales not found"
       search-by="medicine"
@@ -116,6 +117,12 @@ interface ManageSalesByCustomerProps {
 }
 
 const router = useRouter();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacyTechnician",
+]);
 
 const props = defineProps<ManageSalesByCustomerProps>();
 

@@ -4,6 +4,7 @@
       :attributes="salesStore.getAllSaleAttributes"
       :null-comment="`No ${startCase(status)} sales found`"
       :records="sales"
+      :user-roles="userRoles"
       name="sale"
       no-action
       search-by="customer"
@@ -33,6 +34,8 @@ import { useCurrencyFormatter } from "@/composables/currency-formatter";
 interface ViewSalesStatusProps {
   status: "issued" | "cancelled" | "pending";
 }
+
+const userRoles: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
 
 const props = defineProps<ViewSalesStatusProps>();
 

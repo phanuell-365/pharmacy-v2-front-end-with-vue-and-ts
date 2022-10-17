@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="usersStore.getUserAttributes"
       :records="users"
+      :user-roles="userRoles"
       name="user"
       null-comment="User not found"
       search-by="username"
@@ -74,6 +75,8 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const usersStore = useUsersStore();
+
+const userRoles: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
 
 const users: Ref<UserDto[] | undefined> = ref();
 

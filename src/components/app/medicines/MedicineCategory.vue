@@ -4,6 +4,7 @@
       :attributes="attributes"
       :null-comment="`No medicines found`"
       :records="medicines"
+      :user-roles="userRoles"
       name="medicine"
       no-action
       search-by="name"
@@ -43,6 +44,8 @@ const props = defineProps<MedicineCategoryProps>();
 
 // const stockStore = useStocksStore();
 const medicineStore = useMedicinesStore();
+
+const userRoles: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
 
 const toastError: Ref<InstanceType<LiveToast>> = ref();
 

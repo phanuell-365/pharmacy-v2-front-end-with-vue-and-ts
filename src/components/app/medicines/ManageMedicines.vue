@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="attributes"
       :records="medicines"
+      :user-roles="userRoles"
       name="medicine"
       null-comment="Medicine not found"
       search-by="name"
@@ -92,6 +93,12 @@ interface ManageMedicinesProps {
 }
 
 const props = defineProps<ManageMedicinesProps>();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacistAssistant",
+]);
 
 const router = useRouter();
 

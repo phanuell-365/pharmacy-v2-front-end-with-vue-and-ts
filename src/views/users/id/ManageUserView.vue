@@ -7,7 +7,11 @@
         </span>
       </template>
       <template #body>
-        <ManageUser :update-mode="updateMode" :user-id="userId" />
+        <ManageUser
+          :avatar-mode="avatar"
+          :update-mode="updateMode"
+          :user-id="userId"
+        />
       </template>
     </SidebarLayout>
   </section>
@@ -25,6 +29,7 @@ import type { UserDto } from "@/stores/app/users/dto";
 interface ManageUserProps {
   userId: string;
   update: boolean;
+  avatar: boolean;
 }
 
 const router = useRouter();

@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="salesStore.getSalesAttributes"
       :records="sales"
+      :user-roles="userRoles"
       name="sale"
       null-comment="Sales not found"
       search-by="customer"
@@ -46,6 +47,12 @@ import { useCurrencyFormatter } from "@/composables/currency-formatter";
 const router = useRouter();
 
 const salesStore = useSalesStore();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacyTechnician",
+]);
 
 const sales: Ref<SalesDto[]> = ref([]);
 const salesWithIds: Ref<SalesWithCustomerIdDto[]> = ref([]);

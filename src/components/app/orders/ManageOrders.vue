@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="ordersStore.getOrderAttributes"
       :records="orders"
+      :user-roles="userRoles"
       name="order"
       null-comment="Order not found"
       search-by="medicine"
@@ -74,6 +75,12 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const ordersStore = useOrdersStore();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacistAssistant",
+]);
 
 const orders: Ref<OrderDto[] | undefined> = ref();
 

@@ -3,6 +3,7 @@
     <SearchTable
       :attributes="purchasesStore.getPurchaseAttributes"
       :records="purchases"
+      :user-roles="userRoles"
       name="purchase"
       null-comment="Purchase not found"
       search-by="medicine"
@@ -72,6 +73,12 @@ import moment from "moment";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+
+const userRoles: Ref<string[]> = ref([
+  "admin",
+  "chiefPharmacist",
+  "pharmacistAssistant",
+]);
 
 const purchasesStore = usePurchasesStore();
 

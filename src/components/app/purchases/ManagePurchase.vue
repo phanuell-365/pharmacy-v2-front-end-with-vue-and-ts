@@ -463,7 +463,7 @@ try {
 } catch (error: any) {
   console.error(error.message);
 
-  if (error.message === "Purchase not found!") {
+  if (error.message === "Purchase not found") {
     router.push(`/errors/purchases/${props.purchaseId}`);
   }
 }
