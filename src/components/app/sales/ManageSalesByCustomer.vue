@@ -51,12 +51,14 @@
           :href="`/sales/${recordId}?update=true`"
           action="update"
         />
-        <ButtonIcon
-          :icon-name="DELETE_ICON"
-          class="mx-1"
-          skin="danger"
-          @click="onDeleteClick(recordId)"
-        />
+        <template v-if="deleteButtonAccessRole?.includes(loggedInUserRole)">
+          <ButtonIcon
+            :icon-name="DELETE_ICON"
+            class="mx-1"
+            skin="danger"
+            @click="onDeleteClick(recordId)"
+          />
+        </template>
       </template>
     </SearchTable>
     <Teleport to="body">
@@ -111,10 +113,17 @@ import { useCustomersStore } from "@/stores/app/customers/customers";
 import type { CustomerDto } from "@/stores/app/customers/dto";
 import { useRouter } from "vue-router";
 import { useCurrencyFormatter } from "@/composables/currency-formatter";
+import { useAuthStore } from "@/stores/auth";
 
 interface ManageSalesByCustomerProps {
   customerId: string;
 }
+
+const authStore = useAuthStore();
+
+const deleteButtonAccessRole: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 const router = useRouter();
 

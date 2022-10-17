@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-evenly">
     <div class="flex-row m-2">
       <RouterLink
-        :to="`/users/${user?.id}`"
+        :to="`/users/${user?.id}?avatar=true`"
         class="text-decoration-none avatar-cover border border-light d-flex justify-content-center"
       >
         <FontAwesome :icon-name="USER_ICON" />

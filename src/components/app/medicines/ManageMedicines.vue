@@ -30,12 +30,14 @@
         <!--          :href="`/medicines/${recordId}?update=true&stock=true`"-->
         <!--          action="update"-->
         <!--        />-->
-        <ButtonIcon
-          :icon-name="DELETE_ICON"
-          class="mx-1"
-          skin="danger"
-          @click="onDeleteClick(recordId)"
-        />
+        <template v-if="deleteButtonAccessRole?.includes(loggedInUserRole)">
+          <ButtonIcon
+            :icon-name="DELETE_ICON"
+            class="mx-1"
+            skin="danger"
+            @click="onDeleteClick(recordId)"
+          />
+        </template>
       </template>
     </SearchTable>
     <Teleport to="body">
@@ -87,10 +89,13 @@ import type { MedicineDto } from "@/stores/app/medicines/dto";
 import moment from "moment";
 import { useRouter } from "vue-router";
 import type { MedicineStockDto } from "@/stores/app/medicines/dto/medicine-stock.dto";
+import { useAuthStore } from "@/stores/auth";
 
 interface ManageMedicinesProps {
   manage: "stock" | "medicine";
 }
+
+const authStore = useAuthStore();
 
 const props = defineProps<ManageMedicinesProps>();
 
@@ -99,6 +104,10 @@ const userRoles: Ref<string[]> = ref([
   "chiefPharmacist",
   "pharmacistAssistant",
 ]);
+
+const deleteButtonAccessRole: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 const router = useRouter();
 

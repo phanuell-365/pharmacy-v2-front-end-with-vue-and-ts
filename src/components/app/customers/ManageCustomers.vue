@@ -22,12 +22,14 @@
           :href="`/customers/${recordId}?update=true`"
           action="update"
         />
-        <ButtonIcon
-          :icon-name="DELETE_ICON"
-          class="mx-1"
-          skin="danger"
-          @click="onDeleteClick(recordId)"
-        />
+        <template v-if="deleteButtonAccessRole?.includes(loggedInUserRole)">
+          <ButtonIcon
+            :icon-name="DELETE_ICON"
+            class="mx-1"
+            skin="danger"
+            @click="onDeleteClick(recordId)"
+          />
+        </template>
       </template>
     </SearchTable>
     <Teleport to="body">
@@ -78,10 +80,12 @@ import { ref } from "vue";
 import type { CustomerDto } from "@/stores/app/customers/dto";
 import moment from "moment";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 
 const customersStore = useCustomersStore();
+const authStore = useAuthStore();
 
 const userRoles: Ref<string[]> = ref([
   "admin",
@@ -89,6 +93,10 @@ const userRoles: Ref<string[]> = ref([
   "pharmacistAssistant",
   "pharmacyTechnician",
 ]);
+
+const deleteButtonAccessRole: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 const customers: Ref<CustomerDto[] | undefined> = ref();
 
