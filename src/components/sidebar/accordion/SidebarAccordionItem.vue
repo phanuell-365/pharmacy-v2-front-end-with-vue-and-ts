@@ -21,6 +21,7 @@ import AccordionCollapse from "./item/AccordionCollapse.vue";
 interface AccordionListItemProps {
   href: string;
   description: string;
+  roles?: string[];
 }
 
 interface SidebarAccordionItemProps {
@@ -28,6 +29,7 @@ interface SidebarAccordionItemProps {
   accordionHeaderId: string;
   accordionIcon: string;
   active?: boolean;
+  roles?: string[];
   accordionList: AccordionListItemProps[];
 }
 

@@ -20,6 +20,7 @@ import AccordionList from "./AccordionList.vue";
 interface AccordionListItemProps {
   href: string;
   description: string;
+  roles?: string[];
 }
 
 interface AccordionCollapseProps {

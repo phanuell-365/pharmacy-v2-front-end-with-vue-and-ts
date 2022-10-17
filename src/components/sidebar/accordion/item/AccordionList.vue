@@ -2,21 +2,26 @@
   <ul
     class="btn-toggle-nav list-unstyled fw-normal pb-1 small d-flex flex-column align-items-start"
   >
-    <AccordionListItem
-      v-for="item in listItems"
-      :key="item.description"
-      :description="item.description"
-      :href="item.href"
-    />
+    <template v-for="item in listItems" :key="item.description">
+      <template v-if="item?.roles?.includes(loggedInUserRole)">
+        <AccordionListItem :description="item.description" :href="item.href" />
+      </template>
+    </template>
   </ul>
 </template>
 
 <script lang="ts" setup>
 import AccordionListItem from "./AccordionListItem.vue";
+import { useAuthStore } from "@/stores/auth";
+import type { Ref } from "vue";
+import { ref } from "vue";
+
+const authStore = useAuthStore();
 
 interface AccordionListItemProps {
   href: string;
   description: string;
+  roles?: string[];
 }
 
 interface AccordionListProps {
@@ -24,6 +29,8 @@ interface AccordionListProps {
 }
 
 defineProps<AccordionListProps>();
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 </script>
 
 <style scoped>
