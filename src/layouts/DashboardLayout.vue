@@ -42,12 +42,6 @@
       </div>
     </div>
   </div>
-
-  <!--  <Teleport to="body">-->
-  <!--    <ToastContainer :placement="TOP_RIGHT">-->
-  <!--      <LiveToast ref="toastB" skin="danger" />-->
-  <!--    </ToastContainer>-->
-  <!--  </Teleport>-->
 </template>
 
 <script lang="ts" setup>
@@ -245,7 +239,7 @@ const purchaseTotals = ref(
 
 const totalPurchases = calculateTotal(purchaseTotals.value as number[]);
 
-const salesTotals = ref(today_sSales.value.map((value) => value.totalPrices));
+const salesTotals = ref(today_sSales.value.map((value) => +value.totalPrices));
 
 const totalSales = calculateTotal(salesTotals.value);
 

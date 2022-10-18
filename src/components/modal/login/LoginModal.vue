@@ -70,16 +70,33 @@
         </div>
       </div>
     </div>
+    <Teleport to="body">
+      <ToastContainer :placement="TOP_RIGHT">
+        <LiveToast
+          ref="toastOk"
+          skin="ok"
+          @on-hidden-bs-toast="onHiddenBsToast"
+        />
+      </ToastContainer>
+    </Teleport>
   </div>
 </template>
 
 <script lang="ts" setup>
+import ToastContainer from "@/components/toast/ToastContainer.vue";
+import LiveToast from "@/components/toast/LiveToast.vue";
+import { TOP_RIGHT } from "@/constants/toasts";
+import moment from "moment";
+import type { Ref } from "vue";
 import { onBeforeMount, onMounted, ref } from "vue";
 import * as bootstrap from "bootstrap";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
+import startCase from "lodash/startCase";
 
 const authStore = useAuthStore();
+
+const toastOk: Ref<InstanceType<LiveToast>> = ref();
 
 const theModal = ref();
 
@@ -151,19 +168,33 @@ const onFormSubmit = async () => {
       });
 
       modal.value?.hide();
-      router.go(0);
+      // router.go(0);
+
+      toastOk.value?.setupToast({
+        name: "Log In Success",
+        elapsedDuration: moment().startOf("second").fromNow(),
+        heading: "Log In Success!",
+        text: `Welcome back ${startCase(username.value)}`,
+        delay: 3000,
+      });
+
+      toastOk.value?.show();
     } catch (error: any) {
       console.error(error);
 
       usernameEl.classList.add("is-invalid");
-      // usernameInvalidFeedback.value = "Invalid username or password";
-      usernameInvalidFeedback.value = error.message;
+      usernameInvalidFeedback.value = "Invalid username or password";
+      // usernameInvalidFeedback.value = error.message;
 
       passwordEl.classList.add("is-invalid");
-      // passwordInvalidFeedback.value = "Invalid username or password";
-      passwordInvalidFeedback.value = error.message;
+      passwordInvalidFeedback.value = "Invalid username or password";
+      // passwordInvalidFeedback.value = error.message;
     }
   }
+};
+
+const onHiddenBsToast = () => {
+  router.go(0);
 };
 
 const onCloseModalClick = () => {

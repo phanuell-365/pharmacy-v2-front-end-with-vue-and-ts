@@ -13,17 +13,23 @@
       <!--        <div class="col-6 d-flex justify-content-end">-->
       <!--          <LoginStatus />-->
       <!--        </div>-->
-      <Teleport to="body">
-        <template v-if="!isLoggedIn">
-          <LoginModal ref="loginModal" />
-        </template>
-      </Teleport>
+
       <!--      </div>-->
       <div
         class="d-flex align-items-center text-success justify-content-between mb-2"
       >
         <slot name="entity-title">
-          <span class="text-start fw-bold fs-5 mx-3">
+          <span
+            v-if="
+              sidebarStore.sidebarSubMenu?.description === 'dashboard' &&
+              loggedInUserRole
+            "
+            class="text-start fw-bold fs-5 mx-3"
+          >
+            {{ startCase(loggedInUserRole) }}'s
+            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</span
+          >
+          <span v-else class="text-start fw-bold fs-5 mx-3">
             {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</span
           >
         </slot>
@@ -43,11 +49,6 @@
         </div>
       </div>
       <CardLayout name="card">
-        <!--        <template #heading>-->
-        <!--          <small class="text-start fw-normal small p-0 m-auto m-0">-->
-        <!--            {{ startCase(sidebarStore.sidebarSubMenu?.description) }}</small-->
-        <!--          >-->
-        <!--        </template>-->
         <template #body>
           <slot name="body" />
         </template>
@@ -56,6 +57,11 @@
         </template>
       </CardLayout>
     </main>
+    <Teleport to="body">
+      <template v-if="!isLoggedIn">
+        <LoginModal ref="loginModal" />
+      </template>
+    </Teleport>
   </section>
 </template>
 
@@ -94,6 +100,8 @@ const isLoggedIn = authStore.isLoggedIn();
 const onLogoutClick = () => {
   logoutModalRef.value?.showModal();
 };
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 onBeforeRouteLeave((to, from, next) => {
   useCleanUpModal(loginModal.value?.modal);
