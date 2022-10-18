@@ -11,6 +11,7 @@ interface DashboardActionsItemProps {
   icon: string;
   href: string;
   text: string;
+  roles?: string[];
 }
 
 interface DashboardActionsItemsProps {
@@ -20,6 +21,4 @@ interface DashboardActionsItemsProps {
 defineProps<DashboardActionsItemsProps>();
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

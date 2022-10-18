@@ -1,39 +1,41 @@
 <template>
   <div class="container">
-    <div class="row justify-content-evenly">
-      <div class="col col-7 col-lg-7 col-md-7 card m-1">
-        <DashboardCarousel>
-          <DashboardCarouselCard
-            v-for="cardItem in dashboardCarouselCards"
-            :key="cardItem.name"
-            :active="cardItem.active"
-          >
-            <DashboardCardItem
-              v-for="card in cardItem.cards"
-              :key="card.totalText"
-              :href="card.href"
-              :total-text="card.totalText"
-              :total-value="card.totalValue"
-            />
-          </DashboardCarouselCard>
-        </DashboardCarousel>
-      </div>
-      <div class="col col-4 col-lg-4 col-md-4 card m-1">
-        <DashboardCarousel>
-          <DashboardCarouselReport>
+    <template v-if="userRoles.includes(loggedInUserRole)">
+      <div class="row justify-content-evenly">
+        <div class="col col-7 col-lg-7 col-md-7 card m-1">
+          <DashboardCarousel>
             <DashboardCarouselCard
-              v-for="cardItem in dashboardCarouselReportCards"
+              v-for="cardItem in dashboardCarouselCards"
               :key="cardItem.name"
               :active="cardItem.active"
-              :interval="6000"
             >
-              <CardReportItem :totals="cardItem.cards" />
+              <DashboardCardItem
+                v-for="card in cardItem.cards"
+                :key="card.totalText"
+                :href="card.href"
+                :total-text="card.totalText"
+                :total-value="card.totalValue"
+              />
             </DashboardCarouselCard>
-          </DashboardCarouselReport>
-        </DashboardCarousel>
+          </DashboardCarousel>
+        </div>
+        <div class="col col-4 col-lg-4 col-md-4 card m-1">
+          <DashboardCarousel>
+            <DashboardCarouselReport>
+              <DashboardCarouselCard
+                v-for="cardItem in dashboardCarouselReportCards"
+                :key="cardItem.name"
+                :active="cardItem.active"
+                :interval="6000"
+              >
+                <CardReportItem :totals="cardItem.cards" />
+              </DashboardCarouselCard>
+            </DashboardCarouselReport>
+          </DashboardCarousel>
+        </div>
       </div>
-    </div>
-    <hr />
+      <hr />
+    </template>
     <div class="row">
       <div class="card">
         <div class="col col-12 col-lg-12 col-md-12">
@@ -68,6 +70,7 @@ import { useSalesStore } from "@/stores/app/sales/sales";
 import type { SaleDto, SalesDto } from "@/stores/app/sales/dto";
 import type { MedicineOutOfStockDto } from "@/stores/app/medicines/dto/medicine-out-of-stock.dto";
 import type { ExpiredMedicineDto } from "@/stores/app/medicines/dto/expired-medicine.dto";
+import { useAuthStore } from "@/stores/auth";
 
 const ordersStore = useOrdersStore();
 const purchasesStore = usePurchasesStore();
@@ -75,6 +78,11 @@ const medicinesStore = useMedicinesStore();
 const suppliersStore = useSuppliersStore();
 const customersStore = useCustomersStore();
 const salesStore = useSalesStore();
+const authStore = useAuthStore();
+
+const userRoles: Ref<string[]> = ref(["admin", "chiefPharmacist"]);
+
+const loggedInUserRole: Ref<string | undefined> = ref(authStore.getUserRole());
 
 const orders: Ref<OrderDto[]> = ref([]);
 const cancelledOrders: Ref<OrderDto[]> = ref([]);
