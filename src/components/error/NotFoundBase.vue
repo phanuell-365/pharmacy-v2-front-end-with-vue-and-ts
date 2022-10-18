@@ -21,9 +21,9 @@
           <slot name="go-back">
             <button
               class="mt-5 fw-bold fs-5 text-success btn btn-light bg-transparent border-0 position-relative"
-              @click="onGoBackClick"
+              @click="onGoHomeClick"
             >
-              <span class="btn-icon mx-1">Go back</span>
+              <span class="btn-icon mx-1">Go Home</span>
               <FontAwesome :icon-name="ARROW_RIGHT_ICON" class="mx-2 icon" />
             </button>
           </slot>
@@ -55,8 +55,8 @@ interface NotFoundBaseProps {
 
 defineProps<NotFoundBaseProps>();
 
-const onGoBackClick = () => {
-  router.back();
+const onGoHomeClick = () => {
+  router.push("/dashboard");
 };
 </script>
 

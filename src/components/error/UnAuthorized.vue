@@ -24,9 +24,9 @@
                   </span>
                   <button
                     class="mt-5 fw-bold fs-5 text-success btn btn-light bg-transparent border-0 position-relative"
-                    @click="onGoBackClick"
+                    @click="onGoHomeClick"
                   >
-                    <span class="btn-icon mx-1">Go back</span>
+                    <span class="btn-icon mx-1">Go Home</span>
                     <FontAwesome
                       :icon-name="ARROW_RIGHT_ICON"
                       class="mx-2 icon"
@@ -71,8 +71,8 @@ const route = useRoute();
 
 const action = route.params["action"];
 
-const onGoBackClick = () => {
-  router.back();
+const onGoHomeClick = () => {
+  router.push("/dashboard");
 };
 </script>
 
