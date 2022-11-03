@@ -117,6 +117,7 @@ import { useAuthStore } from "@/stores/auth";
 
 interface ManageSalesByCustomerProps {
   customerId: string;
+  saleDate: string;
 }
 
 const authStore = useAuthStore();
@@ -148,8 +149,13 @@ const amountReceived: Ref<number> = ref(0);
 const totalAmountArr: Ref<(number | string)[]> = ref([]);
 
 try {
+  // testing monthly sales
+  await salesStore.getMonthlyReports();
   customer.value = await customersStore.fetchCustomerById(props.customerId);
-  sales.value = await salesStore.fetchSalesByCustomerId(props.customerId);
+  sales.value = await salesStore.fetchSalesByCustomerId(
+    props.customerId,
+    props.saleDate
+  );
 
   totalAmountArr.value = sales.value.map((value) => value.totalPrice);
 
@@ -233,7 +239,10 @@ const onDeleteSale = async () => {
 
     deleteModalRef.value.hideModal();
 
-    sales.value = await salesStore.fetchSalesByCustomerId(props.customerId);
+    sales.value = await salesStore.fetchSalesByCustomerId(
+      props.customerId,
+      props.saleDate
+    );
   } catch (error: any) {
     toastError.value?.setupToast({
       name: "Delete Sale Error",

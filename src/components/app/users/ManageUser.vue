@@ -225,7 +225,10 @@ watch(
 );
 
 try {
-  usersRoles.value = await usersStore.fetchUsersRoles();
+  if (setAvatarMode.value)
+    usersRoles.value = await usersStore.fetchUsersRoles(false);
+  if (!setAvatarMode.value)
+    usersRoles.value = await usersStore.fetchUsersRoles(true);
   user.value = await usersStore.fetchUserById(props.userId);
 } catch (error: any) {
   console.log(error.message);
@@ -242,10 +245,14 @@ const usernameValidation = (value: string) => {
   return true;
 };
 
-const passwordValidation = (_value: string) => {
-  // if (!value) {
-  //   return "This field is required";
-  // }
+const passwordValidation = (value: string) => {
+  if (!value) {
+    return "This field is required";
+  }
+
+  if (value.length < 5) {
+    return "The password length may contain 5 characters or more";
+  }
 
   return true;
 };
@@ -388,7 +395,7 @@ const onUpdateClick = async () => {
 const onViewClick = () => {
   setUpdateMode.value = false;
   setViewMode.value = true;
-  router.go(0);
+  if (setAvatarMode.value) router.go(0);
 };
 
 const onAddNewClick = async () => {
