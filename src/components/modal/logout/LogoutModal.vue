@@ -71,7 +71,8 @@ defineExpose({
 const onLogoutClick = () => {
   authStore.logout();
   logoutModal.value?.hide();
-  router.push("/");
+  if (href.value === "current") router.go(0);
+  else if (href.value) router.push(href.value);
 };
 
 const onCloseClick = () => {
