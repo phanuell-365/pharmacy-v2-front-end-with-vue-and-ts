@@ -90,13 +90,16 @@ export const useMedicinesStore = defineStore({
       return tokenStore.getStoredToken();
     },
 
-    async fetchMedicines(): Promise<MedicineDto[]> {
-      const response = await fetch(`${BASE_URL}/medicines`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+    async fetchMedicines(paranoid: boolean = true): Promise<MedicineDto[]> {
+      const response = await fetch(
+        `${BASE_URL}/medicines?paranoid=${paranoid}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -190,13 +193,16 @@ export const useMedicinesStore = defineStore({
       return this.strengths;
     },
 
-    async fetchMedicineById(medicineId: string) {
-      const response = await fetch(`${BASE_URL}/medicines/${medicineId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+    async fetchMedicineById(medicineId: string, paranoid: boolean = true) {
+      const response = await fetch(
+        `${BASE_URL}/medicines/${medicineId}?paranoid=${paranoid}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
