@@ -8,10 +8,13 @@
               <SearchPanel
                 ref="customerSearchPanelRef"
                 :filter-array="customerSearchPairs"
+                add-link
                 class="mx-2"
+                item-desc="Add Customer"
                 label="customer"
                 name="customer"
                 @on-found-item="onFoundCustomerItem"
+                @on-add-new-item="onAddCustomerClick"
               />
             </div>
           </div>
@@ -131,6 +134,10 @@
       <Teleport to="body">
         <AddItem ref="addItemModal" />
         <UpdateItem ref="updateItemModal" />
+        <AddCustomerModal
+          ref="addNewCustomerModal"
+          @on-added-customer="onHiddenAddNewCustomerModal"
+        />
         <ToastContainer :placement="TOP_CENTER">
           <LiveToast
             ref="toastSuccess"
@@ -159,6 +166,7 @@ import ToastContainer from "@/components/toast/ToastContainer.vue";
 import LiveToast from "@/components/toast/LiveToast.vue";
 import AddItem from "./AddItem.vue";
 import UpdateItem from "./UpdateItem.vue";
+import AddCustomerModal from "@/components/modal/sales/AddCustomerModal.vue";
 import { DELETE_ICON, UPDATE_ICON } from "@/constants/icons";
 import { TOP_CENTER } from "@/constants/toasts";
 import { useCustomersStore } from "@/stores/app/customers/customers";
@@ -195,6 +203,7 @@ const customerSearchPanelRef: Ref<
 > = ref();
 const toastSuccess = ref();
 const toastError = ref();
+const addNewCustomerModal: Ref<InstanceType<AddCustomerModal>> = ref();
 
 try {
   customers.value = await customersStore.fetchCustomers();
@@ -230,12 +239,16 @@ medicineSearchPairs.value = medicines.value.map((value) => ({
   id: value.id,
 }));
 
+const onAddCustomerClick = () => {
+  addNewCustomerModal.value.showModal();
+};
+
 const foundCustomerId = ref("");
 
 const foundCustomer: Ref<CustomerDto | undefined> = ref();
 
 const onFoundCustomerItem = (item: SearchPairs) => {
-  foundCustomerId.value = item.id;
+  foundCustomerId.value = item?.id;
   foundCustomer.value = customers.value.find(
     (value) => value.id === foundCustomerId.value
   );
@@ -418,6 +431,15 @@ const onClear = () => {
   customerSearchPanelRef.value?.clear();
   foundCustomer.value = undefined;
   foundCustomerId.value = "";
+};
+
+const onHiddenAddNewCustomerModal = async () => {
+  customers.value = await customersStore.fetchCustomers();
+  customerSearchPairs.value = customers.value.map((value) => ({
+    name: value.name,
+    id: value.id,
+  }));
+  console.log("added");
 };
 
 const onHiddenBsToast = () => {
