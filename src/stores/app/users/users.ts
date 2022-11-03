@@ -87,9 +87,9 @@ export const useUsersStore = defineStore({
     async generateUsersReports() {
       return await useFetchReport("users");
     },
-    async fetchUsersRoles() {
+    async fetchUsersRoles(filter: boolean = false) {
       const response: Response = await fetch(
-        `${BASE_URL}/users/search?resource=roles`,
+        `${BASE_URL}/users/search?resource=roles&filter=${filter}`,
         {
           method: "GET",
           headers: {
