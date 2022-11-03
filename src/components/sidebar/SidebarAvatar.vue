@@ -30,30 +30,19 @@ import { useAuthStore } from "@/stores/auth";
 import type { UserDto } from "@/stores/app/users/dto";
 import type { Ref } from "vue";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
 
 const usersStore = useUsersStore();
 const authStore = useAuthStore();
-
-const router = useRouter();
 
 const user: Ref<UserDto | undefined> = ref();
 
 const userId: Ref<string | undefined> = ref(authStore.getLoggedInUserId());
 
-// onBeforeMount(
-//   async () => {
-
 try {
   if (userId.value) user.value = await usersStore.fetchUserById(userId.value);
 } catch (error: any) {
   console.error(error);
-  // if (error.message === "Unauthorized")
-  //   router.go(0);
 }
-//
-//   }
-// );
 </script>
 
 <style scoped>
