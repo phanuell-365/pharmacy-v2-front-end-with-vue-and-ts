@@ -1,5 +1,5 @@
 <template>
-  <section class="manage-suppliers">
+  <section class="manage-sales-view">
     <SidebarLayout>
       <template #body>
         <ManageSales />
@@ -9,14 +9,14 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate All Sales Report"
-            @click="onGenerateReportClick('ungrouped')"
+            text="Download All Sales Report"
+            @click="onDownloadReportClick('ungrouped')"
           />
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Sales Report"
-            @click="onGenerateReportClick('grouped')"
+            text="Download Sales Report"
+            @click="onDownloadReportClick('grouped')"
           />
         </FormButtonsContainer>
       </template>
@@ -46,14 +46,14 @@ const salesStore = useSalesStore();
 
 const toastError: Ref<InstanceType<LiveToast>> = ref();
 
-const onGenerateReportClick = async (category: string) => {
+const onDownloadReportClick = async (category: "ungrouped" | "grouped") => {
   try {
-    await salesStore.generateSalesReports(category);
+    await salesStore.generateSalesReports("download", category);
   } catch (error: any) {
     toastError.value?.setupToast({
-      name: "Fetch Users Error",
+      name: "Fetch Sales Error",
       elapsedDuration: moment().startOf("second").fromNow(),
-      heading: "Fetch Users Error",
+      heading: "Fetch Sales Error",
       text: error.message,
       delay: 5000,
     });

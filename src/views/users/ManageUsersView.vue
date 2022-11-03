@@ -9,8 +9,8 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Report"
-            @click="onGenerateReportClick"
+            text="Download Report"
+            @click="onDownloadReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,7 +27,7 @@ import { useUsersStore } from "@/stores/app/users/users";
 
 const usersStore = useUsersStore();
 
-const onGenerateReportClick = () => {
+const onDownloadReportClick = () => {
   usersStore.generateUsersReports();
 };
 </script>

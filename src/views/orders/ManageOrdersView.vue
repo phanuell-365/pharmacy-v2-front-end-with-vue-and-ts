@@ -9,8 +9,8 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Report"
-            @click="onGenerateOrderReportClick"
+            text="Download Report"
+            @click="onDownloadOrderReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,7 +27,7 @@ import { useOrdersStore } from "@/stores/app/orders/orders";
 
 const ordersStore = useOrdersStore();
 
-const onGenerateOrderReportClick = () => {
+const onDownloadOrderReportClick = () => {
   ordersStore.generateOrdersReport();
 };
 </script>

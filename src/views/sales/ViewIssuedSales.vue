@@ -9,8 +9,14 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Issued Sales Report"
-            @click="onGenerateIssuedSalesReportClick"
+            text="View Issued Sales Report"
+            @click="onViewIssuedSalesReportClick"
+          />
+          <FormButton
+            class="my-1"
+            skin="dark"
+            text="Download Issued Sales Report"
+            @click="onDownloadIssuedSalesReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,8 +33,12 @@ import { useSalesStore } from "@/stores/app/sales/sales";
 
 const salesStore = useSalesStore();
 
-const onGenerateIssuedSalesReportClick = async () => {
-  await salesStore.generateSalesReports("ungrouped", "issued");
+const onDownloadIssuedSalesReportClick = async () => {
+  await salesStore.generateSalesReports("download", "ungrouped", "issued");
+};
+
+const onViewIssuedSalesReportClick = async () => {
+  await salesStore.generateSalesReports("view", "ungrouped", "issued");
 };
 </script>
 

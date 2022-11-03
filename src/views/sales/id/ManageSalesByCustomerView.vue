@@ -7,15 +7,21 @@
         </span>
       </template>
       <template #body>
-        <ManageSalesByCustomer :customer-id="id" />
+        <ManageSalesByCustomer :customer-id="id" :sale-date="saleDate" />
       </template>
       <template #footer>
         <FormButtonsContainer>
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Sales Receipt"
-            @click="onGenerateSalesReceipt"
+            text="View Sales Receipt"
+            @click="onViewSalesReceipt"
+          />
+          <FormButton
+            class="my-1"
+            skin="dark"
+            text="Download Sales Receipt"
+            @click="onDownloadSalesReceipt"
           />
         </FormButtonsContainer>
       </template>
@@ -39,6 +45,7 @@ const router = useRouter();
 
 interface ManageSalesByCustomerViewProps {
   id: string;
+  saleDate: string;
 }
 
 const props = defineProps<ManageSalesByCustomerViewProps>();
@@ -60,8 +67,12 @@ onMounted(async () => {
   }
 });
 
-const onGenerateSalesReceipt = async () => {
-  await salesStore.generateSalesReceipt(props.id);
+const onViewSalesReceipt = async () => {
+  await salesStore.generateSalesReceipt(props.id, props.saleDate, "view");
+};
+
+const onDownloadSalesReceipt = async () => {
+  await salesStore.generateSalesReceipt(props.id, props.saleDate, "download");
 };
 </script>
 

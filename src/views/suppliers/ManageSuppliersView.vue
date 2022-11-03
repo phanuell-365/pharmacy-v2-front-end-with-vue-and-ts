@@ -9,8 +9,8 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Report"
-            @click="onGenerateSuppliersReportClick"
+            text="Download Report"
+            @click="onDownloadSuppliersReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,7 +27,7 @@ import { useSuppliersStore } from "@/stores/app/suppliers/suppliers";
 
 const suppliersStore = useSuppliersStore();
 
-const onGenerateSuppliersReportClick = async () => {
+const onDownloadSuppliersReportClick = async () => {
   await suppliersStore.generateSuppliersReport();
 };
 </script>

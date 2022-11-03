@@ -9,8 +9,8 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Cancelled Sales Report"
-            @click="onGenerateCancelledSalesReportClick"
+            text="Download Cancelled Sales Report"
+            @click="onDownloadCancelledSalesReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,7 +27,7 @@ import { useSalesStore } from "@/stores/app/sales/sales";
 
 const salesStore = useSalesStore();
 
-const onGenerateCancelledSalesReportClick = async () => {
+const onDownloadCancelledSalesReportClick = async () => {
   await salesStore.generateSalesReports("ungrouped", "cancelled");
 };
 </script>

@@ -9,8 +9,8 @@
           <FormButton
             class="my-1"
             skin="dark"
-            text="Generate Pending Sales Report"
-            @click="onGeneratePendingSalesReportClick"
+            text="Download Pending Sales Report"
+            @click="onDownloadPendingSalesReportClick"
           />
         </FormButtonsContainer>
       </template>
@@ -27,7 +27,7 @@ import { useSalesStore } from "@/stores/app/sales/sales";
 
 const salesStore = useSalesStore();
 
-const onGeneratePendingSalesReportClick = async () => {
+const onDownloadPendingSalesReportClick = async () => {
   await salesStore.generateSalesReports("ungrouped", "pending");
 };
 </script>

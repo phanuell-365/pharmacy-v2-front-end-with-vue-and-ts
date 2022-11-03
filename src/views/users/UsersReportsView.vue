@@ -2,7 +2,9 @@
   <section class="users-reports-view">
     <SidebarLayout>
       <template #body>
-        <button class="btn btn-light" @click="onGeneratePdfClick">Generate pdf</button>
+        <button class="btn btn-light" @click="onDownloadPdfClick">
+          Download pdf
+        </button>
         {{ response }}
       </template>
     </SidebarLayout>
@@ -18,11 +20,9 @@ const usersStore = useUsersStore();
 
 const response = ref();
 
-const onGeneratePdfClick = async () => {
+const onDownloadPdfClick = async () => {
   response.value = await usersStore.generateUsersReports();
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
