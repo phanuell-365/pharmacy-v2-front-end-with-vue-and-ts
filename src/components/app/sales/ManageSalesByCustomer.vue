@@ -168,6 +168,15 @@ try {
 } catch (error: any) {
   console.error(error);
 
+  if (error?.statusCode) {
+    if (error?.statusCode === 403)
+      router.push({
+        name: "un-authorized",
+        path: "/un-authorized",
+        params: { action: "manage-customer's-sale" },
+      });
+  }
+
   toastError.value?.setupToast({
     name: "Fetch Sales Error",
     elapsedDuration: moment().startOf("second").fromNow(),

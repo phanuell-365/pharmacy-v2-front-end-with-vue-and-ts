@@ -217,6 +217,15 @@ try {
   suppliers.value = await suppliersStore.fetchSuppliers();
   orderStatuses.value = await ordersStore.fetchOrderStatus();
 } catch (error: any) {
+  console.log(error);
+  if (error?.statusCode) {
+    if (error?.statusCode === 403)
+      router.push({
+        name: "un-authorized",
+        path: "/un-authorized",
+        params: { action: "place-an-order" },
+      });
+  }
   if (error?.message?.includes("medicine"))
     toastError.value?.setupToast({
       name: "Medicines Error",

@@ -196,8 +196,20 @@ const customerSearchPanelRef: Ref<
 const toastSuccess = ref();
 const toastError = ref();
 
-customers.value = await customersStore.fetchCustomers();
-medicines.value = await medicineStore.fetchMedicines();
+try {
+  customers.value = await customersStore.fetchCustomers();
+  medicines.value = await medicineStore.fetchMedicines();
+} catch (error: any) {
+  console.log(error);
+  if (error?.statusCode) {
+    if (error?.statusCode === 403)
+      router.push({
+        name: "un-authorized",
+        path: "/un-authorized",
+        params: { action: "add-sales" },
+      });
+  }
+}
 
 // stocks.value = await stocksStore.fetchStocks();
 

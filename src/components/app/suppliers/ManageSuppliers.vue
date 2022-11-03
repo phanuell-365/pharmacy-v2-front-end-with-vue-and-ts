@@ -98,6 +98,15 @@ try {
 } catch (error: any) {
   console.error(error);
 
+  if (error?.statusCode) {
+    if (error?.statusCode === 403)
+      router.push({
+        name: "un-authorized",
+        path: "/un-authorized",
+        params: { action: "place-an-order" },
+      });
+  }
+
   toastError.value?.setupToast({
     name: "Fetch Suppliers Error",
     elapsedDuration: moment().startOf("second").fromNow(),

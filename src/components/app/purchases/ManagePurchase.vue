@@ -463,6 +463,15 @@ try {
 } catch (error: any) {
   console.error(error.message);
 
+  if (error?.statusCode) {
+    if (error?.statusCode === 403)
+      router.push({
+        name: "un-authorized",
+        path: "/un-authorized",
+        params: { action: "manage-purchase" },
+      });
+  }
+
   if (error.message === "Purchase not found") {
     router.push(`/errors/purchases/${props.purchaseId}`);
   }
