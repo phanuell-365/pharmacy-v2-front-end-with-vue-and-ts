@@ -94,6 +94,12 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth";
 import startCase from "lodash/startCase";
 
+interface LoginModalProps {
+  redirect?: string;
+}
+
+const props = defineProps<LoginModalProps>();
+
 const authStore = useAuthStore();
 
 const toastOk: Ref<InstanceType<LiveToast>> = ref();
@@ -194,7 +200,9 @@ const onFormSubmit = async () => {
 };
 
 const onHiddenBsToast = () => {
-  router.go(0);
+  if (props.redirect) {
+    router.push(props.redirect);
+  } else router.go(0);
 };
 
 const onCloseModalClick = () => {
