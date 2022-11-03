@@ -10,7 +10,7 @@
           id="searchInput"
           v-model="searchText"
           :name="name"
-          :placeholder="`Find by ${name} name ... `"
+          :placeholder="`Filter by ${name} name ... `"
           autocomplete="off"
           class="form-control shadow-sm"
           type="search"
