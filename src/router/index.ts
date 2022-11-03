@@ -283,6 +283,37 @@ const router = createRouter({
         });
       },
     },
+    {
+      path: "/sales/reports/monthly-sales",
+      name: "monthly-sales",
+      component: () => import("../views/sales/MonthlySalesView.vue"),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "monthly-sales" },
+        });
+      },
+    },
+    {
+      path: "/sales/reports/daily-sales/:saleDate",
+      name: "daily-sales",
+      component: () => import("../views/sales/DailySalesView.vue"),
+      props: (route) => ({ saleDate: route.params.saleDate }),
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+
+        if (authStore.isAuthenticated()) return next();
+        return next({
+          name: "un-authorized",
+          path: "/un-authorized",
+          params: { action: "daily-sales" },
+        });
+      },
+    },
 
     // medicines routes
     {

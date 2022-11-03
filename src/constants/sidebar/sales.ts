@@ -37,5 +37,11 @@ export const SALES_MENU: AccordionItemProps = {
       routeName: "cancelled-sales",
       roles: ["admin", "chiefPharmacist"],
     },
+    {
+      href: "/sales/reports/monthly-sales",
+      description: "monthly-sales",
+      routeName: "monthly-sales",
+      roles: ["admin", "chiefPharmacist"],
+    },
   ],
 };

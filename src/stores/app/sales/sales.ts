@@ -7,8 +7,13 @@ import type {
 } from "@/stores/app/sales/dto/sale.dto";
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
-import type { NewSalesDto, UpdateSaleDto } from "@/stores/app/sales/dto";
+import type {
+  MonthlySalesDto,
+  NewSalesDto,
+  UpdateSaleDto,
+} from "@/stores/app/sales/dto";
 import { useFetchReport } from "@/composables/use-fetch-report";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
 
 const SALES_DEFAULT: SalesDto = {
   id: "",
@@ -43,6 +48,12 @@ const ALL_SALE_DEFAULT: SaleDto = {
   amountReceived: 0,
 };
 
+const MONTHLY_SALES_DEFAULT: MonthlySalesDto = {
+  saleDate: "",
+  numberOfSales: 0,
+  totalAmount: "",
+};
+
 interface SalesState {
   sales: SalesDto[];
   sale: SaleDto | null;
@@ -65,6 +76,7 @@ export const useSalesStore = defineStore({
       Object.keys(ALL_SALE_DEFAULT).filter(
         (value) => value !== "id" && value !== "amountReceived"
       ),
+    getMonthlySalesAttributes: () => Object.keys(MONTHLY_SALES_DEFAULT),
   },
   actions: {
     getToken() {
@@ -214,9 +226,9 @@ export const useSalesStore = defineStore({
       return this.saleStatus;
     },
 
-    async fetchSalesByCustomerId(customerId: string) {
+    async fetchSalesByCustomerId(customerId: string, saleDate: string) {
       const response: Response = await fetch(
-        `${BASE_URL}/sales/customer/${customerId}`,
+        `${BASE_URL}/sales/customer/${customerId}?saleDate=${saleDate}`,
         {
           method: "GET",
           headers: {
@@ -291,16 +303,61 @@ export const useSalesStore = defineStore({
     },
 
     async generateSalesReports(
+      option: "download" | "view",
       category?: "ungrouped" | "grouped",
       selection?: string
     ) {
       return await useFetchReport(
-        `sales?${category}=true&selection=${selection}`
+        `sales?${category}=true&selection=${selection}`,
+        option
       );
     },
 
-    async generateSalesReceipt(customerId: string) {
-      return await useFetchReport(`sales/customers/${customerId}`);
+    async generateSalesReceipt(
+      customerId: string,
+      saleDate: string,
+      option: "download" | "view"
+    ) {
+      return await useFetchReport(
+        `sales/customers/${customerId}?saleDate=${saleDate}`,
+        option
+      );
+    },
+
+    async getMonthlyReports() {
+      const response: Response = await fetch(`${BASE_URL}/analytics/sales/`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        },
+      });
+
+      const data: MonthlySalesDto[] = await response.json();
+
+      if (!response.ok) throw data as unknown as Error;
+
+      return data.map((value) => {
+        value.totalAmount = useCurrencyFormatter(+value.totalAmount).value;
+        return value;
+      });
+    },
+
+    async fetchSalesByDate(salesDate: string) {
+      const response: Response = await fetch(
+        `${BASE_URL}/sales/category/${salesDate}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
+
+      const data: SaleDto[] = await response.json();
+
+      if (!response.ok) throw data as unknown as Error;
+
+      return data;
     },
   },
 });
