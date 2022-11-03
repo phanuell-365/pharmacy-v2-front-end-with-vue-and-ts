@@ -7,6 +7,8 @@ import type {
 import { useTokenStore } from "@/stores/auth/token";
 import { BASE_URL } from "@/constants/base-url";
 import { useFetchReport } from "@/composables/use-fetch-report";
+import { useCurrencyFormatter } from "@/composables/currency-formatter";
+import type { MonthlySalesDto } from "@/stores/app/sales/dto";
 
 const PURCHASE_DEFAULT: PurchaseDto = {
   id: "",
@@ -196,6 +198,27 @@ export const usePurchasesStore = defineStore({
 
     async generatePurchasesReport() {
       await useFetchReport("purchases");
+    },
+
+    async getMonthlyReports() {
+      const response: Response = await fetch(
+        `${BASE_URL}/purchases/monthly-report`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
+
+      const data: MonthlySalesDto[] = await response.json();
+
+      if (!response.ok) throw data as unknown as Error;
+
+      return data.map((value) => {
+        value.totalAmount = useCurrencyFormatter(+value.totalAmount).value;
+        return value;
+      });
     },
   },
 });
