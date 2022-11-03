@@ -25,7 +25,7 @@ export const useCustomersStore = defineStore({
     customers: [],
   }),
   getters: {
-    getCustomerAttributes: (state) =>
+    getCustomerAttributes: () =>
       Object.keys(CUSTOMER_DEFAULT).filter((value) => value !== "id"),
   },
   actions: {
@@ -69,13 +69,16 @@ export const useCustomersStore = defineStore({
       return data as CustomerDto;
     },
 
-    async fetchCustomerById(customerId: string) {
-      const response = await fetch(`${BASE_URL}/customers/${customerId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        },
-      });
+    async fetchCustomerById(customerId: string, paranoid: boolean = true) {
+      const response = await fetch(
+        `${BASE_URL}/customers/${customerId}?paranoid=${paranoid}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
