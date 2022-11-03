@@ -228,8 +228,8 @@ const medicinesStore = useMedicinesStore();
 const customersStore = useCustomersStore();
 
 const sale: Ref<SalesWithIdsDto | undefined> = ref();
-const customer: Ref<CustomerDto | undefined> = ref();
-const medicine: Ref<MedicineDto | undefined> = ref();
+// const customer: Ref<CustomerDto | undefined> = ref();
+// const medicine: Ref<MedicineDto | undefined> = ref();
 const customers: Ref<CustomerDto[]> = ref([]);
 const medicines: Ref<MedicineDto[]> = ref([]);
 const saleStatuses: Ref<string[]> = ref([]);
@@ -256,19 +256,19 @@ try {
     props.saleId,
     true
   )) as SalesWithIdsDto;
-  if (sale.value?.CustomerId)
-    customer.value = await customersStore.fetchCustomerById(
-      sale.value?.CustomerId
-    );
-  if (sale.value?.MedicineId)
-    medicine.value = await medicinesStore.fetchMedicineById(
-      sale.value?.MedicineId
-    );
+  // if (sale.value?.CustomerId)
+  //   customer.value = await customersStore.fetchCustomerById(
+  //     sale.value?.CustomerId
+  //   );
+  // if (sale.value?.MedicineId)
+  //   medicine.value = await medicinesStore.fetchMedicineById(
+  //     sale.value?.MedicineId
+  //   );
 
   saleStatuses.value = await salesStore.fetchSalesStatus();
 
   customers.value = await customersStore.fetchCustomers();
-  medicines.value = await medicinesStore.fetchMedicines();
+  medicines.value = await medicinesStore.fetchMedicines(false);
 } catch (error: any) {
   console.error(error.message);
 
