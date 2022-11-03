@@ -2,7 +2,10 @@ import { BASE_URL } from "@/constants/base-url";
 import { useTokenStore } from "@/stores/auth/token";
 import { useGetFileName } from "@/composables/get-filename";
 
-export const useFetchReport = async (model: string) => {
+export const useFetchReport = async (
+  model: string,
+  option: "download" | "view" = "download"
+) => {
   const tokenStore = useTokenStore();
 
   const response: Response = await fetch(`${BASE_URL}/reports/${model}`, {
@@ -21,15 +24,21 @@ export const useFetchReport = async (model: string) => {
 
   const file = window.URL.createObjectURL(blob);
 
-//   window.location.assign(file);
-
-  const filename = useGetFileName(response);
-
-  const link: HTMLAnchorElement = document.createElement("a");
-  link.href = file;
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();
+  switch (option) {
+    case "download":
+      {
+        const filename = useGetFileName(response);
+        const link: HTMLAnchorElement = document.createElement("a");
+        link.href = file;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+      }
+      break;
+    case "view":
+      window.location.assign(file);
+      break;
+  }
 
   setTimeout(() => {
     URL.revokeObjectURL(file);
