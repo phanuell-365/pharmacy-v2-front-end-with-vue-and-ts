@@ -44,26 +44,40 @@
                     >Get Started
                   </RouterLink>
                   |
-                  <RouterLink
-                    class="link-secondary text-decoration-none px-2"
-                    to="/"
+                  <span
+                    class="link-secondary px-2 click-span"
+                    @click="onLogInClick"
+                    >Log In</span
                   >
-                    LogIn
-                  </RouterLink>
+                  <!--                  <RouterLink-->
+                  <!--                    class="link-secondary text-decoration-none px-2"-->
+                  <!--                    to="/"-->
+                  <!--                  >-->
+                  <!--                    LogIn-->
+                  <!--                  </RouterLink>-->
                 </slot>
               </footer>
             </div>
           </div>
         </div>
       </div>
+
+      <Teleport to="body">
+        <template v-if="showLoginModal">
+          <LoginModal ref="loginModal" redirect="/dashboard" />
+        </template>
+      </Teleport>
     </div>
   </section>
 </template>
 
 <script lang="ts" setup>
 import FontAwesome from "@/components/icons/FontAwesome.vue";
+import LoginModal from "@/components/modal/login/LoginModal.vue";
 import { ARROW_RIGHT_ICON, USER_LOCK } from "@/constants/icons";
 import { useRoute, useRouter } from "vue-router";
+import type { Ref } from "vue";
+import { ref } from "vue";
 
 const router = useRouter();
 
@@ -71,8 +85,16 @@ const route = useRoute();
 
 const action = route.params["action"];
 
+const loginModal: Ref<InstanceType<LoginModal>> = ref();
+
+const showLoginModal: Ref<boolean> = ref(false);
+
 const onGoHomeClick = () => {
   router.push("/dashboard");
+};
+
+const onLogInClick = () => {
+  showLoginModal.value = true;
 };
 </script>
 
@@ -96,6 +118,10 @@ const onGoHomeClick = () => {
 
 .container-fluid .row {
   height: 88vh;
+}
+
+.click-span {
+  cursor: pointer;
 }
 
 .error-text {
