@@ -87,7 +87,7 @@ try {
 const onGetSaleIdClick = (saleId: string) => {
   const sale = salesWithIds.value.find((value) => value.id === saleId);
 
-  router.push(`/sales/customer/${sale?.CustomerId}`);
+  router.push(`/sales/customer/${sale?.CustomerId}?saleDate=${sale?.saleDate}`);
 };
 </script>
 
