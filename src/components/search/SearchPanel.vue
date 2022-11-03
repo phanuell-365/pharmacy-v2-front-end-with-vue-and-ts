@@ -31,6 +31,13 @@
         >
           {{ item.name }}
         </span>
+        <span
+          v-if="addLink"
+          class="p-2 text-success"
+          @click="onAddNewLinkClick"
+        >
+          {{ itemDesc }}
+        </span>
       </div>
     </div>
   </form>
@@ -50,6 +57,8 @@ interface SearchPairs {
 interface SearchPanelProps {
   label: string;
   name: string;
+  addLink?: boolean;
+  itemDesc?: string;
   filterArray: SearchPairs[];
 }
 
@@ -74,6 +83,14 @@ const {
 const filterArr = ref(props.filterArray);
 const filterArrayClone = ref(props.filterArray);
 
+watch(
+  () => props.filterArray,
+  (value) => {
+    filterArr.value = value;
+    filterArrayClone.value = value;
+  }
+);
+
 watch(searchText, (value) => {
   filterArr.value = filterArrayClone.value.filter((value1) =>
     value1.name.toLowerCase().includes(value.toLowerCase())
@@ -94,11 +111,16 @@ const onFocusOutHandler = () => {
 const emit = defineEmits<{
   // eslint-disable-next-line no-unused-vars
   (e: "on-found-item", item: SearchPairs, name: string): void;
+  (e: "on-add-new-item"): void;
 }>();
 
 const onClickHandler = (item: SearchPairs) => {
   emit("on-found-item", item, "click");
   searchText.value = item.name;
+};
+
+const onAddNewLinkClick = () => {
+  emit("on-add-new-item");
 };
 
 onUpdated(() => {
