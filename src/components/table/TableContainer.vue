@@ -15,12 +15,17 @@ import { computed } from "vue";
 interface TableContainerProps {
   skin?: string;
   large?: boolean;
+  xlarge?: boolean;
 }
 
 const props = defineProps<TableContainerProps>();
 
 const tableSize = computed(() =>
-  props.large ? "scroll-table-lg" : "scroll-table-sm"
+  props.large
+    ? "scroll-table-lg"
+    : props.xlarge
+    ? "scroll-table-xl"
+    : "scroll-table-sm"
 );
 
 const color = computed(() =>
@@ -38,6 +43,12 @@ const color = computed(() =>
 .scroll-table-lg {
   position: relative;
   max-height: 380px;
+  overflow: auto;
+}
+
+.scroll-table-xl {
+  position: relative;
+  max-height: 420px;
   overflow: auto;
 }
 
