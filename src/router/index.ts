@@ -298,6 +298,7 @@ const router = createRouter({
         });
       },
     },
+      /*
     {
       path: "/sales/reports/daily-sales/:saleDate",
       name: "daily-sales",
@@ -313,7 +314,7 @@ const router = createRouter({
           params: { action: "daily-sales" },
         });
       },
-    },
+    },*/
 
     // medicines routes
     {
